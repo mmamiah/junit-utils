@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <environments default="test">
+        <environment id="test">
+            <transactionManager type="JDBC"/>
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="org.h2.Driver"/>
+                <property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=Oracle;"/>
+                <property name="username" value="sa"/>
+            </dataSource>
+        </environment>
+        <environment id="env_dev">
+            <transactionManager type="JDBC"/>
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="org.h2.Driver"/>
+                <property name="url" value="jdbc:h2:mem:env_dev;DB_CLOSE_DELAY=-1;MODE=Oracle;"/>
+                <property name="username" value="sa"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper class="lu.mms.common.quality.assets.mybatis.EntityMapper"/>
+        <mapper class="lu.mms.common.quality.assets.spring.context.TestcaseMapper"/>
+    </mappers>
+</configuration>

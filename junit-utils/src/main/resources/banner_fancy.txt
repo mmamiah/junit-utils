@@ -1,0 +1,20 @@
+
+
+    ${jay}   $$$$$\${unit}$$\   $$\         $$\  $$\     ${default}      ${utils}$$\   $$\  $$\    $$\$$\${default}
+    ${jay}   \__$$ ${unit}$$ |  $$ |        \__| $$ |    ${default}      ${utils}$$ |  $$ | $$ |   \__$$ |${default}
+    ${jay}      $$ ${unit}$$ |  $$ $$$$$$$\ $$\$$$$$$\   ${default}      ${utils}$$ |  $$ $$$$$$\  $$\$$ |$$$$$$$\${default}
+    ${jay}      $$ ${unit}$$ |  $$ $$  __$$\$$ \_$$  _|  ${default}      ${utils}$$ |  $$ \_$$  _| $$ $$ $$  _____|${default}
+    ${jay}$$\   $$ ${unit}$$ |  $$ $$ |  $$ $$ | $$ |    ${default}      ${utils}$$ |  $$ | $$ |   $$ $$ \$$$$$$\${default}
+    ${jay}$$ |  $$ ${unit}$$ |  $$ $$ |  $$ $$ | $$ |$$\ ${default}      ${utils}$$ |  $$ | $$ |$$\$$ $$ |\____$$\${default}
+    ${jay}\$$$$$$  ${unit}\$$$$$$  $$ |  $$ $$ | \$$$$  |${default}      ${utils}\$$$$$$  | \$$$$  $$ $$ $$$$$$$  |${default}
+    ${jay} \______/${unit} \______/\__|  \__\__|  \____/ ${default}       ${utils}\______/   \____/\__\__\_______/${default}
+
+         ${content}:: JUnit Utils ::        (v${junit-utils.version})
+#######################################################################################################################
+#            Junit Platform: ${junit-platform.version}
+#             Junit Jupiter: ${junit5.version}
+#                  Hamcrest: ${hamcrest.version}
+#     Mockito JUnit Jupiter: ${mockito.version}
+#             Java Compiler: ${maven.compiler.target}
+#######################################################################################################################
+${default}

@@ -1,0 +1,11 @@
+junit-utils:
+    junit-platform-yml: true
+    # dummy value just to represent multiple entries
+    indice-yml: true
+
+# dummy value just to represent multiple entries
+another-junit-lib:
+    # dummy value just to represent multiple entries
+    junit-platform-plus-yml: true
+    # dummy value just to represent multiple entries
+    indice: true
