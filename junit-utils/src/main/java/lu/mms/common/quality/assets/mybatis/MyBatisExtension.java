@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.0"
+    since = "0.0.1"
 )
 public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 

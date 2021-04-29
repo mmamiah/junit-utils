@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.0"
+    since = "0.0.1"
 )
 public final class InternalMocksContext implements AssetVisitor<Consumer<InternalMocksContext>> {
     private static final String MOCKS_CONTEXT_ENABLED_TEMPLATE = "Mocks context has been instantiated for '{}().{}.";
