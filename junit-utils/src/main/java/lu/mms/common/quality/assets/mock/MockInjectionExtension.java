@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.1.0"
+    since = "0.0.0"
 )
 public class MockInjectionExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 

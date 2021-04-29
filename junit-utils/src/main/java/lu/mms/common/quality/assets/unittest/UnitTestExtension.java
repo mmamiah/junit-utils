@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "1.0"
+    since = "0.0.0"
 )
 public class UnitTestExtension extends JunitUtilsExtension
                                 implements BeforeTestExecutionCallback, AfterTestExecutionCallback {

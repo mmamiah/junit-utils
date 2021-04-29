@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.0.0"
+    since = "0.0.0"
 )
 public class SpringContextRunnerExtension extends JunitUtilsExtension
                                         implements BeforeEachCallback, AfterEachCallback, BeforeTestExecutionCallback {

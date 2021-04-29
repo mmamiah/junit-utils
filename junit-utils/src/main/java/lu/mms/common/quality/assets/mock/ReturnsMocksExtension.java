@@ -25,7 +25,7 @@ import java.util.Set;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.0.0"
+    since = "0.0.0"
 )
 public class ReturnsMocksExtension extends JunitUtilsExtension
                                     implements BeforeEachCallback, BeforeTestExecutionCallback, AfterEachCallback {

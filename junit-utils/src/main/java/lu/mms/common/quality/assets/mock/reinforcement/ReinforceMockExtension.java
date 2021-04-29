@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 @API(
         status = API.Status.EXPERIMENTAL,
-        since = "3.2.0"
+        since = "0.0.0"
 )
 public class ReinforceMockExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 

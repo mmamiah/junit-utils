@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.0.0"
+    since = "0.0.0"
 )
 public class MockitoSpyExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 

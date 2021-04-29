@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 public abstract class JunitUtilsExtension implements Consumer<InternalMocksContext>, BeforeAllCallback,
                                                     AfterAllCallback {
 
+    /**
+     * The JUnit Utils namespace.
+     */
     public static final ExtensionContext.Namespace JUNIT_UTILS_NAMESPACE = create("junit.utils");
 
     @Override

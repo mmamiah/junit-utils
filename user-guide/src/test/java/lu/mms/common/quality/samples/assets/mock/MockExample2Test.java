@@ -1,8 +1,8 @@
 package lu.mms.common.quality.samples.assets.mock;
 
 import lu.mms.common.quality.samples.models.Customer;
-import lu.mms.common.quality.samples.models.Report;
 import lu.mms.common.quality.samples.models.Identity;
+import lu.mms.common.quality.samples.models.Report;
 import org.hamcrest.core.IsNot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
