@@ -4,6 +4,7 @@ import lu.mms.common.quality.assets.JunitUtilsExtension;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -20,7 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static lu.mms.common.quality.assets.mybatis.MyBatisTestUtils.getSqlSessionFactory;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.0.0"
+    since = "0.0.0"
 )
 public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 
@@ -39,57 +39,50 @@ public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachC
     @Override
     public void beforeAll(final ExtensionContext context) {
         super.beforeAll(context);
-
-        context.getTestClass().ifPresent(MyBatisExtension::configureMyBatisTestClass);
+        configureMyBatisTestClassSession(context.getRequiredTestClass());
     }
 
     @Override
     public void beforeEach(final ExtensionContext context) {
-        final Optional<Method> optMethod = context.getTestMethod();
-        if (optMethod.isEmpty()) {
-            return;
-        }
-
+        final Method method = context.getRequiredTestMethod();
         LOGGER.debug("Active sessions count = [{}], [<{}>]", SQL_CLASS_SESSIONS.size(), SQL_CLASS_SESSIONS);
 
-        final Method method = optMethod.get();
-        final SqlSession sqlSession = configureMyBatis(method, context.getTestClass().get());
+        final SqlSession sqlSession = configureMyBatisTestMethodSession(method);
 
         // Checking the connection status. The test case will be ignored if SqlSession is not valid.
         final String errorMessage = "[%s].[%s] Invalid SqlSession state.";
         assumeTrue(isValidSession(sqlSession),
             String.format(errorMessage, method.getDeclaringClass().getSimpleName(), method.getName()));
 
-        context.getTestInstance().ifPresent(instance ->
-            ReflectionUtils.getAllFields(instance.getClass(), this::isValidCandidate).forEach(field -> {
-                final Optional<?> optMapper = findMapper(sqlSession, field);
-                optMapper.ifPresent(mapper -> ReflectionTestUtils.setField(instance, field.getName(), mapper));
-            })
-        );
+        ReflectionUtils.getAllFields(context.getRequiredTestClass(), this::isValidCandidate).forEach(field -> {
+            final Optional<?> optMapper = findMapper(sqlSession, field);
+            optMapper.ifPresent(mapper ->
+                    ReflectionTestUtils.setField(context.getRequiredTestInstance(), field.getName(), mapper)
+            );
+        });
     }
 
     @Override
     public void afterEach(final ExtensionContext context) {
         // close the method session
-        context.getTestMethod().ifPresent(method -> closeSession(SQL_METHOD_SESSIONS.remove(method)));
+        closeSession(SQL_METHOD_SESSIONS.remove(context.getRequiredTestMethod()));
 
         // close the class session in case of test isolation
-        context.getTestClass().ifPresent(testClass -> {
-            final MyBatisTest myBatis = testClass.getAnnotation(MyBatisTest.class);
-            if (myBatis != null && myBatis.testIsolation()) {
-                closeSession(SQL_CLASS_SESSIONS.remove(testClass));
-            }
-        });
+        final Class<?> testClass = context.getRequiredTestClass();
+
+        final MyBatisMapperTest myBatis = testClass.getAnnotation(MyBatisMapperTest.class);
+        if (myBatis != null && myBatis.testIsolation()) {
+            closeSession(SQL_CLASS_SESSIONS.remove(testClass));
+        }
     }
 
     @Override
     public void afterAll(final ExtensionContext context) {
         super.afterAll(context);
 
-        context.getTestClass().ifPresent(testClass -> {
-            closeSession(SQL_CLASS_SESSIONS.get(testClass));
-            SQL_CLASS_SESSIONS.remove(testClass);
-        });
+        final Class<?> testClass = context.getRequiredTestClass();
+        closeSession(SQL_CLASS_SESSIONS.get(testClass));
+        SQL_CLASS_SESSIONS.remove(testClass);
     }
 
     private boolean isValidCandidate(final Field field) {
@@ -124,32 +117,32 @@ public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachC
         return mapper;
     }
 
-    private static void configureMyBatisTestClass(final Class<?> targetClass) {
-        final MyBatisTest myBatis = targetClass.getAnnotation(MyBatisTest.class);
-        if (myBatis == null || myBatis.testIsolation()) {
+    private static void configureMyBatisTestClassSession(final Class<?> targetClass) {
+        final MyBatisMapperTest myBatis = targetClass.getAnnotation(MyBatisMapperTest.class);
+        if (myBatis == null) {
             return;
         }
 
         LOGGER.debug("Configuring MyBatis for [{}].", targetClass.getName());
         // initialising the data source
-        MyBatisTestUtils.initDataSource(targetClass, myBatis);
+        final SqlSessionFactory factory = SessionFactoryUtils.initSessionFactory(targetClass.getSimpleName(), myBatis);
         LOGGER.debug("MyBatis configuration Applied.");
 
         // SQL Session creation for the given test class
-        final SqlSession sqlSession = getSqlSessionFactory(targetClass).openSession(true);
+        final SqlSession sqlSession = factory.openSession(true);
         // saving the session, to be able to close it after test class execution
         SQL_CLASS_SESSIONS.put(targetClass, sqlSession);
     }
 
-    private static SqlSession configureMyBatis(final Method method, final Class<?> testClass) {
-        MyBatisTest myBatisTest = method.getAnnotation(MyBatisTest.class);
+    private static SqlSession configureMyBatisTestMethodSession(final Method method) {
+        MyBatisMapperTest myBatisTest = method.getAnnotation(MyBatisMapperTest.class);
         if (myBatisTest == null) {
             // if not MyBatis annotation at method level, then we will use the one for whole test class
-            final SqlSession sqlSession = SQL_CLASS_SESSIONS.get(testClass);
+            final SqlSession sqlSession = SQL_CLASS_SESSIONS.get(method.getDeclaringClass());
             if (sqlSession != null) {
                 return sqlSession;
             }
-            myBatisTest = testClass.getAnnotation(MyBatisTest.class);
+            myBatisTest = method.getDeclaringClass().getAnnotation(MyBatisMapperTest.class);
             if (myBatisTest == null) {
                 return null;
             }
@@ -162,11 +155,11 @@ public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachC
         LOGGER.debug("Configuring MyBatis for [{}].[{}(...)].",
             method.getDeclaringClass().getSimpleName(), method.getName());
         // initialising the data source
-        MyBatisTestUtils.initDataSource(method, myBatisTest);
+        final SqlSessionFactory factory = SessionFactoryUtils.initSessionFactory(method.getName(), myBatisTest);
         LOGGER.debug("MyBatis configuration Applied.");
 
         // SQL Session creation for the given method
-        final SqlSession sqlSession = getSqlSessionFactory(method).openSession(true);
+        final SqlSession sqlSession = factory.openSession(true);
         // saving the session, to be able to close it after method execution
         SQL_METHOD_SESSIONS.put(method, sqlSession);
 

@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Documented
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.0.0"
+    since = "0.0.0"
 )
 public @interface InjectMapper {
 }

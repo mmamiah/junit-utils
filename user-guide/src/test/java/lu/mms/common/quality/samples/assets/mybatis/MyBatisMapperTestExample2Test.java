@@ -1,7 +1,7 @@
 package lu.mms.common.quality.samples.assets.mybatis;
 
 import lu.mms.common.quality.assets.mybatis.InjectMapper;
-import lu.mms.common.quality.assets.mybatis.MyBatisTest;
+import lu.mms.common.quality.assets.mybatis.MyBatisMapperTest;
 import lu.mms.common.quality.samples.dao.CustomerMapper;
 import org.junit.jupiter.api.Test;
 
@@ -9,11 +9,11 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 // tag::class_level_example[]
-@MyBatisTest(
-    config = "mybatis-test-config.xml",
-    script = {"schema-alpha.sql", "data-beta.sql"}
+@MyBatisMapperTest(
+    mapperClass = CustomerMapper.class,
+    script = {"schema.sql", "data.sql"}
 )
-class MyBatisTestExample2Test {
+class MyBatisMapperTestExample2Test {
 
     @InjectMapper
     private CustomerMapper sut;
