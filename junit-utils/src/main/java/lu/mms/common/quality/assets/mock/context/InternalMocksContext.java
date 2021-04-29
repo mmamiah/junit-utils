@@ -12,7 +12,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -24,9 +23,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static lu.mms.common.quality.assets.mock.context.MockContextUtils.getObjectClass;
 
 /**
  * The '<b>MockInstanceContext</b> collect the test instance mocks and spies, and provide the method to retrieve
@@ -34,7 +30,7 @@ import static lu.mms.common.quality.assets.mock.context.MockContextUtils.getObje
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.2.0"
+    since = "0.0.1"
 )
 public final class InternalMocksContext implements AssetVisitor<Consumer<InternalMocksContext>> {
     private static final String MOCKS_CONTEXT_ENABLED_TEMPLATE = "Mocks context has been instantiated for '{}().{}.";

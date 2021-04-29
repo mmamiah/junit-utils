@@ -2,8 +2,8 @@ package lu.mms.common.quality.samples.assets.unittest;
 
 import lu.mms.common.quality.assets.unittest.UnitTest;
 import lu.mms.common.quality.samples.models.Customer;
-import lu.mms.common.quality.samples.models.Report;
 import lu.mms.common.quality.samples.models.Identity;
+import lu.mms.common.quality.samples.models.Report;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;

@@ -1,5 +1,7 @@
 This project contains the JUnit Utils framework for Java applications, and a sample project.
 
+[![Coverage Status](https://coveralls.io/repos/github/mmamiah/junit-utils/badge.svg?branch=develop)](https://coveralls.io/github/mmamiah/junit-utils?branch=develop)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up on your local machine for development.

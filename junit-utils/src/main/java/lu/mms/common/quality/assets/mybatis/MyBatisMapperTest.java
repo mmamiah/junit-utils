@@ -18,15 +18,9 @@ import java.lang.annotation.Target;
 @ExtendWith(MyBatisExtension.class)
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.2.0"
+    since = "0.0.1"
 )
 public @interface MyBatisMapperTest {
-
-    /**
-     * The MyBatis XML configuration.
-     * @return The configuration.
-     */
-    String config();
 
     /**
      * The SQL scripts to run when configuring the DataSource. <br>
@@ -36,17 +30,17 @@ public @interface MyBatisMapperTest {
     String[] script() default "";
 
     /**
-     * The MyBatis environment to be configured.
-     * @return The environment
-     */
-    String environment() default "";
-
-    /**
      * Manage the connection to the database.
-     * @return <b>true</b>, if <i>@Test</i> methods should be isolated completely.
-     *              Then, the connection will be closed after each method.<br>
+     * @return <b>true</b>, if <i>@Test</i> methods should be isolated from the other test methods.
+     *                      Then, the connection will be closed after each method.<br>
      *         <b>false</b>, otherwise.
      */
     boolean testIsolation() default true;
+
+    /**
+     * This parameter represent an array of Mapper classes to be added to MyBatis configuration.
+     * @return The array of mapper classes to register.
+     */
+    Class<?>[] mapperClass();
 
 }

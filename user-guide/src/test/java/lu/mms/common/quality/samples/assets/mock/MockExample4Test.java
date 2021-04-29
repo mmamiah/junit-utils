@@ -2,8 +2,8 @@ package lu.mms.common.quality.samples.assets.mock;
 
 import lu.mms.common.quality.assets.mock.ReturnsMocksExtension;
 import lu.mms.common.quality.samples.models.Customer;
-import lu.mms.common.quality.samples.models.Report;
 import lu.mms.common.quality.samples.models.Identity;
+import lu.mms.common.quality.samples.models.Report;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;

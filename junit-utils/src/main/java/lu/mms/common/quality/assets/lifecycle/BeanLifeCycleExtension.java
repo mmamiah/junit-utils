@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "3.2.0"
+    since = "0.0.1"
 )
 public class BeanLifeCycleExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 
