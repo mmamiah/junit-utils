@@ -9,17 +9,20 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * This class provide utils method to manage the {@link SessionFactoryUtils}.
@@ -36,7 +39,7 @@ public final class SessionFactoryUtils {
         // hidden constructor
     }
 
-    static void reset() {
+    static void clear() {
         SQL_SESSION_FACTORIES.clear();
     }
 
@@ -44,21 +47,29 @@ public final class SessionFactoryUtils {
      * Initialized the DataSource, using the provided configuration and sql scripts. <br>
      * Those scripts will be executed in the order they are provided.
      * @param sessionFactoryId The session factory ID.
-     * @param myBatis The {@link MyBatisMapperTest} annotation
+     * @param testClass The test class
+     * @param scripts The migration scripts to execute
      * @return The {@link SqlSessionFactory} object
      * @throws IllegalStateException Thrown if the 'mybatisTestConfig' is blank.
      */
-    static synchronized SqlSessionFactory initSessionFactory(final String sessionFactoryId,
-                                                             final MyBatisMapperTest myBatis) {
+    static synchronized SqlSessionFactory initSessionFactory(final String sessionFactoryId, final Class<?> testClass,
+                                                             final String[] scripts) {
 
-        if (ArrayUtils.isEmpty(myBatis.script())) {
+        if (ArrayUtils.isEmpty(scripts)) {
             LOGGER.warn("No script found in your config.");
         }
 
         // Instantiate the SessionFactory
         SqlSessionFactory sqlSessionFactory = SQL_SESSION_FACTORIES.get(sessionFactoryId);
         if (sqlSessionFactory == null) {
-            sqlSessionFactory = SessionFactoryUtils.createSqlSessionFactory(sessionFactoryId, myBatis.mapperClass());
+            // Collect the mapper classes to register
+            final List<Class<?>> mapperClasses = ReflectionUtils.getAllFields(
+                    testClass,
+                    ReflectionUtils.withAnnotation(InjectMapper.class)
+            ).stream().map(Field::getType).collect(Collectors.toList());
+
+            // Create the session factory
+            sqlSessionFactory = SessionFactoryUtils.createSqlSessionFactory(sessionFactoryId, mapperClasses);
             SQL_SESSION_FACTORIES.put(sessionFactoryId, sqlSessionFactory);
         }
 
@@ -71,7 +82,7 @@ public final class SessionFactoryUtils {
         }
 
         // Execute migration scripts
-        for (String migration: myBatis.script()) {
+        for (String migration: scripts) {
             LOGGER.debug("Applying migration script: [{}]", migration);
             MyBatisTestUtils.runScript(dataSource, migration);
             LOGGER.debug("Migration script [{}] applied.", migration);
@@ -84,10 +95,11 @@ public final class SessionFactoryUtils {
      * This method create a {@link SqlSessionFactory} as per the provided testcase name and the mapper to add to the
      * MyBatis configuration.
      * @param testCaseName The test case name
-     * @param mapperClass The mapper classes to add to the configuration
+     * @param mapperClasses The mapper classes to add to the configuration
      * @return The resulting session factory
      */
-    public static SqlSessionFactory createSqlSessionFactory(final String testCaseName, final Class<?>[] mapperClass) {
+    public static SqlSessionFactory createSqlSessionFactory(final String testCaseName,
+                                                            final List<Class<?>> mapperClasses) {
         // Create an unpooled connection
         final UnpooledDataSource dataSource = new UnpooledDataSource();
         dataSource.setDriver("org.h2.Driver");
@@ -107,7 +119,7 @@ public final class SessionFactoryUtils {
         configuration.setMapUnderscoreToCamelCase(true);
 
         // Join resources (Mapper interface)
-        Stream.of(mapperClass).forEach(configuration::addMapper);
+        mapperClasses.forEach(configuration::addMapper);
 
         // Get the session factory
         return new SqlSessionFactoryBuilder().build(configuration);

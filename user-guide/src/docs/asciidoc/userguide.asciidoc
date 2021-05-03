@@ -35,6 +35,9 @@ Marc MAMIAH, Luxembourg
 v${junit-utils.version}, {localdate}
 :organization: -#-
 :doctype: book
+:hide-uri-scheme:
+Repo: https://github.com/mmamiah/junit-utils
+
 
 [abstract]
 Abstract
@@ -353,6 +356,9 @@ This is a helper extension, as its name states, it is a paramter provider, which
 to the test instance method. Any debugging and mocks context check is therefore possible to verify the value using
 during the test case initiatization.
 
+==== MyBatisMapperExtension
+(see annotation _@MyBatisMapperTest_)
+
 === Basic Annotations
 As designed, annotation make it easy to add a given behavior to and object or a class. This is why annotations have been
 a good candidate to ease developer life when it comes to software testing. _JUnit Utils_ comes with couples of
@@ -463,12 +469,12 @@ include::{examples}/assets/mockvalue/MockValueExample4Test.java[tag=example]
 
 ==== _@MyBatisMapperTest_
 One part of application development is oriented as well in data retrieval and manipulation from database. Mybatis
-mappers are used for this purpose in our projects and as other part of the code, need to be tested.
+mappers are being used for this purpose in many projects and as other part of the code, need to be tested.
 It is possible to apply the configuration manually, but ... of course to save the time we need to test and maintain the
 production code, this task has been automatized and standardized with the _@MyBatisMapperTest_ annotation (and the relevant
-extension _MyBatisExtension_, which registered by default by _@MyBatisMapperTest_).
+extension _MyBatisMapperExtension_, which registered by default by _@MyBatisMapperTest__).
 
-.@MyBatisMapperTest at method level.
+.@MapperTest at method level.
 [source, java, linenums, indent=0]
 ----
 include::{examples}/assets/mybatis/MyBatisMapperTestExample1Test.java[tag=method_level_example]
@@ -496,13 +502,12 @@ Please find the properties provided by _@MyBatisMapperTest_ in the next table.
 m|script|The SQL scripts to run when configuring the DataSource|
 m|testIsolation|Manage the connection to the database. If `true` the database connection will be closed after each
 test method|`true`
-m|mapperClass|An array of Mapper classes to be added to MyBatis configuration.|
 |===
 
 ==== _@InjectMapper_
 As you probable noticed in previous example (_MyBatisMapperTestExample2Test_), the subject under test is _@InjectMapper_
 annotated. In fact, initializing MyBatis context is not enough, we still need to retrieve the target mapper we want to
-test. This is where _MyBatisExtension_ come into the game and inject the target mapper in the field annotated with
+test. This is where _MyBatisMapperExtension_ come into the game and inject the target mapper in the field annotated with
 _@InjectMapper_.
 
 ==== _@SpringContextRunner_

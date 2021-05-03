@@ -10,10 +10,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-@MyBatisMapperTest(
-        mapperClass = EntityMapper.class,
-        script = {"schema.sql", "data-for-test_class.sql"}
-)
+@MyBatisMapperTest(script = {"schema.sql", "data-for-test_class.sql"})
 class MyBatisMapperExtendedTest {
 
     @InjectMapper
@@ -32,7 +29,7 @@ class MyBatisMapperExtendedTest {
     }
 
     @Test
-    @MyBatisMapperTest(mapperClass = EntityMapper.class, script = {"schema.sql", "data-for-test_method.sql"})
+    @MyBatisMapperTest(script = {"schema.sql", "data-for-test_method.sql"})
     void shouldInitMapperAtTestMethodLevel() {
         // Arrange
 
@@ -51,7 +48,7 @@ class MyBatisMapperExtendedTest {
      * The datasource schema is initialized without any data.
      */
     @Test
-    @MyBatisMapperTest(mapperClass = EntityMapper.class, script = "schema.sql")
+    @MyBatisMapperTest(script = "schema.sql")
     void shouldUseSpecificConfigWhenConfigAtMethodLevel() {
         // Arrange
         final int itemCount = SessionFactoryUtils.countRowsInTableWhere("customer", null);
@@ -70,7 +67,7 @@ class MyBatisMapperExtendedTest {
      * The datasource schema is initialized without any data.
      */
     @Test
-    @MyBatisMapperTest(mapperClass = EntityMapper.class, script = "schema.sql", testIsolation = false)
+    @MyBatisMapperTest(script = "schema.sql", testIsolation = false)
     void shouldNotConsiderTestIsolationAtFalseForMethodConfig() {
         // Arrange
         final int itemCount = SessionFactoryUtils.countRowsInTableWhere("customer", null);

@@ -32,9 +32,9 @@ import static org.mockito.Mockito.when;
  * Test that Mybatis configuration is properly applied.
  */
 @ExtendWith(MockitoExtension.class)
-class MyBatisExtensionTest {
+class MyBatisMapperExtensionTest {
 
-    private final MyBatisExtension sut = new MyBatisExtension();
+    private final MyBatisMapperExtension sut = new MyBatisMapperExtension();
 
     @Mock(lenient = true)
     private ExtensionContext extensionContextMock;
@@ -48,7 +48,7 @@ class MyBatisExtensionTest {
     void init() {
         when(extensionContextMock.getStore(JUNIT_UTILS_NAMESPACE)).thenReturn(storeSpy);
 
-        assumeTrue(MyBatisExtension.SQL_METHOD_SESSIONS.isEmpty(), "No Method Session should be defined");
+        assumeTrue(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), "No Method Session should be defined");
     }
 
     @AfterEach
@@ -60,8 +60,8 @@ class MyBatisExtensionTest {
     @AfterAll
     static void afterAllTestcase() {
         // ensure that all Sessions have been closes
-        assertThat(MyBatisExtension.SQL_CLASS_SESSIONS.isEmpty(), equalTo(true));
-        assertThat(MyBatisExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
+        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS.isEmpty(), equalTo(true));
+        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
     }
 
     @Test
@@ -78,7 +78,7 @@ class MyBatisExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        final SqlSession session = MyBatisExtension.SQL_METHOD_SESSIONS.get(testMethod);
+        final SqlSession session = MyBatisMapperExtension.SQL_METHOD_SESSIONS.get(testMethod);
         assertThat(session, nullValue());
     }
 
@@ -94,8 +94,8 @@ class MyBatisExtensionTest {
         sut.beforeAll(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
+        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
 
         // At @BeforeAll level, we do not instantiate the @Mapper.
         assertThat(testInstance.getMapper(), nullValue());
@@ -115,8 +115,8 @@ class MyBatisExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
+        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
         assertThat(testInstance.getMapper(), nullValue());
     }
 
@@ -136,8 +136,8 @@ class MyBatisExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisExtension.SQL_CLASS_SESSIONS.isEmpty(), equalTo(true));
-        assertThat(MyBatisExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS.isEmpty(), equalTo(true));
+        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
         assertThat(testInstance.getMapper(), notNullValue());
     }
 
@@ -155,8 +155,8 @@ class MyBatisExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
         assertThat(testInstance.getMapper(), notNullValue());
     }
 
@@ -175,8 +175,8 @@ class MyBatisExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisExtension.SQL_METHOD_SESSIONS, anEmptyMap());
+        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, anEmptyMap());
         assertThat(testInstance.getMapper(), notNullValue());
     }
 
@@ -197,8 +197,8 @@ class MyBatisExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
+        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
         assertThat(testInstance.getMapper(), notNullValue());
     }
 
@@ -217,7 +217,7 @@ class MyBatisExtensionTest {
         }
     }
 
-    @MyBatisMapperTest(mapperClass = EntityMapper.class)
+    @MyBatisMapperTest
     private static class MyBatisTestClassItem extends TestcaseItem {
         @InjectMapper
         private EntityMapper entityMapper;
@@ -239,14 +239,14 @@ class MyBatisExtensionTest {
         }
 
         @Override
-        @MyBatisMapperTest(mapperClass = EntityMapper.class)
+        @MyBatisMapperTest
         public void exampleOfTestMethod() {
             // should not be executed
             Assertions.fail();
         }
     }
 
-    @MyBatisMapperTest(mapperClass = EntityMapper.class, testIsolation = false)
+    @MyBatisMapperTest(testIsolation = false)
     private static class MyBatisTestHybridItem extends TestcaseItem {
         @InjectMapper
         private EntityMapper entityMapper;
@@ -257,14 +257,14 @@ class MyBatisExtensionTest {
         }
 
         @Override
-        @MyBatisMapperTest(mapperClass = EntityMapper.class, testIsolation = false)
+        @MyBatisMapperTest(testIsolation = false)
         public void exampleOfTestMethod() {
             // should not be executed
             Assertions.fail();
         }
     }
 
-    @MyBatisMapperTest(mapperClass = EntityMapper.class, testIsolation = false)
+    @MyBatisMapperTest(testIsolation = false)
     private static class MyBatisTestHybridItemNoClassLevelTestIsolation extends TestcaseItem {
         @InjectMapper
         private EntityMapper entityMapper;
@@ -281,7 +281,7 @@ class MyBatisExtensionTest {
         }
     }
 
-    @MyBatisMapperTest(mapperClass = EntityMapper.class)
+    @MyBatisMapperTest
     private static class MyBatisTestNoMethodLevelTestIsolation extends TestcaseItem {
         @InjectMapper
         private EntityMapper entityMapper;
@@ -292,7 +292,7 @@ class MyBatisExtensionTest {
         }
 
         @Override
-        @MyBatisMapperTest(mapperClass = EntityMapper.class, testIsolation = false)
+        @MyBatisMapperTest(testIsolation = false)
         public void exampleOfTestMethod() {
             // should not be executed
             Assertions.fail();
