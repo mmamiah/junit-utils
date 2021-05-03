@@ -87,6 +87,12 @@ public final class ConstructorInjection implements Consumer<InternalMocksContext
         || MockUtil.isSpy(ReflectionTestUtils.getField(testInstance, field.getName()));
     }
 
+    /**
+     * @param spyClass The class to spy
+     * @param object    The spied instance
+     * @param mockName  The spy name
+     * @return  The spy object
+     */
     public static Object newSpy(final Class<?> spyClass, final Object object, final String mockName) {
         return mock(spyClass, withSettings().spiedInstance(object).name(mockName).defaultAnswer(CALLS_REAL_METHODS));
     }

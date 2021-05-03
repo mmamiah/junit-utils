@@ -31,8 +31,8 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotated
 public class MockValueExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringContextRunnerExtension.class);
-    private static final String NULL_MOCKVALUE_FIELD_ERROR_TMPL = "The field '%s' (annotated with @MockValue) is 'NULL'."
-            + " Please remove the field if it is not used, or set a default value.";
+    private static final String NULL_MOCKVALUE_FIELD_ERROR_TMPL = "The field '%s' (annotated with @MockValue) "
+            + "is 'NULL'. Please remove the field if it is not used, or set a default value.";
 
     @Override
     public void beforeEach(final ExtensionContext context) {

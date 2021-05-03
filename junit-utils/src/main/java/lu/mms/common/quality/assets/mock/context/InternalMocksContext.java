@@ -262,7 +262,7 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
             .collect(Collectors.toList());
     }
 
-    private void logContextState(Logger logger, Class<?> testClass, String testMethodName) {
+    private void logContextState(final Logger logger, final Class<?> testClass, final String testMethodName) {
         if (ObjectUtils.anyNull(logger, testClass)) {
             return;
         }

@@ -17,7 +17,7 @@
     <description>JUnit Utilities user guide</description>
 
     <properties>
-        <junit-utils.version>${project.parent.version}</junit-utils.version>
+        <junit-utils.version>0.0.1</junit-utils.version>
         <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
         <asciidoctorj.version>2.4.1</asciidoctorj.version>
         <asciidoctorj-pdf.version>1.5.3</asciidoctorj-pdf.version>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>lu.mms.common</groupId>
             <artifactId>junit-utils</artifactId>
-            <version>${junit-utils.version}</version>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
 

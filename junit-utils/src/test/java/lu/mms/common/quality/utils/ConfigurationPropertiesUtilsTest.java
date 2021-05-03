@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Test to ensure that the configuration properties are properly loaded. <br>
- * <b>impl note:</b> {@link ConfigurationPropertiesUtils#initJunitUtilsProperties()} is called by default at Framework start,
- *          no need to call it again.
+ * <b>impl note:</b> {@link ConfigurationPropertiesUtils#initJunitUtilsProperties()} is called by default at
+ *          Framework start, no need to call it again.
  */
 class ConfigurationPropertiesUtilsTest {
 

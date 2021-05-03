@@ -180,11 +180,11 @@ class BeanLifeCycleEnabledTest {
         }
 
         @PostConstruct
-        public void init(){
+        public void init() {
             postConstructExecuted = true;
         }
         @PreDestroy
-        public void preDestroy(){
+        public void preDestroy() {
             preDestroyExecuted = true;
         }
         @Override

@@ -88,8 +88,8 @@ class ReinforceMockExtensionTest {
         assertNotNullMembers(busMock);
     }
 
-    private void assertNotNullMembers( final Object target) {
-        Class<?> targetClass = MockUtil.getMockSettings(target).getTypeToMock();
+    private void assertNotNullMembers(final Object target) {
+        final Class<?> targetClass = MockUtil.getMockSettings(target).getTypeToMock();
         Arrays.stream(targetClass.getDeclaredFields())
                 .forEach(field -> {
                     final Object member = ReflectionTestUtils.getField(target, field.getName());

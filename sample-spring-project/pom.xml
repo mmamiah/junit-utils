@@ -31,7 +31,7 @@
         <dependency>
             <groupId>lu.mms.common</groupId>
             <artifactId>junit-utils</artifactId>
-            <version>${junit-utils.version}</version>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

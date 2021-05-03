@@ -24,6 +24,7 @@ public interface MockValueVisitor extends Consumer<Object> {
      */
     String VALUE_BASIC_REGEX = "\\$\\{([^\\:]+)\\:{0,1}([\\p{ASCII}]*){0,1}\\}";
 
+    /** {@linkplain Value @Value} regex pattern. */
     Pattern BASIC_VALUE_PATTERN = Pattern.compile(VALUE_BASIC_REGEX);
 
     /**

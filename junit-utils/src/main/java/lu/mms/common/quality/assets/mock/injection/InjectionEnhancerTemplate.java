@@ -24,6 +24,10 @@ public final class InjectionEnhancerTemplate implements Consumer<InternalMocksCo
         this.annotationClass = annotationClass;
     }
 
+    /**
+     * @param annotationClass The target object annotation
+     * @return  The new template object
+     */
     public static InjectionEnhancerTemplate newTemplate(final Class<? extends Annotation> annotationClass) {
         return new InjectionEnhancerTemplate(annotationClass);
     }

@@ -52,7 +52,7 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
         "The field [%s] is not an instance of 'AbstractApplicationContextRunner'.";
 
     /** A mock reinforcement handler that do nothing. */
-    private static final MockReinforcementHandler DEFAULT_REINFORCEMENT_HANDLER = (a, b, c) -> {};
+    private static final MockReinforcementHandler DEFAULT_REINFORCEMENT_HANDLER = (a, b, c) -> { };
 
     private MockReinforcementHandler mockReinforcementHandler;
 
@@ -84,7 +84,7 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
     }
 
     /**
-     * Instantiate the {@link ApplicationContextRunner} field and apply the {@link SpringContextRunner} settings
+     * Instantiate the {@link ApplicationContextRunner} field and apply the {@link SpringContextRunner} settings.
      * @param mocksContext The test instance mocks context
      */
     @Override
@@ -126,7 +126,8 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
      * @param mocks The mocks to inject
      * @param ofInstance Instance owning the <code>field</code>
      */
-    public void injectMocksOnFields(Set<Field> needingInjection, Set<Object> mocks, Object ofInstance) {
+    public void injectMocksOnFields(final Set<Field> needingInjection, final Set<Object> mocks,
+                                    final Object ofInstance) {
         new DefaultInjectionEngine().injectMocksOnFields(needingInjection, mocks, ofInstance);
     }
 

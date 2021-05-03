@@ -9,6 +9,8 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -81,7 +83,8 @@ public final class MockValueDefaultVisitor implements MockValueVisitor {
 
     }
 
-    private void instantiateAtMockValue(final Object sut, final Field field, final Field mockValueField, final String defaultValue) {
+    private void instantiateAtMockValue(final Object sut, final Field field, final Field mockValueField,
+                                        final String defaultValue) {
         final Object value = retrieveValueToInject(sut, field, mockValueField, defaultValue);
 
         if (value == null) {
@@ -125,8 +128,9 @@ public final class MockValueDefaultVisitor implements MockValueVisitor {
                 valueToInject = String.valueOf(valueToInject).split(",");
             }
             if (isArrayAndIsNotEmpty(valueToInject)) {
-                valueToInject = CollectionUtils.arrayToList(valueToInject)
-                        .stream()
+                final Collection<?> values = new ArrayList<>();
+                CollectionUtils.mergeArrayIntoCollection(valueToInject, values);
+                valueToInject = values.stream()
                         .map(String::valueOf)
                         .reduce((a, b) -> String.join(", ", a, b))
                         .orElse(StringUtils.EMPTY);

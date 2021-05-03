@@ -50,7 +50,8 @@ public class FieldAndSetterInjection implements Consumer<InternalMocksContext>, 
     }
 
     @Override
-    public void injectMocksOnFields(final Set<Field> needingInjection, final Set<Object> mocks, final Object ofInstance) {
+    public void injectMocksOnFields(final Set<Field> needingInjection, final Set<Object> mocks,
+                                    final Object ofInstance) {
         // ensure there is mocks type duplication, and if so, the spies will have priority
         if (ObjectUtils.anyNull(needingInjection, mocks, ofInstance)) {
             return;
