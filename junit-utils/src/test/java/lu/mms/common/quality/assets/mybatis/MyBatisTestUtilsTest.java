@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class MyBatisTestUtilsTest {
 
-    private final String[] scripts = new String[] {"schema.sql", "data-for-test_class.sql"};
+    private final String[] scripts = new String[] {"sql/schema.sql", "sql/data-for-test_class.sql"};
 
     private SqlSessionFactory sessionFactory;
     private SqlSession session;
