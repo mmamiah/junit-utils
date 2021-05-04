@@ -60,18 +60,10 @@ public final class SessionFactoryUtils {
         }
 
         // Instantiate the SessionFactory
-        SqlSessionFactory sqlSessionFactory = SQL_SESSION_FACTORIES.get(sessionFactoryId);
-        if (sqlSessionFactory == null) {
-            // Collect the mapper classes to register
-            final List<Class<?>> mapperClasses = ReflectionUtils.getAllFields(
-                    testClass,
-                    ReflectionUtils.withAnnotation(InjectMapper.class)
-            ).stream().map(Field::getType).collect(Collectors.toList());
-
-            // Create the session factory
-            sqlSessionFactory = SessionFactoryUtils.createSqlSessionFactory(sessionFactoryId, mapperClasses);
-            SQL_SESSION_FACTORIES.put(sessionFactoryId, sqlSessionFactory);
-        }
+        final SqlSessionFactory sqlSessionFactory = SQL_SESSION_FACTORIES.computeIfAbsent(
+                sessionFactoryId,
+                id -> newSqlSessionFactory(testClass, id)
+        );
 
         // Instantiate the DataSource
         final DataSource dataSource;
@@ -89,6 +81,17 @@ public final class SessionFactoryUtils {
         }
 
         return sqlSessionFactory;
+    }
+
+    private static SqlSessionFactory newSqlSessionFactory(final Class<?> testClass, final String sessionFactoryId) {
+        // Collect the mapper classes to register
+        final List<Class<?>> mapperClasses = ReflectionUtils.getAllFields(
+                testClass,
+                ReflectionUtils.withAnnotation(InjectMapper.class)
+        ).stream().map(Field::getType).collect(Collectors.toList());
+
+        // Create the session factory
+        return createSqlSessionFactory(sessionFactoryId, mapperClasses);
     }
 
     /**
