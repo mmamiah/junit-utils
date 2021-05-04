@@ -10,12 +10,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * MyBatisMapperTest annotation.
+ * {@link MyBatisMapperTest} is an annotation that is used to register {@linkplain MyBatisMapperExtension extensions}
+ * which will setup the minimal MyBatis environment, initialize the datasource and register the declared
+ * {@linkplain InjectMapper mapper fields}, to make then accessible for the test cases.
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@ExtendWith(MyBatisExtension.class)
+@ExtendWith(MyBatisMapperExtension.class)
 @API(
     status = API.Status.EXPERIMENTAL,
     since = "0.0.1"
@@ -23,7 +25,7 @@ import java.lang.annotation.Target;
 public @interface MyBatisMapperTest {
 
     /**
-     * The SQL scripts to run when configuring the DataSource. <br>
+     * The migration scripts to run when configuring the DataSource. <br>
      * The script will be executed in the declared order.
      * @return The script.
      */
@@ -36,11 +38,5 @@ public @interface MyBatisMapperTest {
      *         <b>false</b>, otherwise.
      */
     boolean testIsolation() default true;
-
-    /**
-     * This parameter represent an array of Mapper classes to be added to MyBatis configuration.
-     * @return The array of mapper classes to register.
-     */
-    Class<?>[] mapperClass();
 
 }

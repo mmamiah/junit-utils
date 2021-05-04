@@ -1,7 +1,7 @@
 package lu.mms.common.quality.assets;
 
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
-import lu.mms.common.quality.assets.mybatis.MyBatisExtension;
+import lu.mms.common.quality.assets.mybatis.MyBatisMapperExtension;
 import lu.mms.common.quality.assets.spring.context.SpringContextRunnerExtension;
 import lu.mms.common.quality.assets.unittest.UnitTest;
 import lu.mms.common.quality.junit.platform.SpiConfiguration;
@@ -73,7 +73,7 @@ public class JunitUtilsExtensionTest {
     private static final Collection<Class<? extends Extension>> INCLUDED = Collections.singleton(MockitoExtension.class);
 
     /** All extensions excluded by default. */
-    private static final Collection<Class<? extends Extension>> EXCLUDED = Arrays.asList(MyBatisExtension.class,
+    private static final Collection<Class<? extends Extension>> EXCLUDED = Arrays.asList(MyBatisMapperExtension.class,
             SpringContextRunnerExtension.class, JunitUtilsExtension.class);
 
     @Mock(lenient = true)

@@ -30,11 +30,15 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
     status = API.Status.EXPERIMENTAL,
     since = "0.0.1"
 )
-public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
+public class MyBatisMapperExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 
-    static final Map<Class<?>, SqlSession> SQL_CLASS_SESSIONS = new ConcurrentHashMap<>();
-    static final Map<Method, SqlSession> SQL_METHOD_SESSIONS = new ConcurrentHashMap<>();
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyBatisExtension.class);
+    /** The {@linkplain SqlSession SQL Session} by test class. */
+    public static final Map<Class<?>, SqlSession> SQL_CLASS_SESSIONS = new ConcurrentHashMap<>();
+
+    /** The {@linkplain SqlSession SQL Session} by test method. */
+    public static final Map<Method, SqlSession> SQL_METHOD_SESSIONS = new ConcurrentHashMap<>();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyBatisMapperExtension.class);
 
     @Override
     public void beforeAll(final ExtensionContext context) {
@@ -125,7 +129,11 @@ public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachC
 
         LOGGER.debug("Configuring MyBatis for [{}].", targetClass.getName());
         // initialising the data source
-        final SqlSessionFactory factory = SessionFactoryUtils.initSessionFactory(targetClass.getSimpleName(), myBatis);
+        final SqlSessionFactory factory = SessionFactoryUtils.initSessionFactory(
+                targetClass.getSimpleName(),
+                targetClass,
+                myBatis.script()
+        );
         LOGGER.debug("MyBatis configuration Applied.");
 
         // SQL Session creation for the given test class
@@ -155,7 +163,11 @@ public class MyBatisExtension extends JunitUtilsExtension implements BeforeEachC
         LOGGER.debug("Configuring MyBatis for [{}].[{}(...)].",
             method.getDeclaringClass().getSimpleName(), method.getName());
         // initialising the data source
-        final SqlSessionFactory factory = SessionFactoryUtils.initSessionFactory(method.getName(), myBatisTest);
+        final SqlSessionFactory factory = SessionFactoryUtils.initSessionFactory(
+                method.getName(),
+                method.getDeclaringClass(),
+                myBatisTest.script()
+        );
         LOGGER.debug("MyBatis configuration Applied.");
 
         // SQL Session creation for the given method

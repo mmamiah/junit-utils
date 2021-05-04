@@ -18,7 +18,6 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 @MyBatisMapperTest(
     testIsolation = false,
-    mapperClass = CustomerMapper.class,
     script = {"schema.sql", "data.sql"}
 )
 @TestMethodOrder(OrderAnnotation.class)
@@ -99,7 +98,7 @@ class MyBatisMapperTestExample1Test {
     @Test
     @Order(4)
     // tag::method_level_example[]
-    @MyBatisMapperTest(mapperClass = CustomerMapper.class, script = "schema.sql")
+    @MyBatisMapperTest(script = "schema.sql")
     void shouldUseSpecificConfigConfigWhenConfigAtMethodLevel() {
         // Arrange
         final int firstIdInDB = 1; // ID in 'data.sql'

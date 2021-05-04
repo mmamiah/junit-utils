@@ -9,10 +9,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 // tag::class_level_example[]
-@MyBatisMapperTest(
-    mapperClass = CustomerMapper.class,
-    script = {"schema.sql", "data.sql"}
-)
+@MyBatisMapperTest(script = {"schema.sql", "data.sql"})
 class MyBatisMapperTestExample2Test {
 
     @InjectMapper

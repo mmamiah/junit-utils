@@ -124,13 +124,15 @@ class RunnerApplicationContextInitializer implements ApplicationContextInitializ
         }
     }
 
-    private Set<Object> registerMocks(final ConfigurableListableBeanFactory beanFactory, final Class<?>... classesToMock) {
+    private Set<Object> registerMocks(final ConfigurableListableBeanFactory beanFactory,
+                                      final Class<?>... classesToMock) {
         return Stream.of(classesToMock)
             .map(classToMock -> synchronizeBeanDefinition(beanFactory, classToMock))
             .collect(Collectors.toSet());
     }
 
-    private Object synchronizeBeanDefinition(final ConfigurableListableBeanFactory beanFactory, final Class<?> mockClass) {
+    private Object synchronizeBeanDefinition(final ConfigurableListableBeanFactory beanFactory,
+                                             final Class<?> mockClass) {
         final String beanName = StringUtils.uncapitalize(mockClass.getSimpleName());
         final String[] beanNames = beanFactory.getBeanNamesForType(mockClass);
         final Object mock;

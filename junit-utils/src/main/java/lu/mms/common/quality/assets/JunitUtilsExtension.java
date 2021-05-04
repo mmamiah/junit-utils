@@ -52,7 +52,7 @@ public abstract class JunitUtilsExtension implements Consumer<InternalMocksConte
 
         final InternalMocksContext mocksContext = store.getOrComputeIfAbsent(
                 testMethodName,
-                (methodName) ->
+                methodName ->
                     InternalMocksContext.newContext(
                             logger,
                             extensionContext.getRequiredTestClass(),
