@@ -121,16 +121,6 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
 
     }
 
-    /**
-     * @param needingInjection Fields needing mock injection
-     * @param mocks The mocks to inject
-     * @param ofInstance Instance owning the <code>field</code>
-     */
-    public void injectMocksOnFields(final Set<Field> needingInjection, final Set<Object> mocks,
-                                    final Object ofInstance) {
-        new DefaultInjectionEngine().injectMocksOnFields(needingInjection, mocks, ofInstance);
-    }
-
     private AbstractApplicationContextRunner<?, ?, ?> retrieveAppContextRunner(
                                                                             final InternalMocksContext mocksContext,
                                                                             final Field field) {
