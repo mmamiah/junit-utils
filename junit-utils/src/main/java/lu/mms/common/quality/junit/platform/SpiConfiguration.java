@@ -4,7 +4,9 @@ import lu.mms.common.quality.JunitUtilsPreconditionException;
 import lu.mms.common.quality.assets.AssetFactory;
 import lu.mms.common.quality.utils.ConfigurationPropertiesUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -33,6 +36,11 @@ import static lu.mms.common.quality.utils.ConfigurationPropertiesUtils.showBanne
  * The framework auto configuration.
  */
 public final class SpiConfiguration implements TestExecutionListener {
+
+    /**
+     * The test execution results map.
+     */
+    public static final Map<String, TestExecutionResult> TEST_EXECUTION_RESULTS = new HashMap<>();
 
     /**
      * The base assets package constant.
@@ -74,6 +82,12 @@ public final class SpiConfiguration implements TestExecutionListener {
         } catch (Exception ex) {
             LOGGER.error("Configuration failed: [{}].", ex.getMessage(), ex);
         }
+    }
+
+    @Override
+    public void executionFinished(final TestIdentifier testIdentifier, final TestExecutionResult testExecutionResult) {
+        // Collect all the test results
+        TEST_EXECUTION_RESULTS.put(testIdentifier.getDisplayName(), testExecutionResult);
     }
 
     /**
