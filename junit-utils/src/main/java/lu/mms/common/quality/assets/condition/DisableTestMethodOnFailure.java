@@ -16,13 +16,13 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-@ExtendWith(DisableOnFailureExtension.class)
+@ExtendWith(DisableTestMethodOnFailureExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Documented
 @API(
     status = API.Status.EXPERIMENTAL,
     since = "0.0.1"
 )
-public @interface DisableOnFailure {
+public @interface DisableTestMethodOnFailure {
 
 }

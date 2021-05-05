@@ -1,6 +1,7 @@
 package lu.mms.common.quality.assets.condition;
 
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.ConditionEvaluationResult;
 import org.junit.jupiter.api.extension.ExecutionCondition;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -16,7 +17,7 @@ import static lu.mms.common.quality.junit.platform.SpiConfiguration.TEST_EXECUTI
  * plan failed). This behaviour will prevent tests executed in a given {@linkplain Order @Order} to not execute
  * coming next tests method in case of any failure.
  */
-public class DisableOnFailureExtension implements ExecutionCondition {
+public class DisableTestMethodOnFailureExtension implements ExecutionCondition, AfterAllCallback {
 
     private static final String DEFAULT_DISABLED_REASON = "The previous test case failed.";
     private static final String TEST_DISABLED_REASON_TEMPLATE = "The test [%s] is disabled because the test [%s] "
@@ -25,8 +26,16 @@ public class DisableOnFailureExtension implements ExecutionCondition {
             "@Disabled is not present");
 
     @Override
+    public void afterAll(final ExtensionContext context) {
+        TEST_EXECUTION_RESULTS.remove(context.getRequiredTestClass().getName());
+    }
+
+    @Override
     public ConditionEvaluationResult evaluateExecutionCondition(final ExtensionContext context) {
-        final Optional<Map.Entry<String, TestExecutionResult>> brokenEntry = TEST_EXECUTION_RESULTS.entrySet().stream()
+        final Optional<Map.Entry<String, TestExecutionResult>> brokenEntry = TEST_EXECUTION_RESULTS
+                .entrySet()
+                .stream().filter(entry -> context.getRequiredTestClass().getName().equals(entry.getKey()))
+                .flatMap(entry -> entry.getValue().entrySet().stream())
                 // Keeping the entry which is not successful
                 .filter(entry -> entry.getValue().getStatus() != TestExecutionResult.Status.SUCCESSFUL)
                 .findFirst();

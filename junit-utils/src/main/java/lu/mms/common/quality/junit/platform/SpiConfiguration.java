@@ -5,8 +5,12 @@ import lu.mms.common.quality.assets.AssetFactory;
 import lu.mms.common.quality.utils.ConfigurationPropertiesUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.platform.engine.TestExecutionResult;
+import org.junit.platform.engine.TestSource;
+import org.junit.platform.engine.support.descriptor.ClassSource;
+import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
+import org.junit.platform.launcher.TestPlan;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -38,9 +43,10 @@ import static lu.mms.common.quality.utils.ConfigurationPropertiesUtils.showBanne
 public final class SpiConfiguration implements TestExecutionListener {
 
     /**
-     * The test execution results map.
+     * The test execution results map per test class. <br>
+     * Description: Map[TestClassname, Map[TestDisplayName, TestExecutionResult]]
      */
-    public static final Map<String, TestExecutionResult> TEST_EXECUTION_RESULTS = new HashMap<>();
+    public static final Map<String, Map<String, TestExecutionResult>> TEST_EXECUTION_RESULTS = new HashMap<>();
 
     /**
      * The base assets package constant.
@@ -87,7 +93,13 @@ public final class SpiConfiguration implements TestExecutionListener {
     @Override
     public void executionFinished(final TestIdentifier testIdentifier, final TestExecutionResult testExecutionResult) {
         // Collect all the test results
-        TEST_EXECUTION_RESULTS.put(testIdentifier.getDisplayName(), testExecutionResult);
+        getClassname(testIdentifier.getSource().orElse(null)).ifPresent(className -> {
+            final Map<String, TestExecutionResult> testClassResults = TEST_EXECUTION_RESULTS.computeIfAbsent(
+                    className,
+                    testClass -> new HashMap<>()
+            );
+            testClassResults.put(testIdentifier.getDisplayName(), testExecutionResult);
+        });
     }
 
     /**
@@ -185,6 +197,15 @@ public final class SpiConfiguration implements TestExecutionListener {
         bannerLogger.addHandler(consoleHandler);
         bannerLogger.setLevel(Level.INFO);
         return bannerLogger;
+    }
+
+    private static Optional<String> getClassname(final TestSource testSource) {
+        if (testSource instanceof MethodSource) {
+            return Optional.of(((MethodSource) testSource).getClassName());
+        } else if (testSource instanceof ClassSource) {
+            return Optional.of(((ClassSource) testSource).getClassName());
+        }
+        return Optional.empty();
     }
 
 

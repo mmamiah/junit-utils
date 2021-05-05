@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(DisableOnFailureExtension.class)
+@ExtendWith(DisableTestMethodOnFailureExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Disabled
-class DisableOnFailureExtensionTest {
+class DisableTestMethodOnFailureExtensionTest {
 
     @Test
     @Order(1)
