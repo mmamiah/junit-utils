@@ -20,57 +20,72 @@
 
     <organization>
         <name>LU</name>
-        <url></url>
+        <url>mms</url>
     </organization>
 
     <inceptionYear>2020</inceptionYear>
 
     <properties>
-        <junit-utils.version>0.0.0</junit-utils.version>
+        <junit-utils.version>1.0.0-SNAPSHOT</junit-utils.version>
 
-        <!-- JDK -->
+        <!-- project -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
 
-        <reflections.version>0.9.12</reflections.version>
-        <ow2-asm.version>6.2</ow2-asm.version>
-
-        <snakeyaml.version>1.26</snakeyaml.version>
-
         <!-- replacing common libs -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
 
-        <maven-plugin.version>3.8.1</maven-plugin.version>
-        <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
-        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
-        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <!-- maven -->
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
 
+        <!-- junit 5 -->
+        <junit5.version>5.7.1</junit5.version>
+        <junit-platform.version>1.7.1</junit-platform.version>
+
+        <!-- commons -->
+        <commons-io.version>2.8.0</commons-io.version>
+        <commons-text.version>1.8</commons-text.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+
+        <!-- Third party libs -->
+        <spring-boot-test.version>2.3.9.RELEASE</spring-boot-test.version>
         <modelmapper.version>2.4.0</modelmapper.version>
         <apiguardian.version>1.1.1</apiguardian.version>
         <hamcrest.version>2.2</hamcrest.version>
         <mybatis.version>3.5.6</mybatis.version>
         <h2.version>1.4.200</h2.version>
-        <spring-boot.version>2.4.4</spring-boot.version>
         <mockito.version>3.8.0</mockito.version>
         <awaitility.version>4.0.3</awaitility.version>
-
-        <junit5.version>5.7.1</junit5.version>
-        <junit-platform.version>1.7.1</junit-platform.version>
-
-        <commons-io.version>2.8.0</commons-io.version>
-        <commons-text.version>1.8</commons-text.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-
         <logback-classic.version>1.2.3</logback-classic.version>
+        <reflections.version>0.9.12</reflections.version>
+        <ow2-asm.version>6.2</ow2-asm.version>
+        <snakeyaml.version>1.26</snakeyaml.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- Commons -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
             <!-- Snake YAML -->
             <dependency>
                 <groupId>org.yaml</groupId>
@@ -151,7 +166,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>${spring-boot-test.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>junit-vintage-engine</artifactId>
@@ -161,6 +176,13 @@
             </dependency>
 
             <!-- JUnit 5 -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit5.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-runner</artifactId>
@@ -173,59 +195,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-engine</artifactId>
-                <version>${junit-platform.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-commons</artifactId>
-                <version>${junit-platform.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-launcher</artifactId>
-                <version>${junit-platform.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit5.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit5.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-params</artifactId>
-                <version>${junit5.version}</version>
-                <scope>compile</scope>
-            </dependency>
 
-            <!-- in place of -commons-parent-pom -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-text</artifactId>
-                <version>${commons-text.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
@@ -241,7 +211,6 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-plugin.version}</version>
                     <configuration>
                         <release>${java.version}</release>
                     </configuration>
@@ -252,31 +221,6 @@
                             <version>${ow2-asm.version}</version>
                         </dependency>
                     </dependencies>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>${maven-install-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${maven-source-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${maven-javadoc-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven-jar-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${maven-jar-plugin.version}</version>
                 </plugin>
 
                 <!-- Tests -->
