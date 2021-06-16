@@ -55,11 +55,11 @@ class ConstructorInitViaReturnsMocksExtensionTest {
             mayor = null;
         }
 
-        District(final String mayorOne, final String mayorTwo) {
-            mayor = null;
+        District(final Building building) {
+            this.mayor = building.getOwner();
         }
 
-        District(final Building building) {
+        District(final Building building, final String mayorOne, final String mayorTwo) {
             this.mayor = building.getOwner();
         }
 

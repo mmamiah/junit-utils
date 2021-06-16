@@ -12,6 +12,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -49,22 +50,14 @@ public final class ConstructorInjection implements Consumer<InternalMocksContext
                 // keep the non-default constructor. We don't want to rebuild with default constructors.
                 .filter(constructor -> constructor.getParameterCount() != 0)
 
+                // retrieve the longest constructor parameters
+                .max(Comparator.comparing(Constructor::getParameterCount))
+
                 // Retrieve the Pair[Constructor, args]
                 .map(constructor -> Pair.<Constructor<?>, Object[]>of(
                     constructor,
                     retrieveMocksByParameters(mockContext, constructor.getParameters()))
                 )
-
-                // Keep the pair for which the 'args' are non null.
-                .filter(pair -> ObjectUtils.allNotNull(pair.getValue()))
-
-                // Selecting the constructor with the most matching arguments
-                .reduce((pairOne, pairTwo) -> {
-                    if (pairOne.getValue().length > pairTwo.getValue().length) {
-                        return pairOne;
-                    }
-                    return pairTwo;
-                })
 
                 // instantiate the field using the selected constructor & args
                 .map(pair -> {
