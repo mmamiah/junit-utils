@@ -58,7 +58,7 @@ class MockInjectionExtensionTest {
      * </code>
      */
     @Test
-    void shouldRebuildTheSutWithUserMockWhenMockNameMatchAndTypeMismatch() {
+    void shouldBuildTheSutWithUserMockWhenMockNameMatchAndTypeMismatch() {
         // Arrange
 
         // Act
