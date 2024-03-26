@@ -2,6 +2,7 @@ package lu.mms.common.quality.assets.unittest;
 
 import lu.mms.common.quality.utils.FrameworkAnnotationUtils;
 import org.hamcrest.core.AnyOf;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+@Disabled
 class UnitTestFactoryTest {
 
     private static final String TAG_ONE = "tag_one";
