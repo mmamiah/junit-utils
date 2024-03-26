@@ -34,19 +34,11 @@ class MockInjectionExtensionTest {
     @InjectMocks
     private Laptop sut;
 
-    @Spy
-    private final List<Device> devices = new ArrayList<>();
-
     @Mock
     private Mice miceMock;
 
     @Spy
     private Mice miceSpy;
-
-    @BeforeEach
-    private void init() {
-        devices.add(new SuperMice());
-    }
 
     /**
      * This testcase, ensure that we keep instantiating the SUT with user mocks, when a Test instance has a declared
@@ -66,7 +58,7 @@ class MockInjectionExtensionTest {
      * </code>
      */
     @Test
-    void shouldRebuildTheSutWithUserMockWhenMockNameMatchAndTypeMismatch() {
+    void shouldBuildTheSutWithUserMockWhenMockNameMatchAndTypeMismatch() {
         // Arrange
 
         // Act

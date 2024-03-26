@@ -36,7 +36,7 @@ public class MockInjectionExtension extends JunitUtilsExtension implements Befor
         final InternalMocksContext mocksContext = retrieveMocksContext(LOGGER, extensionContext);
 
         // Applying the injection enhancer template
-        mocksContext.visit(InjectionEnhancerTemplate.newTemplate(InjectMocks.class));
+        mocksContext.visit(InjectionEnhancerTemplate.newFieldInjectionTemplate(InjectMocks.class));
     }
 
     @Override
