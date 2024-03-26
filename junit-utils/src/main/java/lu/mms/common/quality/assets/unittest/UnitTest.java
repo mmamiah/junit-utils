@@ -78,7 +78,6 @@ import java.lang.annotation.Target;
     UnitTestExtension.class,
     BeanLifeCycleExtension.class,
     FixtureExtension.class,
-    DisableTestMethodOnFailureExtension.class,
 
     // Parameter Resolvers
     MocksContextParameterResolver.class

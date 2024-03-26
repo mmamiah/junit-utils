@@ -1,5 +1,6 @@
 package lu.mms.common.quality.assets;
 
+import lu.mms.common.quality.assets.condition.DisableTestMethodOnFailureExtension;
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
 import lu.mms.common.quality.assets.mybatis.MyBatisMapperExtension;
 import lu.mms.common.quality.assets.spring.context.SpringContextRunnerExtension;
@@ -74,7 +75,8 @@ public class JunitUtilsExtensionTest {
 
     /** All extensions excluded by default. */
     private static final Collection<Class<? extends Extension>> EXCLUDED = Arrays.asList(MyBatisMapperExtension.class,
-            SpringContextRunnerExtension.class, JunitUtilsExtension.class);
+            SpringContextRunnerExtension.class, JunitUtilsExtension.class,
+            DisableTestMethodOnFailureExtension.class);
 
     @Mock(lenient = true)
     private ExtensionContext extensionContextMock;
