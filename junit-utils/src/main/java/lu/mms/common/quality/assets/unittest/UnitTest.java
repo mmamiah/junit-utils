@@ -1,5 +1,6 @@
 package lu.mms.common.quality.assets.unittest;
 
+import lu.mms.common.quality.assets.condition.DisableTestMethodOnFailureExtension;
 import lu.mms.common.quality.assets.fixture.FixtureExtension;
 import lu.mms.common.quality.assets.lifecycle.BeanLifeCycleExtension;
 import lu.mms.common.quality.assets.mock.MockInjectionExtension;

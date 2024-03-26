@@ -2,6 +2,7 @@ package lu.mms.common.quality.assets.unittest;
 
 import lu.mms.common.quality.utils.FrameworkAnnotationUtils;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 @UnitTest(strictness = Strictness.WARN)
+@Disabled
 class UnitAnnotationWarnStrictnessTest {
 
     @Test

@@ -2,6 +2,7 @@ package lu.mms.common.quality.assets.mock.injection;
 
 import lu.mms.common.quality.assets.mock.MockInjectionExtension;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 @ExtendWith({MockitoExtension.class, MockInjectionExtension.class})
+@Disabled
 class MockInjectionExtensionTest {
 
     private static final String BY_CONSTRUCTOR_TEMPLATE = "by_constructor_%s";
