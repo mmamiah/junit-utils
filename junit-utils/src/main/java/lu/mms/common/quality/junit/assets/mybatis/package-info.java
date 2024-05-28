@@ -1,1 +1,0 @@
-package lu.mms.common.quality.junit.assets.mybatis;
