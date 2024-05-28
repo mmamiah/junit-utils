@@ -1,0 +1,11 @@
+junit-utils:
+    junit-platform-yaml: true
+    # dummy value just to represent multiple entries
+    indice-yaml: sad4s
+
+# dummy value just to represent multiple entries
+another-yaml-junit-lib:
+    # dummy value just to represent multiple entries
+    junit-platform-plus-yaml: true
+    # dummy value just to represent multiple entries
+    indice: 123

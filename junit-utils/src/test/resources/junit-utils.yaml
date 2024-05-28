@@ -1,0 +1,10 @@
+
+junit-utils:
+  # Shows the banner if true.
+  show-banner: true
+
+  # Shows the fancy banner if 'show-banner' = true and 'fancy-banner' = true.
+  fancy-banner: true
+
+
+
