@@ -4,17 +4,10 @@ import lu.mms.common.quality.JunitUtilsPreconditionException;
 import lu.mms.common.quality.assets.AssetFactory;
 import lu.mms.common.quality.utils.ConfigurationPropertiesUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.junit.platform.engine.TestExecutionResult;
-import org.junit.platform.engine.TestSource;
-import org.junit.platform.engine.support.descriptor.ClassSource;
-import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
-import org.junit.platform.launcher.TestIdentifier;
-import org.junit.platform.launcher.TestPlan;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.NOPLogger;
 import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.util.ReflectionUtils;
 
@@ -24,10 +17,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -36,17 +27,12 @@ import java.util.stream.Collectors;
 import static lu.mms.common.quality.utils.ConfigurationPropertiesUtils.isFancyBanner;
 import static lu.mms.common.quality.utils.ConfigurationPropertiesUtils.isLogReflections;
 import static lu.mms.common.quality.utils.ConfigurationPropertiesUtils.showBanner;
+import static lu.mms.common.quality.utils.FrameworkUtils.findAssignableCandidate;
 
 /**
  * The framework auto configuration.
  */
 public final class SpiConfiguration implements TestExecutionListener {
-
-    /**
-     * The test execution results map per test class. <br>
-     * Description: Map[TestClassname, Map[TestDisplayName, TestExecutionResult]]
-     */
-    public static final Map<String, Map<String, TestExecutionResult>> TEST_EXECUTION_RESULTS = new HashMap<>();
 
     /**
      * The base assets package constant.
@@ -72,9 +58,12 @@ public final class SpiConfiguration implements TestExecutionListener {
             printBanner();
 
             // Disable Reflection logs if needed
+            // TODO to be removed if not possible to disable logger.
             final boolean logReflections = isLogReflections();
             if (!logReflections && Reflections.log instanceof LocationAwareLogger) {
-                Reflections.log = NOPLogger.NOP_LOGGER;
+                final Logger logger = LoggerFactory.getLogger(Reflections.class);
+                // FIXME to uncomment when switching to [slf4j v2+] with [logback v1.4.5+] (Spring Boot 3 ?)
+                // logger.atLevel(org.slf4j.event.Level.ERROR);
             }
 
             // Factories initialisation
@@ -88,18 +77,6 @@ public final class SpiConfiguration implements TestExecutionListener {
         } catch (Exception ex) {
             LOGGER.error("Configuration failed: [{}].", ex.getMessage(), ex);
         }
-    }
-
-    @Override
-    public void executionFinished(final TestIdentifier testIdentifier, final TestExecutionResult testExecutionResult) {
-        // Collect all the test results
-        getClassname(testIdentifier.getSource().orElse(null)).ifPresent(className -> {
-            final Map<String, TestExecutionResult> testClassResults = TEST_EXECUTION_RESULTS.computeIfAbsent(
-                    className,
-                    testClass -> new HashMap<>()
-            );
-            testClassResults.put(testIdentifier.getDisplayName(), testExecutionResult);
-        });
     }
 
     /**
@@ -157,9 +134,9 @@ public final class SpiConfiguration implements TestExecutionListener {
      * @return The factories Map.
      */
     static <A extends Annotation, F extends AssetFactory<A>> Map<Class<A>, F> retrieveFactories() {
-        // Search for factories in the root package
-        final Reflections reflections = new Reflections(ROOT_PACKAGE);
-        final Set<Class<? extends AssetFactory>> factoryClasses = reflections.getSubTypesOf(AssetFactory.class);
+
+        final Set<Class<? extends AssetFactory>> factoryClasses = findAssignableCandidate(AssetFactory.class);
+
         return factoryClasses.stream()
             // instantiate the factories
             .map(SpiConfiguration::<A, F>newFactoryInstance)
@@ -197,15 +174,6 @@ public final class SpiConfiguration implements TestExecutionListener {
         bannerLogger.addHandler(consoleHandler);
         bannerLogger.setLevel(Level.INFO);
         return bannerLogger;
-    }
-
-    private static Optional<String> getClassname(final TestSource testSource) {
-        if (testSource instanceof MethodSource) {
-            return Optional.of(((MethodSource) testSource).getClassName());
-        } else if (testSource instanceof ClassSource) {
-            return Optional.of(((ClassSource) testSource).getClassName());
-        }
-        return Optional.empty();
     }
 
 

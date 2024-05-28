@@ -32,21 +32,21 @@ class BannerConsoleFormatter extends Formatter {
     /** ANSI code for black foreground color.*/
     private static final String BLACK_FOREGROUND = String.format(ANSI_RENDITION_FORMAT, FOREGROUND, 51, 51, 51);
 
-    private static final String ORANGE_KEY = "mms";
+    private static final String MMS_KEY = "mms";
     private static final String DEFAULT_KEY = "default";
     private static final String JAY_KEY = "jay";
     private static final String UNIT_KEY = "unit";
     private static final String UTILS_KEY = "utils";
     private static final String CONTENT_KEY = "content";
 
-    private final Map<String, String> substitutionMap;
+    private Map<String, String> substitutionMap;
 
     /**
      * ConsoleLogFormatter default constructor.
      */
     public BannerConsoleFormatter() {
         substitutionMap = new HashMap<>();
-        substitutionMap.put(ORANGE_KEY, ORANGE_FOREGROUND);
+        substitutionMap.put(MMS_KEY, ORANGE_FOREGROUND);
         substitutionMap.put(DEFAULT_KEY, ANSI_RESET);
         substitutionMap.put(JAY_KEY, BLACK_FOREGROUND);
         substitutionMap.put(UNIT_KEY, BLACK_FOREGROUND);
