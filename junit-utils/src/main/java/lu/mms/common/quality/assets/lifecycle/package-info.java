@@ -1,0 +1,1 @@
+package lu.mms.common.quality.assets.lifecycle;
