@@ -1,7 +1,0 @@
-
-junit-utils:
-  # The package that will be scanned by the framework.
-  component-scan: lu.mms
-
-  # Turn ON reflections logging.
-  log-reflections: false
