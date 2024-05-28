@@ -1,7 +1,7 @@
-package lu.mms.common.quality.assets;
+package lu.mms.common.quality.junit.assets;
 
-import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
-import lu.mms.common.quality.platform.SpiConfiguration;
+import lu.mms.common.quality.junit.assets.mock.context.InternalMocksContext;
+import lu.mms.common.quality.junit.platform.SpiConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
