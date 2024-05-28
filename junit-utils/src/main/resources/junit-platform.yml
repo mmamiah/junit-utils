@@ -1,5 +1,0 @@
-# Enable automatic extension detection
-# The extensions discovered via the ServiceLoad mechanism will be added to the extension registry after JUnit Jupiter's
-# global extensions (e.f., support for TestInfo, TestReporter, etc.)
-# See 'junit.org/junit/docs/current/user-guide/' for more info
-junit.jupiter.extensions.autodetection.enabled: true
