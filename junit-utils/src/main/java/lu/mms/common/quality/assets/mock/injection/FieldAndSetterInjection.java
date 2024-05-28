@@ -23,7 +23,7 @@ import static lu.mms.common.quality.assets.mock.context.MockContextUtils.retriev
  * This class ensure the mocks from the {@link InternalMocksContext} are injected via field/setter when relevant, to the
  * test instance target member annotated with the provided annotation.
  */
-public class FieldAndSetterInjection implements Consumer<InternalMocksContext>, MockReinforcementHandler {
+public final class FieldAndSetterInjection implements Consumer<InternalMocksContext>, MockReinforcementHandler {
 
     private final Class<? extends Annotation> annotationClass;
 
@@ -31,6 +31,11 @@ public class FieldAndSetterInjection implements Consumer<InternalMocksContext>, 
         this.annotationClass = annotationClass;
     }
 
+    /**
+     * Instantiate a new mock injection consumer.
+     * @param annotationClass   The annotation to search.
+     * @return  the mock injection consumer
+     */
     public static FieldAndSetterInjection newConsumer(final Class<? extends Annotation> annotationClass) {
         return new FieldAndSetterInjection(annotationClass);
     }

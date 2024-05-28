@@ -1,1 +1,1 @@
-Main-Class: lu.mms.common.quality.junit.platform.SpiConfiguration
+Main-Class: lu.mms.common.quality.platform.SpiConfiguration

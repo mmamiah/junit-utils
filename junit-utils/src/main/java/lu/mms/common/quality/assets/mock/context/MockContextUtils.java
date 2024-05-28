@@ -20,11 +20,6 @@ import java.util.stream.IntStream;
  */
 public final class MockContextUtils {
 
-    /**
-     * Mapper to turn strings value to selected target class.
-     */
-    public static final ModelMapper MODEL_MAPPER = new ModelMapper();
-
     private MockContextUtils() {
         // hidden constructor
     }
@@ -75,7 +70,7 @@ public final class MockContextUtils {
         if (Set.class.isAssignableFrom(type)) {
             mocksCollection = new HashSet<>(safeMocks);
         } else {
-            mocksCollection = MODEL_MAPPER.map(safeMocks, type);
+            mocksCollection = new ModelMapper().map(safeMocks, type);
         }
         return mocksCollection;
     }
@@ -109,7 +104,7 @@ public final class MockContextUtils {
     }
 
     /**
-     * This method return the class object. <br>
+     * This method returns the class object. <br>
      * If the object is a mock, it returns the original object class, otherwise it return the <i>object.getClass()</i>
      * value.
      * @param object The object to check

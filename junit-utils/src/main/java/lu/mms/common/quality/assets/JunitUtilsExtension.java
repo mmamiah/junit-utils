@@ -1,20 +1,37 @@
 package lu.mms.common.quality.assets;
 
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
+import lu.mms.common.quality.platform.SpiConfiguration;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringBootVersion;
 
 import java.util.function.Consumer;
 
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 
 /**
- * This class provide the basic functionality for any JUnit Utils Extension.
+ * This class provides the basic functionality for any JUnit Utils Extension.
  */
 public abstract class JunitUtilsExtension implements Consumer<InternalMocksContext>, BeforeAllCallback,
                                                     AfterAllCallback {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JunitUtilsExtension.class);
+    private static final String MIN_SPRING_BOOT_TEST_VERSION = "2.6.0";
+
+    // Static block to ensure that the SPI class is loaded
+    static {
+        try {
+            Class.forName(SpiConfiguration.class.getName());
+        } catch (final Throwable throwable) {
+            LOGGER.warn("Failed to load the Service Provider API");
+        }
+    }
 
     /**
      * The JUnit Utils namespace.
@@ -23,8 +40,23 @@ public abstract class JunitUtilsExtension implements Consumer<InternalMocksConte
 
     @Override
     public void beforeAll(final ExtensionContext extensionContext) {
+        // spring version gatekeeper.
+        assumeTrue(
+                isValidVersion(SpringBootVersion.getVersion()),
+                String.format(
+                        "'Spring Boot Test' minimum required version is [%s]. You are using version [%s]",
+                        MIN_SPRING_BOOT_TEST_VERSION, SpringBootVersion.getVersion()
+                )
+        );
+
         final ExtensionContext.Store store = getStore(extensionContext);
         store.put(getClass(), true);
+    }
+
+    static boolean isValidVersion(final String actual) {
+        final int requiredVersion = Integer.parseInt(MIN_SPRING_BOOT_TEST_VERSION.replaceAll("\\.", StringUtils.EMPTY));
+        final int actualVersion = Integer.parseInt(actual.replaceAll("\\.", StringUtils.EMPTY));
+        return actualVersion >= requiredVersion;
     }
 
     @Override

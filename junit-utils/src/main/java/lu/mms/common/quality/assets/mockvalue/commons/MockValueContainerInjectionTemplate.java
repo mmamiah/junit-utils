@@ -48,7 +48,7 @@ public final class MockValueContainerInjectionTemplate implements Consumer<Class
                                 .map(value -> Pair.of(field, BASIC_VALUE_PATTERN.matcher(value)))
                 )
                 .filter(pair -> pair.getValue().matches())
-                .collect(Collectors.toMap(pair -> pair.getValue().group(1), Pair::getKey));
+                .collect(Collectors.toMap(pair -> pair.getValue().group(1), Pair::getKey, (o, v) -> o));
 
         // inject the test instance @MockValue to the @Spy field @Value annotated
         findAnnotatedFields(testInstance.getClass(), annotationClass)

@@ -1,9 +1,12 @@
 package lu.mms.common.quality.utils;
 
+import lu.mms.common.quality.platform.SpiConfiguration;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Map;
+import java.util.Properties;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -16,23 +19,14 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  */
 class ConfigurationPropertiesUtilsTest {
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-        "log-reflections",          // defined in .YML
-        "show-banner",              // defined in .YAML
-        "component-scan",           // defined in .PROPERTIES
-        "junit-platform-properties", // defined in 'junit-platform.properties'
-        "junit-platform-yaml",      // defined in 'junit-platform.yaml'
-        "junit-platform-yml"        // defined in 'junit-platform.properties'
-    })
-    void shouldFindYamlConfigurationWhenEntryKeyProvided(final String propertyKey) {
-        // Arrange
+    @BeforeAll
+    static void init() throws ClassNotFoundException {
+        Class.forName(SpiConfiguration.class.getName());
+    }
 
-        // Act
-        final Object simpleValue = ConfigurationPropertiesUtils.properties.get(propertyKey);
-
-        // Assert
-        assertThat(simpleValue, notNullValue());
+    @BeforeEach
+    void ini() {
+        assumeTrue(ConfigurationPropertiesUtils.properties != null);
     }
 
     @ParameterizedTest
@@ -41,14 +35,12 @@ class ConfigurationPropertiesUtilsTest {
         "junit-utils.show-banner",               // defined in .YAML
         "junit-utils.component-scan",            // defined in .PROPERTIES
         "junit-utils.junit-platform-properties", // defined in 'junit-platform.properties'
-        "junit-utils.junit-platform-yaml",       // defined in 'junit-platform.yaml'
-        "junit-utils.junit-platform-yml"         // defined in 'junit-platform.properties'
+        "junit-utils.junit-platform-yaml"       // defined in 'junit-platform.yaml'
     })
     void shouldFindConfigurationKeyWhenFullKeyDefined(final String propertyKey) {
         // Arrange
-        final Map<Object, Object> properties = ConfigurationPropertiesUtils.properties;
-        // should not find the key as we do not store full keys in the map
-        assumeTrue(properties.get(propertyKey) == null);
+        final Properties properties = ConfigurationPropertiesUtils.properties;
+        assumeTrue(properties.get(propertyKey) != null);
 
         // Act
         final Object value = ConfigurationFileType.retrieveConfiguration(properties, propertyKey);

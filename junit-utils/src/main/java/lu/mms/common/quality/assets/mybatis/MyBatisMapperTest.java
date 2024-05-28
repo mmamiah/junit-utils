@@ -1,5 +1,8 @@
 package lu.mms.common.quality.assets.mybatis;
 
+import lu.mms.common.quality.assets.db.InMemoryDb;
+import lu.mms.common.quality.assets.no.NoClass;
+import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -20,16 +23,22 @@ import java.lang.annotation.Target;
 @ExtendWith(MyBatisMapperExtension.class)
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.1"
+    since = "1.0.0"
 )
 public @interface MyBatisMapperTest {
+
+    /**
+     * The InMemory database engine to be used to instantiate the datasource (session factory).
+     * @return  The database engine.
+     */
+    InMemoryDb dbEngine() default InMemoryDb.HSQL_ORACLE;
 
     /**
      * The migration scripts to run when configuring the DataSource. <br>
      * The script will be executed in the declared order.
      * @return The script.
      */
-    String[] script() default "";
+    String[] script() default StringUtils.EMPTY;
 
     /**
      * Manage the connection to the database.
@@ -38,5 +47,7 @@ public @interface MyBatisMapperTest {
      *         <b>false</b>, otherwise.
      */
     boolean testIsolation() default true;
+
+    Class<?>[] sqlRoutines() default NoClass.class;
 
 }

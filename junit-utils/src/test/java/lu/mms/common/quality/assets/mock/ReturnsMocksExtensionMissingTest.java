@@ -1,6 +1,6 @@
 package lu.mms.common.quality.assets.mock;
 
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -31,9 +31,9 @@ class ReturnsMocksExtensionMissingTest {
 
 
     @Test
-    void shouldNotInitMocksWhenMissingUnitTestAnnotation() {
+    void shouldNotInitMocksWhenMissingExtendWithTestUtilsAnnotation() {
         // Arrange
-        assumeTrue(getClass().getDeclaredAnnotation(UnitTest.class) == null);
+        assumeTrue(getClass().getDeclaredAnnotation(ExtendWithTestUtils.class) == null);
 
         // Act
         final Room room = houseMock.getRoom();

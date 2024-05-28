@@ -1,6 +1,6 @@
 package lu.mms.common.quality.utils;
 
-import lu.mms.common.quality.junit.platform.SpiConfiguration;
+import lu.mms.common.quality.platform.SpiConfiguration;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,7 +46,7 @@ class ConfigurationFileTypeTest {
     @EnumSource(ConfigurationFileType.class)
     void shouldReturnEmptyMapWhenResourceIsNull(final ConfigurationFileType configType) {
         // Act
-        final Map<Object, Object> properties = configType.retrieveConfigurations(null);
+        final Properties properties = configType.retrieveConfigurations(null);
 
         // Assert
         assertThat(properties, notNullValue());
@@ -77,7 +78,7 @@ class ConfigurationFileTypeTest {
             .filter(Optional::isEmpty)
             .forEach(url -> {
                 // Act
-                final Map<Object, Object> properties = configType.retrieveConfigurations(url.get());
+                final Properties properties = configType.retrieveConfigurations(url.get());
 
                 // Assert
                 assertThat(properties, notNullValue());
@@ -105,29 +106,6 @@ class ConfigurationFileTypeTest {
             // Assert
             assertThat(config, notNullValue());
             assertThat(config.get(notExistingProperty), nullValue());
-            assertThat(config, anEmptyMap());
-        });
-    }
-
-    @ParameterizedTest
-    @EnumSource(ConfigurationFileType.class)
-    void shouldNotConsiderPropertyWhenNotAnIngJunitUtilsProperty(final ConfigurationFileType fileFormat)
-                                                                throws IOException {
-        // Arrange
-        final String filename = fileFormat.getFilename("testcase");
-        final String propertyKey = "customer.country"; // property not starting by [junit-utils]
-        final String propertyValue = "Luxembourg";
-        final String propertyEntry = samplePropertyEntryProvider(fileFormat, propertyKey, propertyValue);
-        // create the file with data
-        final URL fileUrl = createFile(tempDir, filename, propertyEntry).toUri().toURL();
-
-        // loop into [ConfigurationFileType] and try to retrieve the property key
-        Stream.of(ConfigurationFileType.values()).forEach(type -> {
-            // Act
-            final Map<Object, Object> config = type.retrieveConfigurations(fileUrl);
-
-            // Assert
-            assertThat(config, notNullValue());
             assertThat(config, anEmptyMap());
         });
     }

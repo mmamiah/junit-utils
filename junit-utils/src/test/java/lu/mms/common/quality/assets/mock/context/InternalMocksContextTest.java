@@ -57,7 +57,7 @@ class InternalMocksContextTest {
     private Charger chargerMock;
 
     @BeforeEach
-    private void init(final TestInfo testInfo) {
+    void init(final TestInfo testInfo) {
         final String methodName = testInfo.getTestMethod().map(Method::getName).orElse(null);
         sut = InternalMocksContext.newContext(LOGGER, getClass(), this, methodName);
     }

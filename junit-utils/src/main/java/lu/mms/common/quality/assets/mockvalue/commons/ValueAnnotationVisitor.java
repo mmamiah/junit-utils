@@ -1,11 +1,11 @@
 package lu.mms.common.quality.assets.mockvalue.commons;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.platform.commons.util.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static lu.mms.common.quality.assets.mock.context.MockContextUtils.MODEL_MAPPER;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatedFields;
 
 /**
@@ -45,7 +45,7 @@ public final class ValueAnnotationVisitor implements MockValueVisitor {
                 if (pair.getKey().getType().isArray()) {
                     objValue = pair.getValue().group(2).split(",");
                 }
-                final Object value = MODEL_MAPPER.map(objValue, pair.getKey().getType());
+                final Object value = new ModelMapper().map(objValue, pair.getKey().getType());
 
                 // No mater whether this field was initialized before or not, if this 'visitor' is called, we need to
                 // re-apply the field defaukting.

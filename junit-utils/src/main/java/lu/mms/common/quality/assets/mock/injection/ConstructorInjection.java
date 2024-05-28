@@ -1,7 +1,6 @@
 package lu.mms.common.quality.assets.mock.injection;
 
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.mockito.Spy;
 import org.mockito.internal.util.MockUtil;
@@ -34,6 +33,11 @@ public final class ConstructorInjection implements Consumer<InternalMocksContext
         this.annotationClass = annotationClass;
     }
 
+    /**
+     * Instantiate a new mock injection consumer.
+     * @param annotationClass   The annotation to search.
+     * @return  the mock injection consumer
+     */
     public static ConstructorInjection newConsumer(final Class<? extends Annotation> annotationClass) {
         return new ConstructorInjection(annotationClass);
     }
@@ -45,39 +49,39 @@ public final class ConstructorInjection implements Consumer<InternalMocksContext
                 field -> field.isAnnotationPresent(annotationClass)
         ).forEach(field -> {
             ReflectionUtils.getAllConstructors(field.getType()).stream()
-                .filter(Objects::nonNull)
+                    .filter(Objects::nonNull)
 
-                // keep the non-default constructor. We don't want to rebuild with default constructors.
-                .filter(constructor -> constructor.getParameterCount() != 0)
+                    // keep the non-default constructor. We don't want to rebuild with default constructors.
+                    .filter(constructor -> constructor.getParameterCount() != 0)
 
-                // retrieve the longest constructor parameters
-                .max(Comparator.comparing(Constructor::getParameterCount))
+                    // retrieve the longest constructor parameters
+                    .max(Comparator.comparing(Constructor::getParameterCount))
 
-                // Retrieve the Pair[Constructor, args]
-                .map(constructor -> Pair.<Constructor<?>, Object[]>of(
-                    constructor,
-                    retrieveMocksByParameters(mockContext, constructor.getParameters()))
-                )
+                    // Retrieve the Pair[Constructor, args]
+                    .map(constructor -> Pair.<Constructor<?>, Object[]>of(
+                            constructor,
+                            retrieveMocksByParameters(mockContext, constructor.getParameters()))
+                    )
 
-                // instantiate the field using the selected constructor & args
-                .map(pair -> {
-                    Object newInstance = BeanUtils.instantiateClass(pair.getKey(), pair.getValue());
-                    // Turn the newly created field into spy if needed
-                    if (isSpySourceField(mockContext.getTestInstance(), field)) {
-                        newInstance = newSpy(field.getType(), newInstance, field.getName());
-                    }
-                    mockContext.mergeMocks(List.of(newInstance));
-                    return newInstance;
-                })
+                    // instantiate the field using the selected constructor & args
+                    .map(pair -> {
+                        Object newInstance = BeanUtils.instantiateClass(pair.getKey(), pair.getValue());
+                        // Turn the newly created field into spy if needed
+                        if (isSpySourceField(mockContext.getTestInstance(), field)) {
+                            newInstance = newSpy(field.getType(), newInstance, field.getName());
+                        }
+                        mockContext.mergeMocks(List.of(newInstance));
+                        return newInstance;
+                    })
 
-                // Re-inject the sut only if it has been instantiated
-                .ifPresent(sut -> ReflectionTestUtils.setField(mockContext.getTestInstance(), field.getName(), sut));
+                    // Re-inject the sut only if it has been instantiated
+                    .ifPresent(sut -> ReflectionTestUtils.setField(mockContext.getTestInstance(), field.getName(), sut));
         });
     }
 
     private static boolean isSpySourceField(final Object testInstance, final Field field) {
         return field.isAnnotationPresent(Spy.class)
-        || MockUtil.isSpy(ReflectionTestUtils.getField(testInstance, field.getName()));
+                || MockUtil.isSpy(ReflectionTestUtils.getField(testInstance, field.getName()));
     }
 
     /**

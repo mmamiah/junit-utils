@@ -4,6 +4,7 @@ import lu.mms.common.quality.assets.mockvalue.MockValue;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
@@ -16,7 +17,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
-import static lu.mms.common.quality.assets.mock.context.MockContextUtils.MODEL_MAPPER;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatedFields;
 
 /**
@@ -140,65 +140,12 @@ public final class MockValueDefaultVisitor implements MockValueVisitor {
             valueToInject = String.valueOf(value).split(",");
         }
         if (!Objects.equals(valueToInject.getClass(), targetClass)) {
-            valueToInject = MODEL_MAPPER.map(valueToInject, targetClass);
+            valueToInject = new ModelMapper().map(valueToInject, targetClass);
         }
         return valueToInject;
     }
 
-    /**
-     * Initialize the <b>targetField</b> with the following value:
-     * <ol>
-     *     <li>With the source field (source#sourceFieldName) if it is not null</li>
-     *     <li>Otherwise, with the <b>annotationDefaultValue</b> if it is not null as well</li>
-     * </ol>
-     * @param source The the source object containing the wanted value
-     * @param sourceFieldName The source field name
-     * @param target The target object where to set the selected value
-     * @param targetField The target field (in the target object)
-     * @param annotationDefaultValue The value to set in case no other value match
-     * @return The value injected in the <b>targetField</b>.
-     */
-    private static Object initMockValueField(final Object source, final String sourceFieldName,
-                                             final Object target, final Field targetField,
-                                             final Object annotationDefaultValue) {
-        // get annotated field value
-        Object value = ReflectionTestUtils.getField(source, sourceFieldName);
-        value = sanitizeTargetValue(targetField, annotationDefaultValue, value);
-
-        if (value == null) {
-            return null;
-        }
-
-        if (!(targetField.getType().isArray() && value.getClass().isArray())) {
-            if (isArrayAndIsNotEmpty(value)) {
-                value = CollectionUtils.arrayToList(value).listIterator().next();
-            }
-            value = MODEL_MAPPER.map(value, targetField.getType());
-        }
-
-        ReflectionTestUtils.setField(target, targetField.getName(), value);
-        return value;
-    }
-
-    private static Object sanitizeTargetValue(final Field targetField, final Object annotationDefaultValue,
-                                              final Object targetValue) {
-        Object result = targetValue;
-        if (annotationDefaultValue == null) {
-            // If no default value was defined then keep the target value AS-IS
-            return result;
-        }
-        if (targetValue == null && StringUtils.isNotBlank(annotationDefaultValue.toString())) {
-            // Get the annotation default value
-            if (targetField.getType().isArray()) {
-                result = String.valueOf(annotationDefaultValue).split(",");
-            } else {
-                result = annotationDefaultValue;
-            }
-        }
-        return result;
-    }
-
-    private static boolean isArrayAndIsNotEmpty(Object object) {
+    private static boolean isArrayAndIsNotEmpty(final Object object) {
         return object.getClass().isArray() && ArrayUtils.getLength(object) > 0;
     }
 

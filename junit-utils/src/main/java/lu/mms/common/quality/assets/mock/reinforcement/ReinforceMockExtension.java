@@ -3,7 +3,7 @@ package lu.mms.common.quality.assets.mock.reinforcement;
 import lu.mms.common.quality.assets.JunitUtilsExtension;
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
 import lu.mms.common.quality.assets.mock.injection.FieldAndSetterInjection;
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 @API(
         status = API.Status.EXPERIMENTAL,
-        since = "0.0.1"
+        since = "1.0.0"
 )
 public class ReinforceMockExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
 
@@ -45,8 +45,9 @@ public class ReinforceMockExtension extends JunitUtilsExtension implements Befor
 
     @Override
     public void beforeEach(final ExtensionContext extensionContext) {
-        final UnitTest unitTest = extensionContext.getRequiredTestClass().getDeclaredAnnotation(UnitTest.class);
-        if (unitTest != null && !unitTest.reinforceMock()) {
+        final ExtendWithTestUtils config = extensionContext.getRequiredTestClass()
+                .getDeclaredAnnotation(ExtendWithTestUtils.class);
+        if (config != null && !config.reinforceMock()) {
             return;
         }
 

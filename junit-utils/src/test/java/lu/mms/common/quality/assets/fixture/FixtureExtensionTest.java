@@ -1,5 +1,6 @@
 package lu.mms.common.quality.assets.fixture;
 
+import lu.mms.common.quality.assets.JunitUtilsTestContextStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicTest;
@@ -7,8 +8,6 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.engine.execution.ExtensionValuesStore;
-import org.junit.jupiter.engine.execution.NamespaceAwareStore;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -38,7 +37,7 @@ class FixtureExtensionTest {
     private ExtensionContext extensionContextMock;
 
     @Spy
-    private final ExtensionContext.Store storeSpy = new NamespaceAwareStore(new ExtensionValuesStore(null), JUNIT_UTILS_NAMESPACE);
+    private final ExtensionContext.Store storeSpy = new JunitUtilsTestContextStore();
 
     @Mock
     private BookService bookServiceMock;

@@ -40,8 +40,8 @@ public class FixtureExtension extends JunitUtilsExtension implements BeforeEachC
     public void beforeEach(final ExtensionContext extensionContext) {
         final Object testInstance = extensionContext.getRequiredTestInstance();
         final Set<Field> mockDependentFields = ReflectionUtils.getAllFields(
-            extensionContext.getRequiredTestClass(),
-            ReflectionUtils.withAnnotation(Fixture.class)
+                extensionContext.getRequiredTestClass(),
+                ReflectionUtils.withAnnotation(Fixture.class)
         )
         .stream()
         // instantiate fixture field

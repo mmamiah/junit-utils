@@ -1,34 +1,27 @@
 package lu.mms.common.quality.assets.spring.context;
 
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
-import lu.mms.common.quality.assets.mock.reinforcement.MockReinforcementHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.ibatis.annotations.Mapper;
 import org.mockito.internal.util.MockUtil;
-import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.config.NamedBeanHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static lu.mms.common.quality.assets.mock.context.MockContextUtils.getObjectClass;
-import static lu.mms.common.quality.utils.FrameworkAnnotationUtils.buildReflections;
+import static lu.mms.common.quality.utils.FrameworkUtils.buildReflections;
 import static org.mockito.Mockito.mock;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.genericBeanDefinition;
 
@@ -42,19 +35,15 @@ class RunnerApplicationContextInitializer implements ApplicationContextInitializ
 
     private final SpringContextRunner contextRunnerAnnotation;
     private final InternalMocksContext mocksContext;
-    private final MockReinforcementHandler mockReinforcementHandler;
 
     /**
      * @param contextRunnerAnnotation The context runner annotation
      * @param mocksContext The test instance mocks context
-     * @param mockReinforcementHandler The mock reinforcement handler
      */
     RunnerApplicationContextInitializer(final SpringContextRunner contextRunnerAnnotation,
-                                        final InternalMocksContext mocksContext,
-                                        final MockReinforcementHandler mockReinforcementHandler) {
+                                        final InternalMocksContext mocksContext) {
         this.contextRunnerAnnotation = contextRunnerAnnotation;
         this.mocksContext = mocksContext;
-        this.mockReinforcementHandler = mockReinforcementHandler;
     }
 
     @Override
@@ -93,35 +82,8 @@ class RunnerApplicationContextInitializer implements ApplicationContextInitializ
                 .collect(Collectors.toSet())
         );
 
-        // For consistency, ensure that any config class is initialized with mocks/spies if relevant
-        Stream.concat(
-            Stream.of(contextRunnerAnnotation.withUserConfiguration()),
-            Stream.of(contextRunnerAnnotation.withConfiguration())
-        ).flatMap(configClass -> ReflectionUtils.getAllFields(configClass).stream())
-        .map(field -> Pair.of(field, toNamedBeanHolder(beanFactory, field.getDeclaringClass())))
-        .filter(pair -> Objects.nonNull(pair.getValue()))
-        .forEach(pair -> {
-            final Field field = pair.getKey();
-            final Object beanInstance = pair.getValue().getBeanInstance();
+        mocksContext.getMocks().addAll(mocks);
 
-            final Object mock = mocksContext.findMockByField(field);
-            if (mock != null) {
-                ReflectionTestUtils.setField(beanInstance, field.getName(), mock);
-                return;
-            }
-            mockReinforcementHandler.injectMocksOnFields(Set.of(field), mocks, beanInstance);
-        });
-
-    }
-
-    private static NamedBeanHolder<?> toNamedBeanHolder(final ConfigurableListableBeanFactory beanFactory,
-                                                        final Class<?> configClass) {
-        try {
-            return beanFactory.resolveNamedBean(configClass);
-        } catch (Exception ex) {
-            LOGGER.error(ex.getMessage());
-            return null;
-        }
     }
 
     private Set<Object> registerMocks(final ConfigurableListableBeanFactory beanFactory,

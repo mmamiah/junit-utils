@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -44,9 +46,11 @@ class SpringContextRunnerExtensionTest {
         });
 
         // Assert
-        final Boolean canOverride = (Boolean) ReflectionTestUtils.getField(
-                contextRunner, "allowBeanDefinitionOverriding"
-        );
+        final Boolean canOverride = Optional.of(contextRunner)
+                .map(context -> ReflectionTestUtils.getField(context, "runnerConfiguration"))
+                .map(config -> String.valueOf(ReflectionTestUtils.getField(config, "allowBeanDefinitionOverriding")))
+                .map(Boolean::valueOf)
+                .orElse(false);
         // BUGFIX #13
         assertThat(canOverride, equalTo(true));
     }

@@ -5,22 +5,27 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>junit-utils-pom</artifactId>
     <groupId>lu.mms.common</groupId>
+    <artifactId>junit-utils-bom</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>sample-non-spring-project</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>Non Spring [Sample]</name>
+  <name>Sample - Non Spring</name>
   <description>Example of non-Spring project</description>
 
-  <properties>
-    <junit-utils.version>${project.parent.version}</junit-utils.version>
-  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>lu.mms.common</groupId>
+        <artifactId>junit-utils</artifactId>
+        <version>${project.parent.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
-
     <!-- Commons -->
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -31,7 +36,6 @@
     <dependency>
       <groupId>lu.mms.common</groupId>
       <artifactId>junit-utils</artifactId>
-      <version>${junit-utils.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -39,32 +43,10 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-      <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-install-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-install</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.0.0-M1</version>
         <executions>
           <execution>
             <id>default-deploy</id>

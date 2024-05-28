@@ -3,11 +3,11 @@ package lu.mms.common.quality.assets.mockvalue.commons;
 import lu.mms.common.quality.assets.mockvalue.MockValue;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.stream.Stream;
 
-import static lu.mms.common.quality.assets.mock.context.MockContextUtils.MODEL_MAPPER;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatedFields;
 
 /**
@@ -25,6 +25,12 @@ public final class TestMethodMockValuesVisitor implements MockValueVisitor {
         this.testInstance = testInstance;
     }
 
+    /**
+     * Instantiate a new mock injection consumer.
+     * @param testInstance   The test instance.
+     * @param testMethodName   The test method name.
+     * @return  the mock injection consumer
+     */
     public static TestMethodMockValuesVisitor newVisitor(final Object testInstance, final String testMethodName) {
         return new TestMethodMockValuesVisitor(testInstance, testMethodName);
     }
@@ -53,7 +59,7 @@ public final class TestMethodMockValuesVisitor implements MockValueVisitor {
                     } else if (field.getType().isArray()) {
                         // map to the correct type
                         targetValue = Stream.of(targetValue).toArray();
-                        targetValue = MODEL_MAPPER.map(targetValue, field.getType());
+                        targetValue = new ModelMapper().map(targetValue, field.getType());
                     }
                     ReflectionTestUtils.setField(sut, field.getName(), targetValue);
                 });

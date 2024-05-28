@@ -1,6 +1,6 @@
 package lu.mms.common;
 
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * With this test we check that Mockito, Hamcrest and the custom extension works.
  */
-@UnitTest
+@ExtendWithTestUtils
 class ArgumentsServiceTest {
 
     @InjectMocks

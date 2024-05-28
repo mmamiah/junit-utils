@@ -1,5 +1,6 @@
 package lu.mms.common.quality.assets.mockvalue;
 
+import lu.mms.common.quality.assets.JunitUtilsTestContextStore;
 import lu.mms.common.quality.assets.mockvalue.commons.MockValueVisitor;
 import org.hamcrest.core.AnyOf;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.engine.execution.ExtensionValuesStore;
-import org.junit.jupiter.engine.execution.NamespaceAwareStore;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -40,7 +39,7 @@ class MockValueDefaultingTest {
     private ExtensionContext extensionContextMock;
 
     @Spy
-    private final ExtensionContext.Store storeSpy = new NamespaceAwareStore(new ExtensionValuesStore(null), JUNIT_UTILS_NAMESPACE);
+    private final ExtensionContext.Store storeSpy = new JunitUtilsTestContextStore();
 
     @MockValue("${actor_name}")
     private final String givenName = "EINSTEIN";

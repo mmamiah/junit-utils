@@ -1,6 +1,7 @@
 package lu.mms.common.quality.assets.mock.context;
 
 import lu.mms.common.quality.assets.AssetVisitor;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -9,7 +10,6 @@ import org.mockito.internal.util.MockUtil;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.1"
+    since = "1.0.0"
 )
 public final class InternalMocksContext implements AssetVisitor<Consumer<InternalMocksContext>> {
     private static final String MOCKS_CONTEXT_ENABLED_TEMPLATE = "Mocks context has been instantiated for '{}().{}.";
@@ -116,7 +116,7 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
      * @param spies The spies to merge to the {@link InternalMocksContext}.
      */
     public void mergeSpies(final Map<Field, Object> spies) {
-        if (CollectionUtils.isEmpty(spies)) {
+        if (MapUtils.isEmpty(spies)) {
             return;
         }
         spies.keySet().forEach(this::mergeField);

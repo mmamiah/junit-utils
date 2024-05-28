@@ -1,7 +1,7 @@
 package lu.mms.common.quality.assets.mockvalue;
 
 import lu.mms.common.quality.assets.AssetFactory;
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import lu.mms.common.quality.utils.ConfigurationPropertiesUtils;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.Extensions;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.util.stream.Stream;
 
-import static lu.mms.common.quality.utils.FrameworkAnnotationUtils.buildReflections;
+import static lu.mms.common.quality.utils.FrameworkUtils.buildReflections;
 
 /**
  * The MockValueFactory ensure that for any declared {@link MockValue}, the related class is extended with the correct
@@ -38,7 +38,7 @@ public class MockValueFactory implements AssetFactory<MockValue> {
 
     private void extensionValidation(final Field field) {
         final Class<?> declaringClass = field.getDeclaringClass();
-        if (declaringClass.isAnnotationPresent(UnitTest.class)) {
+        if (declaringClass.isAnnotationPresent(ExtendWithTestUtils.class)) {
             return;
         }
         final Extensions extensions = declaringClass.getDeclaredAnnotation(Extensions.class);
