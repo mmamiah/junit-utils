@@ -1,12 +1,11 @@
 package lu.mms.common.quality.assets.spring.context;
 
+import lu.mms.common.quality.assets.JunitUtilsTestContextStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.engine.execution.ExtensionValuesStore;
-import org.junit.jupiter.engine.execution.NamespaceAwareStore;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.internal.util.MockUtil;
@@ -30,12 +29,12 @@ public class TestcaseSpringContextRunnerWithBeansTest {
     private ExtensionContext extensionContextMock;
 
     @Spy
-    private final ExtensionContext.Store storeSpy = new NamespaceAwareStore(new ExtensionValuesStore(null), JUNIT_UTILS_NAMESPACE);
+    private final ExtensionContext.Store storeSpy = new JunitUtilsTestContextStore();
 
     private SpringContextRunnerWithBeans testCaseInstance;
 
     @BeforeEach
-    private void init(final TestInfo testInfo) {
+    void init(final TestInfo testInfo) {
         when(extensionContextMock.getStore(JUNIT_UTILS_NAMESPACE)).thenReturn(storeSpy);
 
         testCaseInstance = TestcaseHelper.newHelper(extensionContextMock).prepareTestCaseMock(

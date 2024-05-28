@@ -1,10 +1,12 @@
 package lu.mms.common.quality.assets.lifecycle;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lu.mms.common.quality.assets.JunitUtilsExtension;
-import lu.mms.common.quality.assets.unittest.UnitTest;
 import org.apiguardian.api.API;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.commons.support.HierarchyTraversalMode;
@@ -16,8 +18,6 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * JUnit extension to execute the test instance <b>non-mock</b> members lifecycle methods. <br>
+ * JUnit's extension to execute the test instance <b>non-mock</b> members lifecycle methods. <br>
  * Any @Mock test instance member will be enforced/fulfilled in order to avoid NPE when executing lifecycle methods.
  * @see PostConstruct
  * @see PreDestroy
@@ -34,28 +34,41 @@ import java.util.Map;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.1"
+    since = "1.0.0"
 )
-public class BeanLifeCycleExtension extends JunitUtilsExtension implements BeforeEachCallback, AfterEachCallback {
+public class BeanLifeCycleExtension extends JunitUtilsExtension implements BeforeEachCallback,
+                                                                    BeforeTestExecutionCallback, AfterEachCallback {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeanLifeCycleExtension.class);
 
     @Override
     public void beforeEach(final ExtensionContext extensionContext) {
-        final UnitTest unitTest = extensionContext.getRequiredTestClass().getDeclaredAnnotation(UnitTest.class);
-        if (unitTest != null && !unitTest.lifeCycle()) {
+        final Class<?> testClass = extensionContext.getRequiredTestClass();
+
+        final WithBeanLifeCycle withBeanLifeCycle = testClass.getDeclaredAnnotation(WithBeanLifeCycle.class);
+        if (withBeanLifeCycle != null && !withBeanLifeCycle.beforeEach()) {
             return;
         }
+
+        executeLifeCycleClass(extensionContext.getRequiredTestInstance(), InitializingBean.class);
+        executeLifeCycleAnnotation(extensionContext, PostConstruct.class);
+    }
+
+    @Override
+    public void beforeTestExecution(final ExtensionContext extensionContext) throws Exception {
+        final Class<?> testClass = extensionContext.getRequiredTestClass();
+
+        final WithBeanLifeCycle withBeanLifeCycle = testClass.getDeclaredAnnotation(WithBeanLifeCycle.class);
+        if (withBeanLifeCycle == null || withBeanLifeCycle.beforeEach()) {
+            return;
+        }
+
         executeLifeCycleClass(extensionContext.getRequiredTestInstance(), InitializingBean.class);
         executeLifeCycleAnnotation(extensionContext, PostConstruct.class);
     }
 
     @Override
     public void afterEach(final ExtensionContext extensionContext) {
-        final UnitTest unitTest = extensionContext.getRequiredTestClass().getDeclaredAnnotation(UnitTest.class);
-        if (unitTest != null && !unitTest.lifeCycle()) {
-            return;
-        }
         executeLifeCycleClass(extensionContext.getRequiredTestInstance(), DisposableBean.class);
         executeLifeCycleAnnotation(extensionContext, PreDestroy.class);
     }
@@ -75,15 +88,15 @@ public class BeanLifeCycleExtension extends JunitUtilsExtension implements Befor
         final Object testInstance = context.getRequiredTestInstance();
         // recover the matching field from the relevant test class
         ReflectionUtils.getAllFields(testInstance.getClass())
-            .stream()
-            // get the test instance fields and their methods annotated with @PostConstruct.
-            .map(field -> mapFieldMethods(field, annotationClass))
-            // Filter test instance properties (Classes) having target methods (@PostConstruct)
-            .filter(entry -> !entry.getValue().isEmpty())
-            // for each entry execute the Lifecycle annotation method (@PostConstruct / @PreDestroy).
-            .forEach(entry -> entry.getValue()
-                    .forEach(method -> executeMethod(testInstance, entry.getKey(), method.getName()))
-            );
+                .stream()
+                // get the test instance fields and their methods annotated with @PostConstruct.
+                .map(field -> mapFieldMethods(field, annotationClass))
+                // Filter test instance properties (Classes) having target methods (@PostConstruct)
+                .filter(entry -> !entry.getValue().isEmpty())
+                // for each entry execute the Lifecycle annotation method (@PostConstruct / @PreDestroy).
+                .forEach(entry -> entry.getValue()
+                        .forEach(method -> executeMethod(testInstance, entry.getKey(), method.getName()))
+                );
     }
 
     private static Map.Entry<String, List<Method>> mapFieldMethods(final Field field,

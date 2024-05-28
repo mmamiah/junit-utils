@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.regex.Matcher;
 
-import static lu.mms.common.quality.assets.mock.context.MockContextUtils.MODEL_MAPPER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -130,7 +130,7 @@ class MockValueSociableUnitTest {
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(valueAnnotation.value());
         assumeTrue(surnameMatcher.matches());
         int[] actualValues = new int[0];
-        final int[] defaultProperties = MODEL_MAPPER.map(surnameMatcher.group(2).split(","), actualValues.getClass());
+        final int[] defaultProperties = new ModelMapper().map(surnameMatcher.group(2).split(","), actualValues.getClass());
 
         // Act
         actualValues = sut.getIntArrayPropertyWithSingleElement();
@@ -150,7 +150,7 @@ class MockValueSociableUnitTest {
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(valueAnnotation.value());
         assumeTrue(surnameMatcher.matches());
         long[] actualValues = new long[0];
-        final long[] defaultProperties = MODEL_MAPPER.map(surnameMatcher.group(2).split(","), actualValues.getClass());
+        final long[] defaultProperties = new ModelMapper().map(surnameMatcher.group(2).split(","), actualValues.getClass());
 
         // Act
         actualValues = sut.getLongArrayWithMultipleElements();

@@ -1,30 +1,31 @@
 package lu.mms.common.quality.assets.mock.injection;
 
-import lu.mms.common.quality.assets.mock.MockInjectionExtension;
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
- * Testing the Mockito default behavior when #Answers.RETURNS_MOCKS and #UnitTest.answer is false.
+ * Testing the Mockito default behavior when #Answers.RETURNS_MOCKS and #ExtendWithTestUtils.answer is false.
  */
-@UnitTest
-@ExtendWith({MockitoExtension.class, MockInjectionExtension.class})
+@ExtendWithTestUtils
 class ConstructorInitViaReturnsMocksExtensionTest {
 
     @InjectMocks
     private District sut;
 
-    @Mock(answer = Answers.RETURNS_MOCKS)
-    private Building buildingMock;
+    @Mock(name = "squareBuilding", answer = Answers.RETURNS_MOCKS)
+    private Building buildingOneMock;
+
+    @Mock(name = "greenBuilding", answer = Answers.RETURNS_MOCKS)
+    private Building buildingTwoMock;
 
     @Mock
     private Owner ownerMock;
@@ -41,30 +42,61 @@ class ConstructorInitViaReturnsMocksExtensionTest {
         assertThat(mayor, equalTo(ownerMock));
     }
 
+    @Test
+    void shouldInstantiateSutWithExactConstructorArgumentWhenArgumentWithSameType() {
+        // Arrange
+
+        // Act
+        final Building greenBuilding = sut.getGreenBuilding();
+        final Building squareBuilding = sut.getSquareBuilding();
+
+        // Assert
+        assertThat(squareBuilding, allOf(notNullValue(), equalTo(buildingOneMock)));
+        assertThat(greenBuilding, allOf(notNullValue(), equalTo(buildingTwoMock)));
+    }
+
 
     // Test case inline model
 
     private static class District {
         private final Owner mayor;
+        private final Building squareBuilding;
+        private final Building greenBuilding;
 
         District() {
             mayor = null;
+            this.squareBuilding = null;
+            this.greenBuilding = null;
         }
 
         District(final String mayorOne) {
             mayor = null;
+            this.squareBuilding = null;
+            this.greenBuilding = null;
         }
 
         District(final Building building) {
             this.mayor = building.getOwner();
+            this.squareBuilding = building;
+            this.greenBuilding = building;
         }
 
-        District(final Building building, final String mayorOne, final String mayorTwo) {
-            this.mayor = building.getOwner();
+        District(final Building squareBuilding, final Building greenBuilding) {
+            this.mayor = squareBuilding.getOwner();
+            this.squareBuilding = squareBuilding;
+            this.greenBuilding = greenBuilding;
         }
 
         Owner getMayor() {
             return mayor;
+        }
+
+        Building getSquareBuilding() {
+            return squareBuilding;
+        }
+
+        Building getGreenBuilding() {
+            return greenBuilding;
         }
     }
 

@@ -1,17 +1,18 @@
 package lu.mms.common.quality.assets.spring.context;
 
+import lu.mms.common.quality.assets.JunitUtilsTestContextStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.engine.execution.ExtensionValuesStore;
-import org.junit.jupiter.engine.execution.NamespaceAwareStore;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.Optional;
 
 import static lu.mms.common.quality.assets.JunitUtilsExtension.JUNIT_UTILS_NAMESPACE;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,12 +31,12 @@ public class TestcaseSimpleSpringContextRunnerTest {
     private ExtensionContext extensionContextMock;
 
     @Spy
-    private final ExtensionContext.Store storeSpy = new NamespaceAwareStore(new ExtensionValuesStore(null), JUNIT_UTILS_NAMESPACE);
+    private final ExtensionContext.Store storeSpy = new JunitUtilsTestContextStore();
 
     private SimpleSpringContextRunner testCaseInstance;
 
     @BeforeEach
-    private void init(final TestInfo testInfo) {
+    void init(final TestInfo testInfo) {
         when(extensionContextMock.getStore(JUNIT_UTILS_NAMESPACE)).thenReturn(storeSpy);
 
         testCaseInstance = TestcaseHelper.newHelper(extensionContextMock).prepareTestCaseMock(
@@ -90,10 +91,12 @@ public class TestcaseSimpleSpringContextRunnerTest {
         assertThat(contextRunner, notNullValue());
         assertThat(contextRunner, instanceOf(ApplicationContextRunner.class));
 
-        final Boolean canOverride = (Boolean) ReflectionTestUtils.getField(
-                contextRunner,
-                "allowBeanDefinitionOverriding"
-        );
+        // Assert
+        final Boolean canOverride = Optional.of(contextRunner)
+                .map(context -> ReflectionTestUtils.getField(context, "runnerConfiguration"))
+                .map(config -> String.valueOf(ReflectionTestUtils.getField(config, "allowBeanDefinitionOverriding")))
+                .map(Boolean::valueOf)
+                .orElse(false);
         // BUGFIX #13
         assertThat(canOverride, equalTo(true));
     }

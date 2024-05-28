@@ -1,8 +1,9 @@
 package lu.mms.common.quality.assets.spring.context;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.platform.commons.util.ReflectionUtils;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static org.mockito.Mockito.when;
@@ -20,7 +21,12 @@ final class TestcaseHelper {
     }
 
     public <T> T prepareTestCaseMock(final Class<T> clazz, final Method method) {
-        final T instance = ReflectionUtils.newInstance(clazz);
+        final T instance;
+        try {
+            instance = ReflectionUtils.accessibleConstructor(clazz).newInstance((Object[]) null);
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
         prepareTestCaseMock(clazz, instance, method);
         return instance;
     }

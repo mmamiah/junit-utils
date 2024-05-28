@@ -1,14 +1,22 @@
 <configuration>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="org.reflections.Reflections" level="INFO" />
-    <logger name="org.springframework.test.util.ReflectionTestUtils" level="INFO" />
+    <logger name="org.reflections.Reflections" level="ERROR" />
+    <logger name="org.springframework.test.util.ReflectionTestUtils" level="ERROR" />
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="ERROR" />
+    <logger name="org.springframework.jdbc.datasource.SimpleDriverDataSource" level="ERROR" />
+    <logger name="org.springframework.jdbc.datasource.DataSourceUtils" level="ERROR" />
+    <logger name="org.apache.ibatis.transaction.jdbc.JdbcTransaction" level="ERROR" />
 
-    <root level="debug">
+    <!-- FIXME to remove when switching to [slf4j v2+] with [logback v1.4.5+] (Spring Boot 3 ?) -->
+    <logger name="org.slf4j.Logger" level="ERROR" />
+
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

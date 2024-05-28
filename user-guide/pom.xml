@@ -6,23 +6,32 @@
     <packaging>jar</packaging>
 
     <parent>
-        <artifactId>junit-utils-pom</artifactId>
         <groupId>lu.mms.common</groupId>
+        <artifactId>junit-utils-bom</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>user-guide</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>JUnit Utils [User Guide]</name>
-    <description>JUnit Utilities user guide</description>
+    <description>JUnit Utilities sample project</description>
 
     <properties>
-        <junit-utils.version>0.0.1</junit-utils.version>
-        <asciidoctor-maven-plugin.version>2.1.0</asciidoctor-maven-plugin.version>
-        <asciidoctorj.version>2.4.1</asciidoctorj.version>
-        <asciidoctorj-pdf.version>1.5.3</asciidoctorj-pdf.version>
-        <spring-beans.version>5.3.5</spring-beans.version>
+        <asciidoctor-maven-plugin.version>3.0.0</asciidoctor-maven-plugin.version>
+        <asciidoctorj.version>2.5.12</asciidoctorj.version>
+        <asciidoctorj-pdf.version>2.3.15</asciidoctorj-pdf.version>
+        <mybatis.version>3.5.15</mybatis.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>lu.mms.common</groupId>
+                <artifactId>junit-utils</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -30,7 +39,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>${spring-beans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
 
         <!-- AsciiDoc -->
@@ -49,13 +61,23 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
         </dependency>
 
         <!-- JUnit Utils -->
         <dependency>
             <groupId>lu.mms.common</groupId>
             <artifactId>junit-utils</artifactId>
-            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -143,7 +165,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
                 <executions>
                     <execution>
                         <id>default-deploy</id>
@@ -156,6 +177,12 @@
             <resource>
                 <directory>src/docs/asciidoc</directory>
                 <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/test/resources</directory>
             </resource>
         </resources>
     </build>

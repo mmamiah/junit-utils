@@ -1,6 +1,8 @@
 package lu.mms.common.quality.assets.lifecycle;
 
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +13,6 @@ import org.mockito.internal.util.MockUtil;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-@UnitTest(lifeCycle = false)
-class BeanLifeCycleDisabledTest {
+@ExtendWithTestUtils
+public class BeanLifeCycleDisabledTest {
 
     private static final List<LifeCycled> TO_CHECK = new ArrayList<>();
 
@@ -37,13 +37,13 @@ class BeanLifeCycleDisabledTest {
     private Tyre tyreMock;
 
     @AfterEach
-    void registerMembers() {
+    public void registerMembers() {
         // register members for later destruction check (see @AfterAll method)
         TO_CHECK.addAll(List.of(sut, engineSpy, tyreMock));
     }
 
     @AfterAll
-    static void assertAllObjectHaveBeenDestroyed() {
+    public static void assertAllObjectHaveBeenDestroyed() {
         TO_CHECK.forEach(item -> {
             try {
                 if (MockUtil.isMock(item)) {
@@ -63,7 +63,7 @@ class BeanLifeCycleDisabledTest {
     }
 
     @Test
-    void shouldNotCallSutLifecycleMethods() throws Exception {
+    public void shouldNotCallSutLifecycleMethods() throws Exception {
         // Arrange
         assumeTrue(sut.getEngine() != null);
         assumeTrue(sut.getTyre() != null);
@@ -80,7 +80,7 @@ class BeanLifeCycleDisabledTest {
     }
 
     @Test
-    void shouldNotCallSpyMemberLifecycleMethods() throws Exception {
+    public void shouldNotCallSpyMemberLifecycleMethods() throws Exception {
         // Arrange
         assumeTrue(sut.getEngine().equals(engineSpy));
 
@@ -97,7 +97,7 @@ class BeanLifeCycleDisabledTest {
     }
 
     @Test
-    void shouldNeverCallMockMemberLifecycleMethods() throws Exception {
+    public void shouldNeverCallMockMemberLifecycleMethods() throws Exception {
         // Arrange
         assumeTrue(sut.getTyre().equals(tyreMock));
 

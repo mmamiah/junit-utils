@@ -1,0 +1,14 @@
+-- TRIGGER follow
+CREATE OR REPLACE TRIGGER TRG_CID_CUSTOMER_SEQUENCE
+ BEFORE INSERT
+ ON CUSTOMER
+ REFERENCING NEW ROW as NEW_ROW
+ FOR EACH ROW
+BEGIN ATOMIC
+   -- affectation de la PK à partir de la séquence si le champ n'est pas renseigné
+   SELECT CUSTOMER_SEQ.nextval
+   INTO NEW_ROW.LA_TRIGGER_COUNTER
+   FROM dual;
+END;
+--/
+--SHOW ERROR

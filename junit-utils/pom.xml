@@ -5,49 +5,49 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <parent>
-        <artifactId>junit-utils-pom</artifactId>
         <groupId>lu.mms.common</groupId>
+        <artifactId>junit-utils-bom</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>junit-utils</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <name>JUnit Utils [LIB]</name>
     <description>JUnit Utilities Library</description>
 
     <organization>
-        <name>LU</name>
-<!--        <url></url>-->
+        <name>MMS</name>
+        <url>https://github.com/mmamiah</url>
     </organization>
 
-    <inceptionYear>2018</inceptionYear>
+    <inceptionYear>2020</inceptionYear>
 
     <scm>
-        <connection>
-            scm:git:https://dev.azure.com/junit-utils
-        </connection>
+        <connection>scm:git:https://github.com/mmamiah/tangui.git</connection>
         <developerConnection>
-            scm:git:https://dev.azure.com/junit-utils
+            scm:git:https://github.com/mmamiah/tangui.git
         </developerConnection>
-        <url>https://dev.azure.com/junit-utils</url>
+        <url>https://github.com/mmamiah/tangui</url>
         <tag>HEAD</tag>
     </scm>
 
     <ciManagement>
-        <system>Jenkins</system>
-        <url>https://jenking/jobs/jenkins/junit-utils/</url>
+        <system>Git</system>
+        <url>https://github.com/mmamiah/tangui/actions/new</url>
     </ciManagement>
 
-    <dependencies>
-        <!-- Snake YAML -->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-        </dependency>
+    <properties>
+        <apiguardian.version>1.1.2</apiguardian.version>
+        <reflections.version>0.10.2</reflections.version>
+        <mybatis.version>3.5.15</mybatis.version>
+    </properties>
 
+    <dependencies>
         <!-- MyBatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
         </dependency>
 
         <!-- LOGGING -->
@@ -55,17 +55,22 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>${modelmapper.version}</version>
         </dependency>
 
         <!-- Advanced reflection features -->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Spring -->
@@ -88,12 +93,35 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <!-- H2 in-memory database -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+        </dependency>
+
+        <!-- HSQL in-memory database -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
         </dependency>
 
         <!-- Awaitility -->
@@ -106,6 +134,7 @@
         <dependency>
             <groupId>org.apiguardian</groupId>
             <artifactId>apiguardian-api</artifactId>
+            <version>${apiguardian.version}</version>
         </dependency>
 
         <!-- Commons -->
@@ -121,35 +150,19 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
 
         <!-- JUnit 5 -->
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-runner</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-engine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-commons</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
         </dependency>
 
     </dependencies>
@@ -164,7 +177,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>lu.mms.common.quality.junit.platform.SpiConfiguration</mainClass>
+                            <mainClass>lu.mms.common.quality.platform.SpiConfiguration</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
@@ -187,32 +200,23 @@
             <!-- Javadoc and sources -->
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-source</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
             </plugin>
         </plugins>
 
         <resources>
             <resource>
+                <filtering>true</filtering>
                 <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/pom.yml</include>
+                    <include>**/banner.txt</include>
+                </includes>
             </resource>
         </resources>
     </build>

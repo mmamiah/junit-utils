@@ -36,8 +36,6 @@ class AnnotationNotMatchedTest {
         final List<Field> mockValues = AnnotationSupport.findAnnotatedFields(this.getClass(), MockValue.class);
         assert !CollectionUtils.isEmpty(mockValues) : String.format(MISSING_PARAM_FORMAT, "@MockValue");
 
-        final List<Field> extendsWith = AnnotationSupport.findAnnotatedFields(this.getClass(), ExtendWith.class);
-
         // Act
         final String value = sut.getTargetValue();
 

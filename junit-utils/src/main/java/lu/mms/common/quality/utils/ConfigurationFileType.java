@@ -1,30 +1,24 @@
 package lu.mms.common.quality.utils;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.core.io.FileUrlResource;
 import org.springframework.util.CollectionUtils;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static lu.mms.common.quality.commons.JunitUtilsCommonKeys.DOT;
-import static lu.mms.common.quality.commons.JunitUtilsCommonKeys.JUNIT_UTILS_KEY;
-import static lu.mms.common.quality.commons.JunitUtilsCommonKeys.LIBRARY_CONFIG_FILES_KEYS;
+import static lu.mms.common.quality.commons.IngJunitUtilsCommonKeys.DOT;
+import static lu.mms.common.quality.commons.IngJunitUtilsCommonKeys.JUNIT_UTILS_KEY;
 
 /**
  * The Configuration file types.
+ * TODO: for yaml use ? YamlPropertiesFactoryBean ?
  */
 enum ConfigurationFileType {
 
@@ -43,11 +37,11 @@ enum ConfigurationFileType {
      */
     YAML("yaml", ConfigurationFileType::readYaml);
 
-    private String fileExtension;
-    private Function<URL, Map<Object, Object>> configExtractor;
+    private final String fileExtension;
+    private final Function<URL, Properties> configExtractor;
 
     ConfigurationFileType(final String fileExtension,
-                          final Function<URL, Map<Object, Object>> configExtractor) {
+                          final Function<URL, Properties> configExtractor) {
         this.fileExtension = fileExtension;
         this.configExtractor = configExtractor;
     }
@@ -77,8 +71,8 @@ enum ConfigurationFileType {
      * @param resource The resource
      * @return  the properties maps
      */
-    public Map<Object, Object> retrieveConfigurations(final URL resource) {
-        Map<Object, Object> properties = Collections.emptyMap();
+    public Properties retrieveConfigurations(final URL resource) {
+        Properties properties = new Properties();
         if (isCandidate(resource)) {
             try {
                 properties = configExtractor.apply(resource);
@@ -129,120 +123,23 @@ enum ConfigurationFileType {
         return retrieveConfiguration(configsMap.get(keyItem), key.substring(key.indexOf(DOT) + 1));
     }
 
-    private static Map<Object, Object> readYaml(final URL resource) {
-        Map<Object, Object> properties = new HashMap<>();
-        try (InputStream inputStream = resource.openStream()) {
-            if (inputStream != null) {
-                properties = getProperties(new Yaml().load(inputStream));
-            }
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex.getMessage(), ex);
-        }
-        return properties;
+    private static Properties readYaml(final URL resource) {
+        final YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
+        factory.setResources(new FileUrlResource(resource));
+        return factory.getObject();
     }
 
-    private static Map<Object, Object> readProperties(final URL resource) {
-        final Map<Object, Object> properties = new HashMap<>();
+    private static Properties readProperties(final URL resource) {
         try (InputStream inputStream = resource.openStream()) {
             final Properties tempProperties = new Properties();
             if (inputStream != null) {
                 tempProperties.load(inputStream);
-                extractLibraryProperties(properties, tempProperties);
+                return tempProperties;
             }
         } catch (IOException ex) {
             throw new IllegalStateException(ex.getMessage(), ex);
         }
-        return properties;
-    }
-
-    /**
-     * Split the dotted property entry 'ont.two.three=four' in order to have a yaml like tree: <br>
-     * <pre>
-     * - one <br>
-     *     |- two <br>
-     *     |    |- three = four
-     * </pre>
-     * @param propertiesMap The properties maps
-     * @param tempProperties the {@link Properties} to extract into the [propertiesMap]
-     */
-    private static void extractLibraryProperties(final Map<Object, Object> propertiesMap,
-                                                 final Properties tempProperties) {
-        tempProperties.entrySet().parallelStream()
-            // Keep the property that starts with junit utils prefix
-            .filter(entry -> entry.getKey().toString().startsWith(JUNIT_UTILS_KEY))
-            .map(entry -> Pair.of(entry.getKey().toString().substring(JUNIT_UTILS_KEY.length() + 1), entry.getValue()))
-            // turn the entry to a map with all child entries
-            .flatMap(pair ->
-                appendPropertyEntry(propertiesMap, pair.getKey(), pair.getValue())
-                    .entrySet().parallelStream()
-            )
-            // put it all in the target map
-            .forEach(entry -> propertiesMap.put(entry.getKey(), entry.getValue()));
-    }
-
-    private static Map<Object, Object> appendPropertyEntry(final Map<Object, Object> properties, final String entry,
-                                                           final Object value) {
-        String key = entry;
-        if (entry.contains(DOT)) {
-            key = StringUtils.substring(entry, 0, entry.indexOf(DOT));
-        } else {
-            return new HashMap<>(Map.of(key, value));
-        }
-        final Map<Object, Object> result = new HashMap<>();
-        if (!CollectionUtils.isEmpty(properties)) {
-            result.putAll(properties);
-        }
-
-        // build the selected property sub-entries
-        final String subKey = StringUtils.substring(entry, entry.indexOf(DOT) + 1);
-        final Map<Object, Object> entryMap = appendPropertyEntry(Map.of(), subKey, value);
-
-        // add the selected property (new entry)
-        final Object entryValue = result.get(key);
-        if (entryValue == null) {
-            properties.put(key, entryMap);
-        } else if (entryValue instanceof Map) {
-            final Map<Object, Object> values = (Map<Object, Object>) entryValue;
-            values.putAll(entryMap);
-        } else {
-            throw new IllegalStateException(String.format("Property type not identified: [%s]", entryValue));
-        }
-        return result;
-    }
-
-    private static Map<Object, Object> getProperties(final Map<Object, Object> properties) {
-        if (CollectionUtils.isEmpty(properties)) {
-            // when <properties> is empty return empty map (to avoid NPE). no more search needed.
-            return Collections.emptyMap();
-        }
-
-        return LIBRARY_CONFIG_FILES_KEYS.parallelStream()
-            // keeping only the non null properties
-            .filter(ObjectUtils::allNotNull)
-            // keeping entries that key starts with <junit-utils> or <junit-platform>
-            .filter(filenameKey -> hasKeyStartingWith(properties, filenameKey))
-            .flatMap(filenameKey -> {
-                if (properties.get(filenameKey) instanceof Map) {
-                    final Map<Object, Object> props = (Map) properties.get(filenameKey);
-                    return props.entrySet().parallelStream();
-                }
-                // if there are some entries thats keys start with junit utils prefix, we pick it up
-                final List<Map.Entry<Object, Object>> validEntries = properties.entrySet().parallelStream()
-                    .filter(entry -> entry.getKey().toString().startsWith(filenameKey))
-                    .collect(Collectors.toList());
-                if (!CollectionUtils.isEmpty(validEntries)) {
-                    return validEntries.parallelStream();
-                }
-                // otherwise we return a single entry set as stream
-                return Set.of(Map.entry(filenameKey, properties.get(filenameKey))).parallelStream();
-            })
-            .filter(entry -> entry.getValue() != null)
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    private static boolean hasKeyStartingWith(final Map<Object, Object> properties, final String filenameKey) {
-        return properties.keySet().parallelStream()
-            .anyMatch(prop -> prop.toString().startsWith(filenameKey));
+        return new Properties();
     }
 
     private static boolean isExtension(final URL url, final ConfigurationFileType configurationFileType) {

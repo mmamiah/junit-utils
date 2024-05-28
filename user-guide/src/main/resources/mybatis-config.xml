@@ -23,6 +23,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper class="lu.mms.common.quality.samples.dao.CustomerMapper"/>
+        <mapper class="lu.mms.common.quality.userguide.dao.CustomerMapper"/>
     </mappers>
 </configuration>

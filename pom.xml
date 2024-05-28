@@ -7,73 +7,129 @@
 
     <modules>
         <module>junit-utils</module>
-        <module>user-guide</module>
-        <module>sample-non-spring-project</module>
         <module>sample-spring-project</module>
+        <module>sample-non-spring-project</module>
+        <module>user-guide</module>
     </modules>
 
     <groupId>lu.mms.common</groupId>
-    <artifactId>junit-utils-pom</artifactId>
+    <artifactId>junit-utils-bom</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>JUnit Utils</name>
-    <description>JUnit Utilities library POM</description>
+    <name>JUnit Utils [BOM]</name>
+    <description>JUnit Utilities library Bill Of Materials</description>
 
     <organization>
-        <name>LU</name>
-        <url>mms</url>
+        <name>MMS</name>
+        <url>https://github.com/mmamiah</url>
     </organization>
 
     <inceptionYear>2020</inceptionYear>
 
     <properties>
-        <junit-utils.version>1.0.0-SNAPSHOT</junit-utils.version>
+        <artifactoryVersion>1.0.0</artifactoryVersion>
 
-        <!-- project -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <!-- JDK -->
+        <java.version>17</java.version>
 
-        <!-- replacing common libs -->
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <!-- Spring -->
+        <spring-boot-junit-utils.version>3.2.4</spring-boot-junit-utils.version>
 
-        <!-- maven -->
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
-        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
-
-        <!-- junit 5 -->
-        <junit5.version>5.7.1</junit5.version>
-        <junit-platform.version>1.7.1</junit-platform.version>
+        <!-- Testing -->
+        <hamcrest.version>2.2</hamcrest.version>
+        <mockito.version>4.9.0</mockito.version>
+        <junit-jupiter.version>5.10.2</junit-jupiter.version>
+        <h2.version>2.2.220</h2.version>
+        <awaitility.version>4.2.1</awaitility.version>
+        <hsql.version>2.7.2</hsql.version>
+        <datafaker.version>1.8.0</datafaker.version>
 
         <!-- commons -->
-        <commons-io.version>2.8.0</commons-io.version>
-        <commons-text.version>1.8</commons-text.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-
-        <!-- Third party libs -->
-        <spring-boot-test.version>2.3.9.RELEASE</spring-boot-test.version>
-        <modelmapper.version>2.4.0</modelmapper.version>
-        <apiguardian.version>1.1.1</apiguardian.version>
-        <hamcrest.version>2.2</hamcrest.version>
-        <mybatis.version>3.5.6</mybatis.version>
-        <h2.version>1.4.200</h2.version>
-        <mockito.version>3.8.0</mockito.version>
-        <awaitility.version>4.0.3</awaitility.version>
-        <logback-classic.version>1.2.3</logback-classic.version>
-        <reflections.version>0.9.12</reflections.version>
+        <reflections.version>0.10.2</reflections.version>
         <ow2-asm.version>6.2</ow2-asm.version>
-        <snakeyaml.version>1.26</snakeyaml.version>
+
+        <logback-parent.version>1.5.3</logback-parent.version>
+        <commons-io.version>2.15.1</commons-io.version>
+        <modelmapper.version>3.2.0</modelmapper.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <HikariCP.version>5.1.0</HikariCP.version>
+        <commons-text.version>1.11.0</commons-text.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <ojdbc8.version>23.3.0.23.09</ojdbc8.version>
+        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
+
+        <!-- maven -->
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>${maven-surefire-plugin.version}</maven-failsafe-plugin.version>
+        <maven-help-plugin.version>3.2.0</maven-help-plugin.version>
+        <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+        <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
+        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <extra-enforcer-rules.version>1.6.1</extra-enforcer-rules.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
     </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/mmamiah/tangui.git</connection>
+        <developerConnection>
+            scm:git:https://github.com/mmamiah/tangui.git
+        </developerConnection>
+        <url>https://github.com/mmamiah/tangui</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <ciManagement>
+        <system>Git</system>
+        <url>https://github.com/mmamiah/tangui/actions/new</url>
+    </ciManagement>
+
+    <repositories>
+        <repository>
+            <id>jaspersoft-third-party</id>
+            <url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jaspersoft-third-party</id>
+            <url>https://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
+            <!-- POM / Import -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-junit-utils.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-parent</artifactId>
+                <version>${logback-parent.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- Commons -->
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-text</artifactId>
-                <version>${commons-text.version}</version>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta.annotation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -85,27 +141,57 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
-
-            <!-- Snake YAML -->
             <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
             </dependency>
-
-            <!-- Logback -->
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback-classic.version}</version>
-                <optional>true</optional>
-                <scope>test</scope>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.modelmapper</groupId>
+                <artifactId>modelmapper</artifactId>
+                <version>${modelmapper.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
+                        <groupId>org.testng</groupId>
+                        <artifactId>testng</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${HikariCP.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle.database.jdbc</groupId>
+                <artifactId>ojdbc8</artifactId>
+                <version>${ojdbc8.version}</version>
+            </dependency>
+
+            <!-- JUnit Utils -->
+            <dependency>
+                <groupId>lu.mms.common</groupId>
+                <artifactId>junit-utils</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- Advanced reflection features -->
@@ -113,7 +199,6 @@
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
-                <scope>compile</scope>
             </dependency>
 
             <!-- Hamcrest -->
@@ -121,7 +206,6 @@
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
-                <scope>compile</scope>
             </dependency>
 
             <!-- Mockito -->
@@ -129,13 +213,18 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
                 <version>${mockito.version}</version>
-                <scope>compile</scope>
             </dependency>
+            <!--
+            ===============================================================================================================
+            The version of bytebuddy included in mockito-core makes the tests fail !
+            That's why we force a more recent version.
+            ===============================================================================================================
+            -->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
-                <scope>compile</scope>
+                <scope>test</scope>
             </dependency>
 
             <!-- H2 in-memory database -->
@@ -143,65 +232,30 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
-                <scope>compile</scope>
             </dependency>
 
-            <!-- Awaitility -->
+            <!-- HSQL in-memory database -->
             <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaitility.version}</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <!-- API Guardian -->
-            <dependency>
-                <groupId>org.apiguardian</groupId>
-                <artifactId>apiguardian-api</artifactId>
-                <version>${apiguardian.version}</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <!-- Spring -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring-boot-test.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>junit-vintage-engine</artifactId>
-                        <groupId>org.junit.vintage</groupId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>${hsql.version}</version>
             </dependency>
 
             <!-- JUnit 5 -->
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
-                <version>${junit5.version}</version>
+                <version>${junit-jupiter.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-runner</artifactId>
-                <version>${junit-platform.version}</version>
-                <scope>compile</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>junit</groupId>
-                        <artifactId>junit</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
+            <!-- Data Faker -->
             <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
+                <groupId>net.datafaker</groupId>
+                <artifactId>datafaker</artifactId>
+                <version>${datafaker.version}</version>
             </dependency>
-
         </dependencies>
 
     </dependencyManagement>
@@ -210,9 +264,13 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <release>${java.version}</release>
+                        <parameters>true</parameters>
+                        <testCompilerArgument>-parameters</testCompilerArgument>
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -221,18 +279,76 @@
                             <version>${ow2-asm.version}</version>
                         </dependency>
                     </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-source</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <configuration>
+                        <doclint>none</doclint> <!-- Turn off all checks -->
+                        <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <detectJavaApiLink>false</detectJavaApiLink>
+                                <doclint>none</doclint>
+                                <!--                                <source>8</source>-->
+                                <!--                                <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>-->
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven-resources-plugin.version}</version>
+                    <configuration>
+                        <useDefaultDelimiters>true</useDefaultDelimiters>
+                        <propertiesEncoding>ISO-8859-1</propertiesEncoding>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${maven-deploy-plugin.version}</version>
                 </plugin>
 
                 <!-- Tests -->
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                     <configuration>
-                        <excludedGroups>integration</excludedGroups>
-                        <excludes>
-                            <exclude>*IT.java</exclude>
-                            <exclude>*ITest.java</exclude>
-                        </excludes>
+                        <failIfNoTests>true</failIfNoTests>
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -243,17 +359,9 @@
                     </dependencies>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven-failsafe-plugin.version}</version>
-                    <configuration>
-                        <properties>
-                            <includeTags>integration</includeTags>
-                        </properties>
-                        <includes>
-                            <include>**/*IT.java</include>
-                            <include>**/*ITest.java</include>
-                        </includes>
-                    </configuration>
                     <executions>
                         <execution>
                             <id>integration-test</id>
@@ -279,12 +387,6 @@
                         <execution>
                             <id>prepare-agent</id>
                             <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>test-report</id>
-                            <goals>
                                 <goal>report</goal>
                             </goals>
                         </execution>
@@ -292,6 +394,18 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>${basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
     </build>
 
 </project>

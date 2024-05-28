@@ -47,6 +47,24 @@ public final class InjectionEnhancerTemplate implements Consumer<InternalMocksCo
     }
 
     /**
+     * Create a new Constructor Injection Template. <br>
+     * This template will inject the mocks as follow:
+     * <ol>
+     *     <li>Apply the constructor injection</li>
+     *     <li>Apply the field/setter injection</li>
+     *     <li>Apply the Lookup method injection</li>
+     * </ol>
+     * @param annotationClass The target object annotation
+     * @return  The new template object
+     */
+    public static InjectionEnhancerTemplate newConstructorInjectionTemplate(final Class<? extends Annotation> annotationClass) {
+        return new InjectionEnhancerTemplate(
+                annotationClass,
+                ConstructorInjection.newConsumer(annotationClass)
+        );
+    }
+
+    /**
      * Create a new Field Injection Template. <br>
      * This template will inject the mocks as follow:
      * <ol>

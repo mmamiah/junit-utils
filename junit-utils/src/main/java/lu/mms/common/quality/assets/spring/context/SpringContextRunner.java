@@ -1,8 +1,9 @@
 package lu.mms.common.quality.assets.spring.context;
 
-import lu.mms.common.quality.assets.None;
+import lu.mms.common.quality.assets.no.NoClass;
 import org.apiguardian.api.API;
 import org.springframework.boot.test.context.runner.AbstractApplicationContextRunner;
+import org.springframework.context.annotation.PropertySource;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -20,9 +21,22 @@ import java.lang.annotation.Target;
 @Documented
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.1"
+    since = "1.0.0"
 )
 public @interface SpringContextRunner {
+
+    /**
+     * Specify the set of profiles active for this Environment. <br>
+     * See also: {@link org.springframework.test.context.ActiveProfiles}.
+     * @return The array of properties to set.
+     */
+    String[] withActiveProfiles() default {};
+
+    /**
+     * In case the Encryption causees some issue, we can turn it off.. <br>
+     * @return The flag to turn on/off the property encryption handling.
+     */
+    boolean ignorePropertyEncryption() default false;
 
     // Bugfix #13
     /**
@@ -51,11 +65,24 @@ public @interface SpringContextRunner {
     String[] withSystemProperties() default {};
 
     /**
+     * Add the specified property source config (.properties, .yaml, .yml). <br>
+     * In case multiple properties files are provided, they will be sorted (natural order of their filename length)
+     * and applied, the next file override the previous one. <br>
+     * Example for <code>application-xxx.yaml</code> and <code>application.yaml</code>, the order will be:
+     * <ol>
+     *     <li><code>application.yaml</code></li>
+     *     <li><code>application-xxx.yaml</code></li>
+     * </ol>
+     * @return The property source config.
+     */
+    PropertySource withPropertySource() default @PropertySource({});
+
+    /**
      * Register the specified configuration class with the ApplicationContext.
      * <b>see:</b> org.springframework.boot.context.annotation.Configurations
      * @return The configuration classes
      */
-    Class<?> withConfiguration() default None.class;
+    Class<?> withConfiguration() default NoClass.class;
 
     /**
      * Register the specified user configuration classes with the ApplicationContext.

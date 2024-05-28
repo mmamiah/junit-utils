@@ -1,6 +1,6 @@
 package lu.mms.common.quality.assets.mock;
 
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -16,7 +16,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
- * Testing the Mockito default behavior when #Answers.RETURNS_MOCKS and #UnitTest.answer is false.
+ * Testing the Mockito default behavior when #Answers.RETURNS_MOCKS and #ExtendWithTestUtils.answer is false.
  */
 @ExtendWith({MockitoExtension.class, ReturnsMocksExtension.class})
 class ReturnsMocksExtensionTest {
@@ -30,7 +30,7 @@ class ReturnsMocksExtensionTest {
     @Test
     void shouldReturnTestcaseMockWhenMockWithReturnMockAnswersCalled() {
         // Arrange
-        assumeTrue(getClass().getDeclaredAnnotation(UnitTest.class) == null);
+        assumeTrue(getClass().getDeclaredAnnotation(ExtendWithTestUtils.class) == null);
         Answer<?> buildingMockAnswer = MockUtil.getMockSettings(sut).getDefaultAnswer();
         assumeTrue(buildingMockAnswer.toString().equals(Answers.RETURNS_MOCKS.name()));
 

@@ -1,6 +1,6 @@
 package lu.mms.common.quality.assets;
 
-import lu.mms.common.quality.junit.platform.SpiConfiguration;
+import lu.mms.common.quality.platform.SpiConfiguration;
 
 import java.lang.annotation.Annotation;
 

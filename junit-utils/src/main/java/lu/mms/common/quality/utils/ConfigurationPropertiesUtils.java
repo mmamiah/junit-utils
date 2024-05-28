@@ -8,20 +8,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Stream;
 
-import static lu.mms.common.quality.commons.JunitUtilsCommonKeys.JUNIT_UTILS_FORMAT;
-import static lu.mms.common.quality.commons.JunitUtilsCommonKeys.JUNIT_UTILS_KEY;
-import static lu.mms.common.quality.commons.JunitUtilsCommonKeys.LIBRARY_CONFIG_FILES_KEYS;
+import static lu.mms.common.quality.commons.IngJunitUtilsCommonKeys.JUNIT_UTILS_FORMAT;
+import static lu.mms.common.quality.commons.IngJunitUtilsCommonKeys.JUNIT_UTILS_KEY;
+import static lu.mms.common.quality.commons.IngJunitUtilsCommonKeys.LIBRARY_CONFIG_FILES_KEYS;
 
 /**
  * Utility class to manage config properties files.
  */
 public final class ConfigurationPropertiesUtils {
 
-    static Map<Object, Object> properties;
+    static Properties properties;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationPropertiesUtils.class);
 
@@ -42,12 +42,13 @@ public final class ConfigurationPropertiesUtils {
      */
     public static void initJunitUtilsProperties() {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        properties = new HashMap<>();
+        properties = new Properties();
         Stream.of(ConfigurationFileType.values())
             .parallel()
             .flatMap(configType -> LIBRARY_CONFIG_FILES_KEYS.parallelStream()
                 .flatMap(libraryName -> configurationFileToStream(classLoader, configType, libraryName))
             )
+            .filter(entry -> entry.getKey().toString().startsWith("junit-utils"))
             // Not using '.collect<Collectors.toMap' in order access the entry key while detecting duplication
             .forEach(entry -> {
                 final Object oldValue = properties.get(entry.getKey());
@@ -71,10 +72,7 @@ public final class ConfigurationPropertiesUtils {
                                                                 final ConfigurationFileType configType,
                                                                 final String libraryName) {
         final URL resource = classLoader.getResource(configType.getFilename(libraryName));
-        final Map<Object, Object> configs = configType.retrieveConfigurations(resource);
-        if (configs == null) {
-            return Stream.empty();
-        }
+        final Properties configs = configType.retrieveConfigurations(resource);
         return configs.entrySet().stream();
     }
 

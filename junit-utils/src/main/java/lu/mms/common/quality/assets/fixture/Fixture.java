@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Documented
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.1"
+    since = "1.0.0"
 )
 public @interface Fixture {
 

@@ -1,7 +1,8 @@
 package lu.mms.common.quality.assets.mybatis;
 
+import lu.mms.common.quality.assets.JunitUtilsTestContextStore;
+import lu.mms.common.quality.assets.db.MyBatisSqlSessionResolver;
 import org.apache.ibatis.session.SqlSession;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.engine.execution.ExtensionValuesStore;
-import org.junit.jupiter.engine.execution.NamespaceAwareStore;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,9 +19,6 @@ import java.util.Optional;
 
 import static lu.mms.common.quality.assets.JunitUtilsExtension.JUNIT_UTILS_NAMESPACE;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsMapWithSize.aMapWithSize;
-import static org.hamcrest.collection.IsMapWithSize.anEmptyMap;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -40,15 +36,15 @@ class MyBatisMapperExtensionTest {
     private ExtensionContext extensionContextMock;
 
     @Spy
-    private final ExtensionContext.Store storeSpy = new NamespaceAwareStore(new ExtensionValuesStore(null), JUNIT_UTILS_NAMESPACE);
+    private final ExtensionContext.Store storeSpy = new JunitUtilsTestContextStore();
 
     private TestcaseItem testInstance;
 
     @BeforeEach
     void init() {
         when(extensionContextMock.getStore(JUNIT_UTILS_NAMESPACE)).thenReturn(storeSpy);
-
-        assumeTrue(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), "No Method Session should be defined");
+        final SqlSession session = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(this.getClass().getSimpleName()), SqlSession.class);
+        assumeTrue(session == null, "No Method Session should be defined");
     }
 
     @AfterEach
@@ -57,19 +53,12 @@ class MyBatisMapperExtensionTest {
         sut.afterAll(extensionContextMock);
     }
 
-    @AfterAll
-    static void afterAllTestcase() {
-        // ensure that all Sessions have been closes
-        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS.isEmpty(), equalTo(true));
-        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
-    }
-
     @Test
     void shouldDoNothingWhenMissingAnnotation(final TestInfo testInfo) throws NoSuchMethodException {
         // Arrange
         when(extensionContextMock.getRequiredTestInstance()).thenAnswer(inv -> this);
         when(extensionContextMock.getRequiredTestClass()).thenAnswer(inv -> getClass());
-        final Method testMethod = testInfo.getTestMethod().orElse(null);
+        final Method testMethod = testInfo.getTestMethod().orElseThrow();
         when(extensionContextMock.getRequiredTestMethod()).thenAnswer(inv -> testMethod);
 
         sut.beforeAll(extensionContextMock);
@@ -78,7 +67,7 @@ class MyBatisMapperExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        final SqlSession session = MyBatisMapperExtension.SQL_METHOD_SESSIONS.get(testMethod);
+        final SqlSession session = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testMethod.getName()), SqlSession.class);
         assertThat(session, nullValue());
     }
 
@@ -94,15 +83,18 @@ class MyBatisMapperExtensionTest {
         sut.beforeAll(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
+        final SqlSession classSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getClass().getSimpleName()), SqlSession.class);
+        assertThat(classSession, nullValue());
+
+        final SqlSession methodSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getTestMethod().getName()), SqlSession.class);
+        assertThat(methodSession, nullValue());
 
         // At @BeforeAll level, we do not instantiate the @Mapper.
         assertThat(testInstance.getMapper(), nullValue());
     }
 
     @Test
-    void shouldInitMybatisConfigurationAtClassLevelOnBeforeEachWhenNoTestMethodDefined() throws NoSuchMethodException {
+    void shouldNotInitMybatisConfigurationAtClassLevelOnBeforeEachWhenNoTestMethodDefined() throws NoSuchMethodException {
         // Arrange
         testInstance = new MyBatisTestClassItem();
         when(extensionContextMock.getRequiredTestClass()).thenReturn((Class) testInstance.getClass());
@@ -115,8 +107,11 @@ class MyBatisMapperExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS.isEmpty(), equalTo(true));
+        final SqlSession classSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getClass().getSimpleName()), SqlSession.class);
+        assertThat(classSession, nullValue());
+
+        final SqlSession methodSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getTestMethod().getName()), SqlSession.class);
+        assertThat(methodSession, nullValue());
         assertThat(testInstance.getMapper(), nullValue());
     }
 
@@ -136,8 +131,12 @@ class MyBatisMapperExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS.isEmpty(), equalTo(true));
-        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
+        final SqlSession classSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getClass().getSimpleName()), SqlSession.class);
+        assertThat(classSession, nullValue());
+
+        final SqlSession methodSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getTestMethod().getName()), SqlSession.class);
+        assertThat(methodSession, notNullValue());
+
         assertThat(testInstance.getMapper(), notNullValue());
     }
 
@@ -155,14 +154,17 @@ class MyBatisMapperExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
+        final SqlSession classSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getClass().getSimpleName()), SqlSession.class);
+        assertThat(classSession, nullValue());
+
+        final SqlSession methodSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getTestMethod().getName()), SqlSession.class);
+        assertThat(methodSession, notNullValue());
+
         assertThat(testInstance.getMapper(), notNullValue());
     }
 
     @Test
-    void shouldApplyMybatisConfigurationOnBeforeEachWhenClassConfigAndMethodConfigDefined()
-                                                                                    throws NoSuchMethodException {
+    void shouldApplyMybatisConfigurationOnBeforeEachWhenClassConfigAndMethodConfigDefined() throws NoSuchMethodException {
         // Arrange
         testInstance = new MyBatisTestHybridItemNoClassLevelTestIsolation();
         when(extensionContextMock.getRequiredTestClass()).thenReturn((Class) testInstance.getClass());
@@ -175,14 +177,17 @@ class MyBatisMapperExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, anEmptyMap());
+        final SqlSession classSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getClass().getSimpleName()), SqlSession.class);
+        assertThat(classSession, nullValue());
+
+        final SqlSession methodSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getTestMethod().getName()), SqlSession.class);
+        assertThat(methodSession, notNullValue());
+
         assertThat(testInstance.getMapper(), notNullValue());
     }
 
     @Test
-    void shouldIgnoreMethodTestIsolationConfigWhenClassConfigAndMethodConfigAndNoTestIsolationAtMethodLevelDefined()
-        throws NoSuchMethodException {
+    void shouldIgnoreMethodTestIsolationConfigWhenClassConfigAndMethodConfigAndNoTestIsolationAtMethodLevelDefined() throws NoSuchMethodException {
         // Arrange
         testInstance = new MyBatisTestNoMethodLevelTestIsolation();
         when(extensionContextMock.getRequiredTestClass()).thenReturn((Class) testInstance.getClass());
@@ -197,8 +202,12 @@ class MyBatisMapperExtensionTest {
         sut.beforeEach(extensionContextMock);
 
         // Assert
-        assertThat(MyBatisMapperExtension.SQL_CLASS_SESSIONS, aMapWithSize(1));
-        assertThat(MyBatisMapperExtension.SQL_METHOD_SESSIONS, aMapWithSize(1));
+        final SqlSession classSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getClass().getSimpleName()), SqlSession.class);
+        assertThat(classSession, nullValue());
+
+        final SqlSession methodSession = storeSpy.get(MyBatisSqlSessionResolver.computeSessionKey(testInstance.getTestMethod().getName()), SqlSession.class);
+        assertThat(methodSession, notNullValue());
+
         assertThat(testInstance.getMapper(), notNullValue());
     }
 

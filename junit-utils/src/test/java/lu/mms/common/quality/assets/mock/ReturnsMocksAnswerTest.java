@@ -1,16 +1,19 @@
 package lu.mms.common.quality.assets.mock;
 
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
+import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.core.IsNot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.invocation.InterceptedInvocation;
+import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +43,7 @@ class ReturnsMocksAnswerTest {
     private InternalMocksContext context;
 
     @BeforeEach
-    private void init() {
+    void init() {
         context = InternalMocksContext.newEmptyContext();
     }
 
@@ -185,44 +188,17 @@ class ReturnsMocksAnswerTest {
         }
     }
 
-    static class ReturnMocksInvocationOnMock implements InvocationOnMock {
-
-        private Object mock;
-        private Method method;
+    static class ReturnMocksInvocationOnMock extends InterceptedInvocation {
 
         ReturnMocksInvocationOnMock(final Class<?> klass, final Object mock, final String methodName) {
-            this.mock = mock;
-            method = ReflectionUtils.findMethod(klass, methodName);
-        }
-
-        @Override
-        public Object getMock() {
-            return mock;
-        }
-
-        @Override
-        public Method getMethod() {
-            return method;
-        }
-
-        @Override
-        public Object[] getArguments() {
-            return new Object[0];
-        }
-
-        @Override
-        public <T> T getArgument(final int i) {
-            return null;
-        }
-
-        @Override
-        public <T> T getArgument(final int i, final Class<T> aClass) {
-            return null;
-        }
-
-        @Override
-        public Object callRealMethod() {
-            return null;
+            super(
+                    new MockStrongReference<>(mock, true),
+                    new DelegatingMethod(ReflectionUtils.findMethod(klass, methodName)),
+                    new Object[0],
+                    null,
+                    null,
+                    RandomUtils.nextInt()
+            );
         }
     }
 

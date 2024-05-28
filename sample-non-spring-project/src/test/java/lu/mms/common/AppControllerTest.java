@@ -1,7 +1,7 @@
 package lu.mms.common;
 
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-@UnitTest
+@ExtendWithTestUtils
 class AppControllerTest {
 
     @InjectMocks

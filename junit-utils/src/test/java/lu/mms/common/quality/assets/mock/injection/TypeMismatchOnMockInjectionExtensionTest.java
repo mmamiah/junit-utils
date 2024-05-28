@@ -1,6 +1,8 @@
 package lu.mms.common.quality.assets.mock.injection;
 
 import lu.mms.common.quality.assets.mock.MockInjectionExtension;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -42,7 +44,7 @@ class TypeMismatchOnMockInjectionExtensionTest {
     private final List<Device> devices = new ArrayList<>();
 
     @BeforeEach
-    private void init() {
+    void init() {
         devices.add(new SuperMice());
     }
 
@@ -64,7 +66,7 @@ class TypeMismatchOnMockInjectionExtensionTest {
      * </code>
      */
     @Test
-    void shouldRebuildTheSutWithUserMockWhenMockNameMatchAndTypeMismatch() {
+    void shouldBuildTheSutWithUserMockWhenMockNameMatchAndTypeMismatch() {
         // Arrange
 
         // Act
@@ -93,6 +95,7 @@ class TypeMismatchOnMockInjectionExtensionTest {
 
         Laptop (final List<Device> devices) {
             this.devicesByConstructor = Stream.ofNullable(devices)
+                    .filter(CollectionUtils::isNotEmpty)
                     .flatMap(Collection::stream)
                     .collect(Collectors.toMap(
                             item -> String.format(BY_CONSTRUCTOR_TEMPLATE, MockUtil.getMockName(item).toString()),
@@ -102,9 +105,12 @@ class TypeMismatchOnMockInjectionExtensionTest {
 
         @Autowired
         private void initTwo(final List<Device> aValue) {
-            this.devices = aValue.stream().collect(Collectors.toMap(
-                item -> String.format(BY_METHOD_TEMPLATE, MockUtil.getMockName(item).toString()),
-                Function.identity()));
+            this.devices = aValue.stream()
+                    .filter(ObjectUtils::isNotEmpty)
+                    .collect(Collectors.toMap(
+                        item -> String.format(BY_METHOD_TEMPLATE, MockUtil.getMockName(item).toString()),
+                        Function.identity())
+                    );
         }
 
         public Map<String, Device> getDevicesByConstructor() {

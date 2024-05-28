@@ -2,17 +2,21 @@ package lu.mms.common.quality.assets.mock.injection;
 
 import lu.mms.common.quality.assets.mock.MockInjectionExtension;
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.Extensions;
 import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.reflections.ReflectionUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static lu.mms.common.quality.assets.mock.context.MockContextUtils.retrieveMocksByParameters;
@@ -35,30 +39,41 @@ public class JUnitUtilsMockAnnotationEngine extends InjectingAnnotationEngine {
 
         final InternalMocksContext context = InternalMocksContext.newContext(null, clazz, testClassInstance, null);
         mockDependentFields.forEach(field -> {
-            // [1] Collect the collection of matching argument if any
-            final Object[] args = ReflectionUtils.getAllConstructors(field.getType()).stream()
+            // retrieve the non-default constructor
+            final Constructor<?> constructor = ReflectionUtils.getAllConstructors(field.getType()).stream()
                     .filter(Objects::nonNull)
 
                     // keep the non-default constructor. We don't want to rebuild with default constructors.
-                    .filter(constructor -> constructor.getParameterCount() != 0)
+                    .filter(constructorItem -> constructorItem.getParameterCount() != 0)
 
                     // retrieve its longest constructor parameters
                     .max(Comparator.comparing(Constructor::getParameterCount))
-                    .map(Constructor::getParameters)
+                    .orElse(null);
 
-                    // collect the constructor parameters (as well as the array/collection mocks)
-                    .map(parameters -> retrieveMocksByParameters(context, parameters))
-                    .orElse(new Object[]{});
+            if (constructor == null) {
+                return;
+            }
 
-            // [2] add them to the candidate mocks collection
-            Stream.of(args)
-                    .filter(Objects::nonNull)
-                    .forEach(mocks::add);
+            // Instantiate the field
+            final Object[] args = retrieveMocksByParameters(context, constructor.getParameters());
+            final Object instance = BeanUtils.instantiateClass(constructor, args);
+            ReflectionTestUtils.setField(testClassInstance, field.getName(), instance);
+
+            // remove the mock dependent fields to avoid any other instantiation
+            if (clazz.getSuperclass() == Object.class) {
+                mockDependentFields.remove(field);
+            }
         });
     }
 
     private static boolean hasValidExtension(final Class<?> testInstanceClass) {
         // Collect from Extensions
+        Stream<ExtendWith> extensionsExtendWithTestUtils = Stream.empty();
+        if (testInstanceClass.isAnnotationPresent(ExtendWithTestUtils.class)) {
+            extensionsExtendWithTestUtils = Stream.of(testInstanceClass.getAnnotationsByType(ExtendWithTestUtils.class))
+                    .flatMap(extension -> Stream.of(extension.annotationType().getAnnotationsByType(ExtendWith.class)));
+        }
+
         Stream<ExtendWith> extensions = Stream.empty();
         if (testInstanceClass.isAnnotationPresent(Extensions.class)) {
             extensions = Stream.of(testInstanceClass.getAnnotationsByType(Extensions.class))
@@ -73,7 +88,8 @@ public class JUnitUtilsMockAnnotationEngine extends InjectingAnnotationEngine {
         }
 
         // check if any of them has the required extension.
-        return Stream.concat(extensions, extendWithsStream)
+        return Stream.of(extensions, extendWithsStream, extensionsExtendWithTestUtils)
+                .flatMap(Function.identity())
                 .anyMatch(ext -> ArrayUtils.contains(ext.value(), MockInjectionExtension.class));
     }
 

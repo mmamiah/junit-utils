@@ -2,7 +2,7 @@ package lu.mms.common.quality.assets.mock;
 
 import lu.mms.common.quality.assets.JunitUtilsExtension;
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
-import lu.mms.common.quality.assets.unittest.UnitTest;
+import lu.mms.common.quality.assets.testutils.ExtendWithTestUtils;
 import lu.mms.common.quality.commons.MockSpyFieldPredicate;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apiguardian.api.API;
@@ -25,7 +25,7 @@ import java.util.Set;
  */
 @API(
     status = API.Status.EXPERIMENTAL,
-    since = "0.0.1"
+    since = "1.0.0"
 )
 public class ReturnsMocksExtension extends JunitUtilsExtension
                                     implements BeforeEachCallback, BeforeTestExecutionCallback, AfterEachCallback {
@@ -35,8 +35,9 @@ public class ReturnsMocksExtension extends JunitUtilsExtension
 
     @Override
     public void beforeEach(final ExtensionContext context) {
-        final UnitTest unitTest = context.getRequiredTestClass().getDeclaredAnnotation(UnitTest.class);
-        if (unitTest != null && !unitTest.returnMocks()) {
+        final ExtendWithTestUtils config = context.getRequiredTestClass()
+                .getDeclaredAnnotation(ExtendWithTestUtils.class);
+        if (config != null && !config.returnMocks()) {
             return;
         }
 
@@ -50,8 +51,9 @@ public class ReturnsMocksExtension extends JunitUtilsExtension
 
     @Override
     public void beforeTestExecution(final ExtensionContext context) {
-        final UnitTest unitTest = context.getRequiredTestClass().getDeclaredAnnotation(UnitTest.class);
-        if (unitTest != null && !unitTest.returnMocks()) {
+        final ExtendWithTestUtils config = context.getRequiredTestClass()
+                .getDeclaredAnnotation(ExtendWithTestUtils.class);
+        if (config != null && !config.returnMocks()) {
             return;
         }
 
