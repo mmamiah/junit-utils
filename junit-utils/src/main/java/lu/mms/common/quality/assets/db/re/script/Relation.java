@@ -13,13 +13,13 @@ public class Relation implements Comparable<Relation> {
     private final String sourceColumn;
     private final String targetTable;
     private final String targetColumn;
-    private final Join joinType;
+    private final JoinType joinType;
     private String targetTableAlias;
     private String sourceTable;
     private String sourceTableAlias;
 
 
-    private Relation(final Join joinType, final String columnName, final String targetTable, final String targetColumn) {
+    public Relation(final JoinType joinType, final String columnName, final String targetTable, final String targetColumn) {
         this.joinType = joinType;
         this.sourceColumn = columnName;
         this.targetTable = targetTable;
@@ -27,7 +27,7 @@ public class Relation implements Comparable<Relation> {
     }
 
     public Relation(final String columnName, final String targetTable, final String targetColumn) {
-        this((Join) null, columnName, targetTable, targetColumn);
+        this((JoinType) null, columnName, targetTable, targetColumn);
     }
 
     public Relation(final String sourceTableName, final String columnName, final String targetTable, final String targetColumn) {
@@ -55,54 +55,6 @@ public class Relation implements Comparable<Relation> {
         return targetTableAlias;
     }
 
-    /**
-     * The SQL 'Join' clause template.
-     *
-     * @param columnName the column name
-     * @param targetTable the target table to join
-     * @param targetColumn the target column to join (defined in 'targetTable')
-     * @return the sql join clause template
-     */
-    public static Relation join(final String columnName, final String targetTable, final String targetColumn) {
-        return new Relation(columnName, targetTable, targetColumn);
-    }
-
-    /**
-     * The SQL 'LEFT Join' clause template.
-     *
-     * @param columnName the column name
-     * @param targetTable the target table to join
-     * @param targetColumn the target column to join (defined in 'targetTable')
-     * @return the sql left join clause template
-     */
-    public static Relation leftJoin(final String columnName, final String targetTable, final String targetColumn) {
-        return new Relation(Join.LEFT, columnName, targetTable, targetColumn);
-    }
-
-    /**
-     * The SQL 'RIGHT Join' clause template.
-     *
-     * @param columnName the column name
-     * @param targetTable the target table to join
-     * @param targetColumn the target column to join (defined in 'targetTable')
-     * @return the sql right join clause template
-     */
-    public static Relation rightJoin(final String columnName, final String targetTable, final String targetColumn) {
-        return new Relation(Join.RIGHT, columnName, targetTable, targetColumn);
-    }
-
-    /**
-     * The SQL 'FULL Join' clause template.
-     *
-     * @param columnName the column name
-     * @param targetTable the target table to join
-     * @param targetColumn the target column to join (defined in 'targetTable')
-     * @return the sql full join clause template
-     */
-    public static Relation fullJoin(final String columnName, final String targetTable, final String targetColumn) {
-        return new Relation(Join.FULL, columnName, targetTable, targetColumn);
-    }
-
     public String getSourceTable() {
         return sourceTable;
     }
@@ -119,11 +71,16 @@ public class Relation implements Comparable<Relation> {
         return targetColumn;
     }
 
-    public Join getJoinType() {
+    public JoinType getJoinType() {
         return joinType;
     }
 
     public String build(final Table table) {
+        // source table
+        if (StringUtils.isBlank(sourceTable)) {
+            sourceTable = table.getName();
+        }
+
         // resolve the columns
         final Column columnOne = table.getSchema()
                 .getTables().get(sourceTable)
