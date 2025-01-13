@@ -1,4 +1,3 @@
-
 This project contains the JUnit framework for Java applications, and a sample project.
 
 ## Getting Started
@@ -8,6 +7,7 @@ These instructions will get you a copy of the project up on your local machine f
 ### Prerequisites
 
 Make sure you have installed :
+
 - [Git](https://git-scm.com/)
 - [Maven](https://maven.apache.org/)
 - [Java 17](https://openjdk.java.net/install/)
@@ -20,11 +20,13 @@ Make sure you have installed :
 ### Installing
 
 Clone the repository:
+
 ```bash
 git clone ssh://git@github.comm:2222/junit-utils-lib.git
 ```
 
 Import into IntelliJ IDEA:
+
 ```bash
 cd junit-utils-lib
 idea .
@@ -35,13 +37,16 @@ idea .
 - **Group ID**: `lu.mms.common`
 - **Artifact ID**: `junit-utils-pom`
 - Java modules name:
-  - `junit-utils` (`lu.mms.common.quality`)
-  - `user-guide` (`lu.mms.common.quality.userguide`)
-  
+    - `junit-utils` (`lu.mms.common.quality`)
+    - `user-guide` (`lu.mms.common.quality.userguide`)
+
 ## Integration in other projects
 
-If you want to use `junit-utils` as dependency of any other project, add the following dependency in your `pom.xml` with the scope `test` :
+If you want to use `junit-utils` as dependency of any other project, add the following dependency in your `pom.xml` with
+the scope `test` :
+
 ```xml
+
 <dependency>
     <groupId>lu.mms.common</groupId>
     <artifactId>junit-utils</artifactId>
@@ -52,7 +57,7 @@ If you want to use `junit-utils` as dependency of any other project, add the fol
 
 ## Contributing
 
-Please read [Way of Working](https://confluence.europe.intranet/display/LTP/How+To) for details on our code of conduct, 
+Please read [Way of Working](https://confluence.europe.intranet/display/LTP/How+To) for details on our code of conduct,
 and the process for submitting pull requests to us.
 
 ## Testing standard
@@ -70,8 +75,8 @@ who participated in this project.
 
 ## Acknowledgments
 
-* [README Template gist](https://gist.githubusercontent.com/PurpleBooth/109311bb0361f32d87a2/raw/824da51d0763e6855c338cc8107b2ff890e7dd43/README-Template.md) 
-for the redaction of what you're reading.
+* [README Template gist](https://gist.githubusercontent.com/PurpleBooth/109311bb0361f32d87a2/raw/824da51d0763e6855c338cc8107b2ff890e7dd43/README-Template.md)
+  for the redaction of what you're reading.
 
 
 

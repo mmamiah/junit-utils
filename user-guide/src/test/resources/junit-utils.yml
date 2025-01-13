@@ -1,4 +1,3 @@
-
 junit-utils:
   # The package that will be scanned by the framework.
   component-scan: lu.mms
