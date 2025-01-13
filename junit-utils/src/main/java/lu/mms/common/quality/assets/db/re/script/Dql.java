@@ -3,6 +3,7 @@ package lu.mms.common.quality.assets.db.re.script;
 import lu.mms.common.quality.assets.db.re.schema.Column;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * The Data Query Language class.

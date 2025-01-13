@@ -59,9 +59,10 @@ public interface MigrationScript extends SqlScript {
 
     /**
      * Create the .sql file in the sql folder (test/resources).
-     * @param packageProvider   The class been with in the target package
-     * @param fileName  the files name
-     * @param lines The file lines.
+     *
+     * @param packageProvider The class been with in the target package
+     * @param fileName        the files name
+     * @param lines           The file lines.
      */
     static boolean createFile(final Class<?> packageProvider, final String fileName, final List<String> lines) {
         Path file;

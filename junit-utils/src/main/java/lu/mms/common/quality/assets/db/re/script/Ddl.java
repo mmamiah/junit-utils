@@ -17,21 +17,21 @@ public class Ddl implements MigrationScript {
 
     private static final String SCHEMA_FILENAME_FORMAT = "schema_%s.sql";
 
-    private static final String CREATE_SCHEMA =  StringUtils.LF
+    private static final String CREATE_SCHEMA = StringUtils.LF
             + "--------------------------------------------- ---------------------------------------\n"
             + "---------------------------------------- CREATE SCHEMA ------------------------------\n"
             + "--------------------------------------------- ---------------------------------------\n"
             + "CREATE SCHEMA IF NOT EXISTS %s;"
             + "\n\n";
 
-    private static final String DROP_TABLES_BANNER =  StringUtils.LF
+    private static final String DROP_TABLES_BANNER = StringUtils.LF
             + "--------------------------------------------- ---------------------------------------\n"
             + "-------------------------------------- DROP TABLES ----------------------------------\n"
             + "--------------------------------------------- ---------------------------------------\n";
 
     private static final String DROP_TABLE = "DROP TABLE %s.%s IF EXISTS; --%s\n";
 
-    private static final String CREATE_TABLES_BANNER =  StringUtils.LF
+    private static final String CREATE_TABLES_BANNER = StringUtils.LF
             + "--------------------------------------------- ----------------------------------------\n"
             + "-------------------------------------- CREATE TABLE ----------------------------------\n"
             + "--------------------------------------------- ----------------------------------------\n";
@@ -41,7 +41,9 @@ public class Ddl implements MigrationScript {
             + "%s"
             + ");\n\n";
 
-    /** Table column definition. example: DT_VALEUR VARCHAR2(100 CHAR) */
+    /**
+     * Table column definition. example: DT_VALEUR VARCHAR2(100 CHAR)
+     */
     private static final String TABLE_COLUMN = "\t%s %s\n";
 
     private static final String PK_TEMPLATE = ",\tCONSTRAINT PK_%s PRIMARY KEY (%s)\n";
@@ -80,7 +82,7 @@ public class Ddl implements MigrationScript {
     }
 
     /**
-     * @return  The DDL string
+     * @return The DDL string
      */
     @Override
     public String build() {

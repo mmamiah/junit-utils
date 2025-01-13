@@ -4,7 +4,10 @@ import lu.mms.common.quality.assets.db.re.schema.Column;
 import lu.mms.common.quality.assets.db.re.schema.Table;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class From implements SqlScript {
 

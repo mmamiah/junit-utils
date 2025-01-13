@@ -16,7 +16,7 @@ public class Dml implements MigrationScript {
 
     private static final String DATA_FILENAME_FORMAT = "data_%s.sql";
 
-    private static final String DELETE_RECORDS_BANNER =  StringUtils.LF
+    private static final String DELETE_RECORDS_BANNER = StringUtils.LF
             + "--------------------------------------------- ----------------------------------------\n"
             + "------------------------------------- DELETE RECORDS ---------------------------------\n"
             + "--------------------------------------------- ----------------------------------------\n";
@@ -68,7 +68,7 @@ public class Dml implements MigrationScript {
     }
 
     /**
-     * @return  The DML string
+     * @return The DML string
      */
     @Override
     public String build() {
