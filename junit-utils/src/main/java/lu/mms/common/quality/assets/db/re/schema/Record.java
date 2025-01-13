@@ -33,8 +33,9 @@ public class Record {
 
     /**
      * Add a new value to the record.
-     * @param columnName    The column name
-     * @param value The column value
+     *
+     * @param columnName The column name
+     * @param value      The column value
      */
     public void appendColumnValue(final String columnName, final Object value) {
         Object formattedValue = value;
@@ -44,7 +45,7 @@ public class Record {
             formattedValue = String.valueOf(value)
                     .replace("'", "\\'")
                     .replace("\n", StringUtils.EMPTY);
-            formattedValue  = String.format("'%s'", formattedValue);
+            formattedValue = String.format("'%s'", formattedValue);
         }
         values.put(columnName, formattedValue);
     }
@@ -55,9 +56,10 @@ public class Record {
 
     /**
      * Compare two records (their values map) and determine if the are equal.
+     *
      * @param record The record to compare to.
-     * @return  true,   if the values map are the same amount of record, and if all entries match. <br>
-     *          false,  otherwise.
+     * @return true,   if the values map are the same amount of record, and if all entries match. <br>
+     * false,  otherwise.
      */
     boolean equalTo(final Record record) {
         if (values.size() != record.getValues().size()) {
