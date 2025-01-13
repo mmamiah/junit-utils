@@ -228,7 +228,7 @@ public class MyBatisMapperExtension extends MyBatisSqlSessionResolver implements
         }
 
         // Execute migration scripts
-        for (String migration: scripts) {
+        for (String migration : scripts) {
             if (StringUtils.isEmpty(migration)) {
                 continue;
             }

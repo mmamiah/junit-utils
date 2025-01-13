@@ -52,7 +52,7 @@ import java.util.stream.Stream;
     since = "1.0.0"
 )
 public class SpringContextRunnerExtension extends JunitUtilsExtension
-                                        implements BeforeEachCallback, AfterEachCallback, BeforeTestExecutionCallback {
+        implements BeforeEachCallback, AfterEachCallback, BeforeTestExecutionCallback {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringContextRunnerExtension.class);
     private static final PropertyPlaceholderHelper PROPERTY_HELPER = new PropertyPlaceholderHelper("${", "}");
@@ -85,6 +85,7 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
 
     /**
      * Instantiate the {@link ApplicationContextRunner} field and apply the {@link SpringContextRunner} settings.
+     *
      * @param mocksContext The test instance mocks context
      */
     @Override
@@ -99,7 +100,7 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
 
         final Object testInstance = mocksContext.getTestInstance();
 
-        for (Field field: contextFields) {
+        for (Field field : contextFields) {
             // validate that the field is an instance of AbstractApplicationContextRunner.
             if (!AbstractApplicationContextRunner.class.isAssignableFrom(field.getType())) {
                 throw new JunitUtilsPreconditionException(String.format(FIELD_CLASS_ERROR_FORMAT, field.getName()));
@@ -122,8 +123,8 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
     }
 
     private AbstractApplicationContextRunner<?, ?, ?> retrieveAppContextRunner(
-                                                                            final InternalMocksContext mocksContext,
-                                                                            final Field field) {
+            final InternalMocksContext mocksContext,
+            final Field field) {
         if (ReflectionTestUtils.getField(mocksContext.getTestInstance(), field.getName()) != null) {
             return (AbstractApplicationContextRunner<?, ?, ?>) ReflectionTestUtils.getField(
                     mocksContext.getTestInstance(),
@@ -134,7 +135,7 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
     }
 
     private static AbstractApplicationContextRunner<?, ?, ?> applyContextRunnerConfig(final Field field,
-                                                   final AbstractApplicationContextRunner<?, ?, ?> appContextRunner) {
+                                                                                      final AbstractApplicationContextRunner<?, ?, ?> appContextRunner) {
         final AtomicReference<AbstractApplicationContextRunner<?, ?, ?>> atomicRunner = new AtomicReference<>();
         atomicRunner.set(appContextRunner);
 
@@ -159,7 +160,7 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
         // set user configurations
         if (ArrayUtils.isNotEmpty(annotation.withUserConfiguration())) {
             atomicRunner.getAndUpdate(appContext -> appContext
-                .withUserConfiguration(annotation.withUserConfiguration()));
+                    .withUserConfiguration(annotation.withUserConfiguration()));
         }
     }
 
@@ -217,12 +218,12 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
         final Properties finalProperties = new Properties();
         finalProperties.putAll(properties);
 
-        final String[] pairs =  properties.entrySet().stream()
+        final String[] pairs = properties.entrySet().stream()
                 .map(entry -> {
                     String value = PROPERTY_HELPER.replacePlaceholders(String.valueOf(entry.getValue()), finalProperties);
                     if (annotation.ignorePropertyEncryption() && value.startsWith("ENC(") && value.endsWith(")")) {
                         value = value.replaceFirst("ENC\\(", value);
-                        value = value.substring(0, value.lastIndexOf(")")-1);
+                        value = value.substring(0, value.lastIndexOf(")") - 1);
                     }
                     return StringUtils.joinWith("=", entry.getKey(), value);
                 })
@@ -296,19 +297,21 @@ public class SpringContextRunnerExtension extends JunitUtilsExtension
 
     /**
      * Add relevant classes as bean in the context.
+     *
      * @param atomicRunner the atomic application context runner
-     * @param annotation the {@link SpringContextRunner} annotation instance
+     * @param annotation   the {@link SpringContextRunner} annotation instance
      */
     private static void withBeans(final AtomicReference<AbstractApplicationContextRunner<?, ?, ?>> atomicRunner,
                                   final SpringContextRunner annotation) {
         // set properties value
         Stream.of(annotation.withBeans())
-            .forEach(bean -> atomicRunner.getAndUpdate(appContext -> appContext.withBean(bean)));
+                .forEach(bean -> atomicRunner.getAndUpdate(appContext -> appContext.withBean(bean)));
     }
 
     /**
      * Produce a new instance of {@link AbstractApplicationContextRunner}.
-     * @param field the field annotated with {@link SpringContextRunner}
+     *
+     * @param field        the field annotated with {@link SpringContextRunner}
      * @param mocksContext the test mocks context
      * @return the application context runner object
      */

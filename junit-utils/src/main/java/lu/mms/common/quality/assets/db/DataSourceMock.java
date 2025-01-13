@@ -44,6 +44,7 @@ public final class DataSourceMock {
 
     /**
      * Create a new DataSource mock.
+     *
      * @param productName the product name
      * @return the new builder
      */
@@ -72,6 +73,7 @@ public final class DataSourceMock {
 
     /**
      * Build the DataSource mock, with {@link DatabaseMetaData} and {@link Connection} mocks and stubs.
+     *
      * @return The prepared DataSource mock
      */
     public DataSource build() {
@@ -121,7 +123,7 @@ public final class DataSourceMock {
         when(resultSetMock.next()).thenAnswer(inv ->
                 hasNext.getAndSet(false)
         );
-        doAnswer(inv->
+        doAnswer(inv ->
                 hasNext.getAndSet(false)
         ).when(resultSetMock).close();
         return resultSetMock;

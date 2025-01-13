@@ -10,14 +10,22 @@ import java.util.Set;
  */
 public enum InMemoryDb {
 
-    /** The H2 with ORACLE compatibility mode. */
+    /**
+     * The H2 with ORACLE compatibility mode.
+     */
     H2_ORACLE(EmbeddedDatabaseType.H2, DBDriverName.ORACLE, "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1;MODE=Oracle;"),
-    /** The H2 with DB2 compatibility mode. */
-    H2_DB2(EmbeddedDatabaseType.H2, DBDriverName.DB2,"jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1;MODE=DB2;"),
+    /**
+     * The H2 with DB2 compatibility mode.
+     */
+    H2_DB2(EmbeddedDatabaseType.H2, DBDriverName.DB2, "jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1;MODE=DB2;"),
 
-    /** The HSQL with ORACLE compatibility mode. */
+    /**
+     * The HSQL with ORACLE compatibility mode.
+     */
     HSQL_ORACLE(EmbeddedDatabaseType.HSQL, DBDriverName.ORACLE, "jdbc:hsqldb:mem:%s;sql.syntax_ora=true"),
-    /** The HSQL with DB2 compatibility mode. */
+    /**
+     * The HSQL with DB2 compatibility mode.
+     */
     HSQL_DB2(
             EmbeddedDatabaseType.HSQL,
             DBDriverName.DB2,

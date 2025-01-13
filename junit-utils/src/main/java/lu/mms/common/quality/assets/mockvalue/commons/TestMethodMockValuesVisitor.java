@@ -27,9 +27,10 @@ public final class TestMethodMockValuesVisitor implements MockValueVisitor {
 
     /**
      * Instantiate a new mock injection consumer.
+     *
      * @param testInstance   The test instance.
-     * @param testMethodName   The test method name.
-     * @return  the mock injection consumer
+     * @param testMethodName The test method name.
+     * @return the mock injection consumer
      */
     public static TestMethodMockValuesVisitor newVisitor(final Object testInstance, final String testMethodName) {
         return new TestMethodMockValuesVisitor(testInstance, testMethodName);

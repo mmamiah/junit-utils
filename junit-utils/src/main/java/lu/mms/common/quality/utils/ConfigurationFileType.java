@@ -68,8 +68,9 @@ enum ConfigurationFileType {
 
     /**
      * Extract properties from configuration file.
+     *
      * @param resource The resource
-     * @return  the properties maps
+     * @return the properties maps
      */
     public Properties retrieveConfigurations(final URL resource) {
         Properties properties = new Properties();
@@ -86,9 +87,10 @@ enum ConfigurationFileType {
     /**
      * Extract property from configuration map. <br>
      * This method will navigate through the given map and retun the first matching key.
-     * @param configs The configurations to search
+     *
+     * @param configs   The configurations to search
      * @param configKey The configuration key to search
-     * @return  the properties maps
+     * @return the properties maps
      */
     public static Object retrieveConfiguration(final Object configs, final String configKey) {
         if (!(configs instanceof Map)) {

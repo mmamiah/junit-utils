@@ -29,12 +29,12 @@ public final class LookupMethodInjection implements Consumer<InternalMocksContex
 
     /**
      * @param annotationClass The target object annotation
-     * @return  The new consumer object
+     * @return The new consumer object
      */
     public static LookupMethodInjection newConsumer(final Class<? extends Annotation> annotationClass) {
         return new LookupMethodInjection(annotationClass);
     }
-    
+
     @Override
     public void accept(final InternalMocksContext mocksContext) {
         ReflectionUtils.getAllFields(

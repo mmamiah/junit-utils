@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *  This extension make the {@link InternalMocksContext} available for the test method/case.
+ * This extension make the {@link InternalMocksContext} available for the test method/case.
  */
 @API(
     status = API.Status.EXPERIMENTAL,

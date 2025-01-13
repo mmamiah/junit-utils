@@ -16,25 +16,28 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @API(
-    status = API.Status.EXPERIMENTAL,
+        status = API.Status.EXPERIMENTAL,
         since = "1.0.0"
 )
 public @interface EnumArgument {
 
     /**
      * The test scenario arguments from the provided enum.
+     *
      * @return The enum class.
-    */
+     */
     Class<? extends Enum<?>> value() default NoEnum.class;
 
     /**
      * The enum values (string) to include.
+     *
      * @return The enum value names.
      */
     String[] include() default {};
 
     /**
      * The enum values (string) to exclude.
+     *
      * @return The enum value names.
      */
     String[] exclude() default {};

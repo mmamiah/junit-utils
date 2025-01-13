@@ -29,22 +29,25 @@ public @interface MyBatisMapperTest {
 
     /**
      * The InMemory database engine to be used to instantiate the datasource (session factory).
-     * @return  The database engine.
+     *
+     * @return The database engine.
      */
     InMemoryDb dbEngine() default InMemoryDb.HSQL_ORACLE;
 
     /**
      * The migration scripts to run when configuring the DataSource. <br>
      * The script will be executed in the declared order.
+     *
      * @return The script.
      */
     String[] script() default StringUtils.EMPTY;
 
     /**
      * Manage the connection to the database.
+     *
      * @return <b>true</b>, if <i>@Test</i> methods should be isolated from the other test methods.
-     *                      Then, the connection will be closed after each method.<br>
-     *         <b>false</b>, otherwise.
+     * Then, the connection will be closed after each method.<br>
+     * <b>false</b>, otherwise.
      */
     boolean testIsolation() default true;
 

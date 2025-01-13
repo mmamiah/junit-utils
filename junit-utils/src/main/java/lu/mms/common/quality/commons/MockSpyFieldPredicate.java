@@ -19,6 +19,7 @@ public final class MockSpyFieldPredicate implements Predicate<Field> {
 
     /**
      * Create New Predicate instance.
+     *
      * @param instance The source object containing the fields
      * @return The MockSpyPredicate
      */

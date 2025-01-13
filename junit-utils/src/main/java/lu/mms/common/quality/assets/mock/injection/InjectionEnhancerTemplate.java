@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  *     <li>Apply the field/setter injection</li>
  *     <li>Apply the Lookup method injection</li>
  * </ol>
- *
+ * <p>
  * The arguments to be injected are resolved from the {@link InternalMocksContext} (mock/spies declared in the
  * test instance).
  */
@@ -39,8 +39,9 @@ public final class InjectionEnhancerTemplate implements Consumer<InternalMocksCo
      *     <li>Apply the field/setter injection</li>
      *     <li>Apply the Lookup method injection</li>
      * </ol>
+     *
      * @param annotationClass The target object annotation
-     * @return  The new template object
+     * @return The new template object
      */
     public static InjectionEnhancerTemplate newTemplate(final Class<? extends Annotation> annotationClass) {
         return new InjectionEnhancerTemplate(annotationClass);
@@ -54,8 +55,9 @@ public final class InjectionEnhancerTemplate implements Consumer<InternalMocksCo
      *     <li>Apply the field/setter injection</li>
      *     <li>Apply the Lookup method injection</li>
      * </ol>
+     *
      * @param annotationClass The target object annotation
-     * @return  The new template object
+     * @return The new template object
      */
     public static InjectionEnhancerTemplate newConstructorInjectionTemplate(final Class<? extends Annotation> annotationClass) {
         return new InjectionEnhancerTemplate(
@@ -71,8 +73,9 @@ public final class InjectionEnhancerTemplate implements Consumer<InternalMocksCo
      *     <li>Apply the field/setter injection</li>
      *     <li>Apply the Lookup method injection</li>
      * </ol>
+     *
      * @param annotationClass The target object annotation
-     * @return  The new template object
+     * @return The new template object
      */
     public static InjectionEnhancerTemplate newFieldInjectionTemplate(final Class<? extends Annotation> annotationClass) {
         return new InjectionEnhancerTemplate(

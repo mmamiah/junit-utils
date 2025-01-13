@@ -99,7 +99,7 @@ public enum NumberDataType {
                     if (formatted.contains("s")) {
                         return StringUtils.replace(formatted, "s", scale.toString());
                     }
-                    return  formatted;
+                    return formatted;
                 })
                 .orElse(StringUtils.EMPTY);
     }

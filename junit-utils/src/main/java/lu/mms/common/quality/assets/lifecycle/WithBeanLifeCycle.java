@@ -16,6 +16,7 @@ import java.lang.annotation.Target;
 /**
  * {@link WithBeanLifeCycle} annotation, which extends the annotated test class with {@link BeanLifeCycleExtension},
  * extension which execute the Subject Under Test (sut) bean life cycle methods, for test and/or verification purpose.
+ *
  * @see BeanLifeCycleExtension
  */
 @Target(ElementType.TYPE)
@@ -30,10 +31,11 @@ public @interface WithBeanLifeCycle {
 
     /**
      * Execute the bean life cycle methods at the JUnit5 @{@link BeforeEach} stage.
+     *
+     * @return <b>true</b>,  bean lifecycle execution is triggered at @{@link BeforeEach} stage <br>
+     * <b>false</b>, bean lifecycle execution is triggered at @{@link BeforeTestExecution} stage
      * @see BeforeEach
      * @see BeforeTestExecution
-     * @return <b>true</b>,  bean lifecycle execution is triggered at @{@link BeforeEach} stage <br>
-     *         <b>false</b>, bean lifecycle execution is triggered at @{@link BeforeTestExecution} stage
      */
     boolean beforeEach() default false;
 

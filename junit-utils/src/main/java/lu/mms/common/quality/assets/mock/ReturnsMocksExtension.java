@@ -28,7 +28,7 @@ import java.util.Set;
     since = "1.0.0"
 )
 public class ReturnsMocksExtension extends JunitUtilsExtension
-                                    implements BeforeEachCallback, BeforeTestExecutionCallback, AfterEachCallback {
+        implements BeforeEachCallback, BeforeTestExecutionCallback, AfterEachCallback {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReturnsMocksExtension.class);
     private Set<Field> previousMockFields;
@@ -80,6 +80,7 @@ public class ReturnsMocksExtension extends JunitUtilsExtension
 
     /**
      * Ensure mocks/spies in the {@link InternalMocksContext} will return declared mocks if needed .
+     *
      * @param mocksContext The mocks context
      */
     @Override

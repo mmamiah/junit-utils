@@ -34,13 +34,14 @@ public final class SessionFactoryUtils {
 
     /**
      * Initialized new SQL Session Factory, using the provided configuration. <br>
-     * @param testClass The test class
+     *
+     * @param testClass        The test class
      * @param sessionFactoryId The session factory ID.
-     * @param inMemoryDb The database engine
+     * @param inMemoryDb       The database engine
      * @return The {@link SqlSessionFactory} object
      */
     public static SqlSessionFactory newSqlSessionFactory(final Class<?> testClass, final String sessionFactoryId,
-                                                          final InMemoryDb inMemoryDb) {
+                                                         final InMemoryDb inMemoryDb) {
         // Collect the mapper classes to register
         final List<Class<?>> mapperClasses = ReflectionUtils.getAllFields(
                 testClass,
@@ -54,9 +55,10 @@ public final class SessionFactoryUtils {
     /**
      * This method create a {@link SqlSessionFactory} as per the provided testcase name and the mapper to add to the
      * MyBatis configuration.
-     * @param testCaseName The test case name
+     *
+     * @param testCaseName  The test case name
      * @param mapperClasses The mapper classes to add to the configuration
-     * @param inMemoryDb The database engine
+     * @param inMemoryDb    The database engine
      * @return The resulting session factory
      */
     public static SqlSessionFactory createSqlSessionFactory(final String testCaseName,

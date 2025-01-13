@@ -81,6 +81,7 @@ public final class SpiConfiguration implements TestExecutionListener {
 
     /**
      * Framework SPI entry point.
+     *
      * @param args The app args
      */
     public static void main(final String[] args) {
@@ -92,7 +93,7 @@ public final class SpiConfiguration implements TestExecutionListener {
 
     private static void junitValidation() {
         boolean isJUnit = false;
-        for (StackTraceElement element: Thread.currentThread().getStackTrace()) {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
             isJUnit = element.getClassName().startsWith(JUNIT_PACKAGE);
             if (isJUnit) {
                 break;
@@ -129,6 +130,7 @@ public final class SpiConfiguration implements TestExecutionListener {
 
     /**
      * Retrieve a Map(Annotation, Factory) of annotations factories.
+     *
      * @param <A> The Annotation type
      * @param <F> The factory type
      * @return The factories Map.
@@ -145,12 +147,12 @@ public final class SpiConfiguration implements TestExecutionListener {
     }
 
     private static <A extends Annotation, T extends AssetFactory<A>> T newFactoryInstance(
-                                                            final Class<? extends AssetFactory> factoryClass) {
+            final Class<? extends AssetFactory> factoryClass) {
         T factoryInstance = null;
         try {
             factoryInstance = (T) ReflectionUtils.accessibleConstructor(factoryClass).newInstance((Object[]) null);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
-                | InvocationTargetException ex) {
+                 | InvocationTargetException ex) {
             LOGGER.error("Failed to instantiate the class.", ex);
         }
         return factoryInstance;

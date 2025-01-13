@@ -38,8 +38,9 @@ class DisplayNameComparator implements Comparator<String> {
     /**
      * Remove extra space in a given string. <br>
      * e.g.: " hello     there   " will return "hello there"
+     *
      * @param key The string to clean
-     * @return  The cleaned string object
+     * @return The cleaned string object
      */
     private static String getCleanEntry(final String key) {
         return key.trim().replaceAll(" ", StringUtils.EMPTY);

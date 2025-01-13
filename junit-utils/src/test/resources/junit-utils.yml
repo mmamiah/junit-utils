@@ -1,4 +1,3 @@
-
 junit-utils:
   # junit-utils-log-reflections=true
   log-reflections: true

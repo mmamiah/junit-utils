@@ -33,8 +33,9 @@ public final class FieldAndSetterInjection implements Consumer<InternalMocksCont
 
     /**
      * Instantiate a new mock injection consumer.
-     * @param annotationClass   The annotation to search.
-     * @return  the mock injection consumer
+     *
+     * @param annotationClass The annotation to search.
+     * @return the mock injection consumer
      */
     public static FieldAndSetterInjection newConsumer(final Class<? extends Annotation> annotationClass) {
         return new FieldAndSetterInjection(annotationClass);
@@ -96,8 +97,9 @@ public final class FieldAndSetterInjection implements Consumer<InternalMocksCont
     /**
      * Search for collection of objects applicable to the mock declared by the user, and initialize the with
      * corresponding mocks.
-     * @param mockContext   The mock context
-     * @param fields    The test instance target fields (i.e @Spy, @InjectMock)
+     *
+     * @param mockContext The mock context
+     * @param fields      The test instance target fields (i.e @Spy, @InjectMock)
      */
     private void injectMockCollections(final InternalMocksContext mockContext, final Set<Field> fields) {
 

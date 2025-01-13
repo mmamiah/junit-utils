@@ -49,6 +49,7 @@ public class MockValueExtension extends JunitUtilsExtension implements BeforeEac
     /**
      * Initialize the @Value (subject under test) and the @MockValue (test instance) for a
      * given test method (test case).
+     *
      * @param context The test instance mocks context
      */
     @Override

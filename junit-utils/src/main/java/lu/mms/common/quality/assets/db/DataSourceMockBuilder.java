@@ -22,9 +22,13 @@ import static org.mockito.Mockito.when;
 )
 public final class DataSourceMockBuilder {
 
-    /** H2 key. */
+    /**
+     * H2 key.
+     */
     static final String H2 = "H2";
-    /** Oracle key. */
+    /**
+     * Oracle key.
+     */
     static final String ORACLE = "Oracle";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceMockBuilder.class);
@@ -59,6 +63,7 @@ public final class DataSourceMockBuilder {
 
     /**
      * Build the DataSource mock, with {@link DatabaseMetaData} and {@link Connection} mocks and stubs.
+     *
      * @return The prepared DataSource mock
      */
     public DataSource build() {

@@ -35,14 +35,15 @@ public final class FrameworkUtils {
 
     /**
      * Build a Reflections object with all the scanners: <br>
-     *     <ul>
-     *         <li>FieldAnnotationsScanner</li>
-     *         <li>MemberUsageScanner</li>
-     *         <li>MethodAnnotationsScanner</li>
-     *         <li>SubTypesScanner</li>
-     *         <li>TypeAnnotationsScanner</li>
-     *         <li>TypeElementsScanner</li>
-     *     </ul>
+     * <ul>
+     *     <li>FieldAnnotationsScanner</li>
+     *     <li>MemberUsageScanner</li>
+     *     <li>MethodAnnotationsScanner</li>
+     *     <li>SubTypesScanner</li>
+     *     <li>TypeAnnotationsScanner</li>
+     *     <li>TypeElementsScanner</li>
+     * </ul>
+     *
      * @param packageName The package to scan
      * @return The Reflections object
      */
@@ -78,9 +79,10 @@ public final class FrameworkUtils {
 
     /**
      * Add annotation to a test class.
+     *
      * @param targetClass The target class
-     * @param annotation The annotation to add
-     * @param <A> The annotation type
+     * @param annotation  The annotation to add
+     * @param <A>         The annotation type
      */
     public static <A extends Annotation> void addAnnotationToClass(final Class<?> targetClass, final A annotation) {
         final Map<Class<? extends Annotation>, Annotation> annotations = FrameworkUtils

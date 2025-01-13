@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
  * instance if relevant. <br>
  * In case this extension is used together with the {@link ExtendWithTestUtils} annotation, the injection will take
  * place only if the property ExtendWithTestUtils.initMocks() is 'true'.
- *
  */
 @API(
     status = API.Status.EXPERIMENTAL,

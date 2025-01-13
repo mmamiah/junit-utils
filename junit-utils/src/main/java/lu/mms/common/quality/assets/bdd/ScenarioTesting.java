@@ -58,6 +58,7 @@ public abstract class ScenarioTesting {
     /**
      * Collect the test class declared method (method without annotation or with accepted annotation) and map then
      * into a list of dynamic tests.
+     *
      * @return List of dynamic tests
      */
     protected List<DynamicNode> getScenarioDynamicTest() {
@@ -68,6 +69,7 @@ public abstract class ScenarioTesting {
     /**
      * Collect the test class declared method (method without annotation or with accepted annotation) and map then
      * into a list of dynamic tests.
+     *
      * @param arguments The arguments to use when building the scenario dynamic tests
      * @return List of dynamic tests
      */
@@ -131,6 +133,7 @@ public abstract class ScenarioTesting {
      * <br>extends Object
      * The methods within the test class (except the one annotated with {@link TestFactory}) will be executed in a
      * 'GIVEN-WHEN-THEN' order, no matter in which order they were declared.
+     *
      * @return A Stream of {@link DynamicNode}s.
      */
     protected Stream<DynamicNode> scenariosTestFactoryTemplate() {
@@ -175,8 +178,9 @@ public abstract class ScenarioTesting {
 
     /**
      * Format the scenario name, to be displayed in the test plan.
+     *
      * @param scenarioName The scenario name
-     * @return  The formatted scenario name
+     * @return The formatted scenario name
      */
     public String formatScenarioName(final String scenarioName) {
         return String.format(SCENARIO, countScenarios.getAndIncrement(), scenarioName);

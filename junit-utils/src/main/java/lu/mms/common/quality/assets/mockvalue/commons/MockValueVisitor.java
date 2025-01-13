@@ -24,12 +24,15 @@ public interface MockValueVisitor extends Consumer<Object> {
      */
     String VALUE_BASIC_REGEX = "\\$\\{([^\\:]+)\\:{0,1}([\\p{ASCII}]*){0,1}\\}";
 
-    /** {@linkplain Value @Value} regex pattern. */
+    /**
+     * {@linkplain Value @Value} regex pattern.
+     */
     Pattern BASIC_VALUE_PATTERN = Pattern.compile(VALUE_BASIC_REGEX);
 
     /**
      * Collect the fields annotated with [@Value] matching to provided [propertyValue].
-     * @param instance The class to scan
+     *
+     * @param instance      The class to scan
      * @param propertyValue The property to match
      * @return the fields list
      */

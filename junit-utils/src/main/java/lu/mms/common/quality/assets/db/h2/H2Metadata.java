@@ -86,7 +86,7 @@ public class H2Metadata implements MetadataFactory {
     }
 
     @Override
-    public String getCheckConstraints(){
+    public String getCheckConstraints() {
         return tableConstraintsMetadata.parallelStream()
                 .filter(constraint -> String.valueOf(constraint.get("CONSTRAINT_TYPE")).equals("CHECK"))
                 .map(constraint -> String.valueOf(constraint.get("CHECK_CLAUSE")))

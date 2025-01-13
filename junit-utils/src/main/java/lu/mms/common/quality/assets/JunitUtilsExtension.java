@@ -73,7 +73,8 @@ public abstract class JunitUtilsExtension implements Consumer<InternalMocksConte
     /**
      * This method retrieve the {@link InternalMocksContext} from a given {@link ExtensionContext}.
      * If the mocks context wasn't yet defined, then a new one is instantiated and added to the extension context.
-     * @param logger The parent logger
+     *
+     * @param logger           The parent logger
      * @param extensionContext The Extension context
      * @return The mocks context object.
      */

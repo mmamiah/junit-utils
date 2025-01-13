@@ -45,9 +45,10 @@ public class OracleMetadata implements MetadataFactory {
 
     /**
      * Constructor.
+     *
      * @param dataSource The datasource
-     * @param schema    The schema
-     * @param tableName The table name
+     * @param schema     The schema
+     * @param tableName  The table name
      */
     public OracleMetadata(final DataSource dataSource, final String schema, final String tableName) {
         final NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -90,7 +91,7 @@ public class OracleMetadata implements MetadataFactory {
     }
 
     @Override
-    public String getCheckConstraints(){
+    public String getCheckConstraints() {
         return tableConstraintsMetadata.parallelStream()
                 .filter(constraint -> String.valueOf(constraint.get("CONSTRAINT_TYPE")).equals(CHECK_KEY))
                 .map(constraint -> String.valueOf(constraint.get("SEARCH_CONDITION")))

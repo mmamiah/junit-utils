@@ -30,9 +30,9 @@ public final class MockValueContainerInjectionTemplate implements Consumer<Class
     }
 
     /**
-     * @param testInstance  The test object instance
-     * @param testMethodName    The test method name
-     * @return  The mock value injection template
+     * @param testInstance   The test object instance
+     * @param testMethodName The test method name
+     * @return The mock value injection template
      */
     public static MockValueContainerInjectionTemplate newTemplate(final Object testInstance,
                                                                   final String testMethodName) {

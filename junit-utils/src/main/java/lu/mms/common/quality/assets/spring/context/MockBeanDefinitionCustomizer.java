@@ -31,7 +31,7 @@ final class MockBeanDefinitionCustomizer implements BeanDefinitionCustomizer {
     }
 
     static MockBeanDefinitionCustomizer newCustomizer(final ConfigurableListableBeanFactory beanFactory,
-                                               final Class<?> beanType, final Object declaredMock) {
+                                                      final Class<?> beanType, final Object declaredMock) {
         return new MockBeanDefinitionCustomizer(beanFactory, beanType, declaredMock);
     }
 
@@ -39,8 +39,8 @@ final class MockBeanDefinitionCustomizer implements BeanDefinitionCustomizer {
     public void customize(final BeanDefinition beanDefinition) {
         // collect previous bean definitions
         final Set<AbstractBeanDefinition> beanDefinitions = Stream.of(beanFactory.getBeanNamesForType(beanType))
-            .map(beanName -> (AbstractBeanDefinition) beanFactory.getBeanDefinition(beanName))
-            .collect(Collectors.toSet());
+                .map(beanName -> (AbstractBeanDefinition) beanFactory.getBeanDefinition(beanName))
+                .collect(Collectors.toSet());
 
         // add the submitted bean definition
         beanDefinitions.add((AbstractBeanDefinition) beanDefinition);

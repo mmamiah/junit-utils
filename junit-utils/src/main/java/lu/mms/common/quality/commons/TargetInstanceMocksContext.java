@@ -42,6 +42,7 @@ public final class TargetInstanceMocksContext {
 
     /**
      * Create a new instance of the test instances mock context.
+     *
      * @param testInstance The test instance
      * @return The context object
      */
@@ -51,6 +52,7 @@ public final class TargetInstanceMocksContext {
 
     /**
      * Create a new instance of the test instances mock context.
+     *
      * @param mocks The mocks/spies to register in the context
      * @return The context object
      */
@@ -68,6 +70,7 @@ public final class TargetInstanceMocksContext {
 
     /**
      * Get the set of mocks.
+     *
      * @return The mock collection
      */
     public Set<Object> getMocks() {
@@ -76,6 +79,7 @@ public final class TargetInstanceMocksContext {
 
     /**
      * Search for a mock in the context by the field name first, and if not found it will search by field type.
+     *
      * @param field The mock field to search
      * @return The mock object
      */
@@ -85,7 +89,8 @@ public final class TargetInstanceMocksContext {
 
     /**
      * Search for a mock in the context by the field name first, and if not found it will search by mockClass.
-     * @param name The mock name
+     *
+     * @param name      The mock name
      * @param mockClass The mock class
      * @return The mock object
      */
@@ -99,8 +104,8 @@ public final class TargetInstanceMocksContext {
 
     /**
      * @param mock The mock to search in the context
-     * @return  true, if the context contains the given mock <br>
-     *          false, otherwise
+     * @return true, if the context contains the given mock <br>
+     * false, otherwise
      */
     public boolean contains(final Object mock) {
         return mockByNames.containsValue(mock);
@@ -108,6 +113,7 @@ public final class TargetInstanceMocksContext {
 
     /**
      * Search for a mock in the context by the given class.
+     *
      * @param mockClass The mock class
      * @return The mock object
      */
@@ -128,6 +134,7 @@ public final class TargetInstanceMocksContext {
 
     /**
      * Search for all mocks in the context, that's can be assigned to the given class.
+     *
      * @param mockClass The mock class
      * @return The mocks list
      */

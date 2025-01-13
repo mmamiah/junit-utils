@@ -31,7 +31,7 @@ public final class ConfigurationPropertiesUtils {
     private static final String FANCY_BANNER_KEY = "fancy-banner";
 
     private static final String DUPLICATED_CONF_ENTRY_ERROR = "The property [%s] is duplicated, "
-        + "having values [%s] and [%s].";
+            + "having values [%s] and [%s].";
 
     private ConfigurationPropertiesUtils() {
         // hidden constructor
@@ -44,21 +44,21 @@ public final class ConfigurationPropertiesUtils {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         properties = new Properties();
         Stream.of(ConfigurationFileType.values())
-            .parallel()
-            .flatMap(configType -> LIBRARY_CONFIG_FILES_KEYS.parallelStream()
-                .flatMap(libraryName -> configurationFileToStream(classLoader, configType, libraryName))
-            )
-            .filter(entry -> entry.getKey().toString().startsWith("junit-utils"))
-            // Not using '.collect<Collectors.toMap' in order access the entry key while detecting duplication
-            .forEach(entry -> {
-                final Object oldValue = properties.get(entry.getKey());
-                if (oldValue != null) {
-                    final String error = String.format(DUPLICATED_CONF_ENTRY_ERROR, entry.getKey(), oldValue,
-                        entry.getValue());
-                    throw new JunitUtilsPreconditionException(error);
-                }
-                properties.put(entry.getKey(), entry.getValue());
-            });
+                .parallel()
+                .flatMap(configType -> LIBRARY_CONFIG_FILES_KEYS.parallelStream()
+                        .flatMap(libraryName -> configurationFileToStream(classLoader, configType, libraryName))
+                )
+                .filter(entry -> entry.getKey().toString().startsWith("junit-utils"))
+                // Not using '.collect<Collectors.toMap' in order access the entry key while detecting duplication
+                .forEach(entry -> {
+                    final Object oldValue = properties.get(entry.getKey());
+                    if (oldValue != null) {
+                        final String error = String.format(DUPLICATED_CONF_ENTRY_ERROR, entry.getKey(), oldValue,
+                                entry.getValue());
+                        throw new JunitUtilsPreconditionException(error);
+                    }
+                    properties.put(entry.getKey(), entry.getValue());
+                });
 
         if (CollectionUtils.isEmpty(properties)) {
             LOGGER.warn("No [{}] configuration file found.", JUNIT_UTILS_KEY);
@@ -68,9 +68,9 @@ public final class ConfigurationPropertiesUtils {
     }
 
     private static Stream<? extends Map.Entry<Object, Object>> configurationFileToStream(
-                                                                final ClassLoader classLoader,
-                                                                final ConfigurationFileType configType,
-                                                                final String libraryName) {
+            final ClassLoader classLoader,
+            final ConfigurationFileType configType,
+            final String libraryName) {
         final URL resource = classLoader.getResource(configType.getFilename(libraryName));
         final Properties configs = configType.retrieveConfigurations(resource);
         return configs.entrySet().stream();
@@ -78,6 +78,7 @@ public final class ConfigurationPropertiesUtils {
 
     /**
      * Determine if the flag 'show banner' state.
+     *
      * @return true/false
      */
     public static synchronized boolean showBanner() {
@@ -87,6 +88,7 @@ public final class ConfigurationPropertiesUtils {
 
     /**
      * Determine if the flag 'fancy banner' state.
+     *
      * @return true/false
      */
     public static synchronized boolean isFancyBanner() {
@@ -96,6 +98,7 @@ public final class ConfigurationPropertiesUtils {
 
     /**
      * Determine is the flag for displaying 'Reflections' logs state.
+     *
      * @return true/false
      */
     public static synchronized boolean isLogReflections() {

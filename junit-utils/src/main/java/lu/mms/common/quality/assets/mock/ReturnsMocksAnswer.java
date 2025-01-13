@@ -27,6 +27,7 @@ public class ReturnsMocksAnswer extends ReturnsMocks {
 
     /**
      * AnnotatedMockAnswer constructor.
+     *
      * @param mocksContext The mocks context.
      */
     ReturnsMocksAnswer(final InternalMocksContext mocksContext) {

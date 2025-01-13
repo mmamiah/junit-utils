@@ -22,6 +22,7 @@ public final class MethodNameComparatorUtils {
 
     /**
      * The test method descriptor comparator.
+     *
      * @return The Comparator object
      */
     public static Comparator<MethodDescriptor> getMethodDescriptorComparator() {
@@ -32,6 +33,7 @@ public final class MethodNameComparatorUtils {
 
     /**
      * The test method DisplayName comparator.
+     *
      * @return The Comparator object
      */
     public static Comparator<Method> getDisplayNameComparator() {

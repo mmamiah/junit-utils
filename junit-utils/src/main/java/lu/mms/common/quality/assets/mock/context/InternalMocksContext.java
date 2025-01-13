@@ -72,11 +72,11 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * Create a new {@link InternalMocksContext}.
-     * @param logger The parent class logger
-     * @param testClass The test class
-     * @param testInstance The test instance
-     * @param testMethodName The test method name
      *
+     * @param logger         The parent class logger
+     * @param testClass      The test class
+     * @param testInstance   The test instance
+     * @param testMethodName The test method name
      * @return The context object
      */
     public static InternalMocksContext newContext(final Logger logger, final Class<?> testClass,
@@ -135,8 +135,8 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
     }
 
     /**
-     * @return  true,   if the Mocks Context has been initialized
-     *          false,  otherwise
+     * @return true,   if the Mocks Context has been initialized
+     * false,  otherwise
      */
     public boolean isInitialized() {
         return this.testInstance != null;
@@ -164,6 +164,7 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * Get the set of mocks.
+     *
      * @return The mock collection
      */
     public Set<Object> getMocks() {
@@ -172,6 +173,7 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * Get the set of mocks.
+     *
      * @return The mock collection
      */
     public Set<Class<?>> getMockClasses() {
@@ -180,6 +182,7 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * Search for a mock in the context by the field name first, and if not found it will search by field type.
+     *
      * @param field The mock field to search
      * @return The mock object
      */
@@ -189,7 +192,8 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * Search for a mock in the context by the field name first, and if not found it will search by mockClass.
-     * @param name The mock name
+     *
+     * @param name      The mock name
      * @param mockClass The mock class
      * @return The mock object
      */
@@ -211,8 +215,8 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * @param mock The mock to search in the context
-     * @return  true, if the context contains the given mock <br>
-     *          false, otherwise
+     * @return true, if the context contains the given mock <br>
+     * false, otherwise
      */
     public boolean contains(final Object mock) {
         return mockByNames.containsValue(mock);
@@ -220,8 +224,8 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * @param mockClass The mock class to search in the context
-     * @return  true, if the context contains the given mock class <br>
-     *          false, otherwise
+     * @return true, if the context contains the given mock class <br>
+     * false, otherwise
      */
     public boolean contains(final Class<?> mockClass) {
         return mockByClasses.containsValue(mockClass);
@@ -229,8 +233,9 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * Search for a mock in the context by the given class.
-     * @param <T>   The mock type
-     * @param <E>   Any assignable class
+     *
+     * @param <T>       The mock type
+     * @param <E>       Any assignable class
      * @param mockClass The mock class
      * @return The set of mocks
      */
@@ -250,8 +255,9 @@ public final class InternalMocksContext implements AssetVisitor<Consumer<Interna
 
     /**
      * Search for all mocks in the context, that's can be assigned to the given class.
-     * @param <T>   The mock type
-     * @param <E>   Any assignable class
+     *
+     * @param <T>       The mock type
+     * @param <E>       Any assignable class
      * @param mockClass The mock class
      * @return The mocks list
      */

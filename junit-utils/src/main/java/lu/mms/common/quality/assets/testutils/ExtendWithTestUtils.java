@@ -85,6 +85,7 @@ public @interface ExtendWithTestUtils {
 
     /**
      * The value to be set as {@link Tag}.
+     *
      * @return The Tag values.
      */
     String[] tags() default StringUtils.EMPTY;
@@ -93,32 +94,36 @@ public @interface ExtendWithTestUtils {
      * Answer with mocks defined in user test (test instance mocks context). <br>
      * Add or not a custom behavior when mock declared with @Mock(answer = Answers.RETURNS_MOCKS) <br>
      * <b>see: </b> {@link Answers} <br>
+     *
      * @return <b>true</b>,  Return mocks defined in test instance. <br>
-     *         <b>false</b>,  Mockito Answers default behavior (a new mock will be returned.).
+     * <b>false</b>,  Mockito Answers default behavior (a new mock will be returned.).
      */
     boolean returnMocks() default true;
 
     /**
      * Enable SUT constructor injection, field/setter inject and Lookup method injection. <br>
-     * @see MockInjectionExtension
+     *
      * @return <b>true</b>,  enable enhanced mock injection<br>
-     *         <b>false</b>, disable enhanced mock injection
+     * <b>false</b>, disable enhanced mock injection
+     * @see MockInjectionExtension
      */
     boolean initMocks() default true;
 
     /**
      * Enable declared {@link Spy} constructor injection, field/setter injection and Lookup method injection.
-     * @see MockitoSpyExtension
+     *
      * @return <b>true</b>,  enable enhanced Spies injection <br>
-     *         <b>false</b>, disable enhanced Spies injection
+     * <b>false</b>, disable enhanced Spies injection
+     * @see MockitoSpyExtension
      */
     boolean initSpies() default true;
 
     /**
      * Ensure that each test instance mock is reinforced, by injected declared mock to it if relevant..
-     * @see ReinforceMockExtension
+     *
      * @return <b>true</b>,  enable mock reinforcement <br>
-     *         <b>false</b>, disable mock reinforcement
+     * <b>false</b>, disable mock reinforcement
+     * @see ReinforceMockExtension
      */
     boolean reinforceMock() default true;
 }

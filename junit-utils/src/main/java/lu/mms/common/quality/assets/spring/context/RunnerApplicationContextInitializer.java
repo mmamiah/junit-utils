@@ -38,7 +38,7 @@ class RunnerApplicationContextInitializer implements ApplicationContextInitializ
 
     /**
      * @param contextRunnerAnnotation The context runner annotation
-     * @param mocksContext The test instance mocks context
+     * @param mocksContext            The test instance mocks context
      */
     RunnerApplicationContextInitializer(final SpringContextRunner contextRunnerAnnotation,
                                         final InternalMocksContext mocksContext) {
@@ -56,6 +56,7 @@ class RunnerApplicationContextInitializer implements ApplicationContextInitializ
 
     /**
      * Initializes the BeanFactory with mocks.
+     *
      * @param beanFactory The bean factory
      */
     private void mockBeanFactoryInitialization(final ConfigurableListableBeanFactory beanFactory) {
@@ -129,7 +130,7 @@ class RunnerApplicationContextInitializer implements ApplicationContextInitializ
                     }
                 } else {
                     LOGGER.warn("Trying to customize a non registered bean. The bean [{}] name was found in "
-                        + "BeanFactory, but it is still missing in the Application context.", beanName);
+                            + "BeanFactory, but it is still missing in the Application context.", beanName);
                     // register bean if it isn't yet defined
                     registerBeanDefinition(beanFactory, object);
                 }

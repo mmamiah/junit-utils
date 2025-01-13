@@ -48,7 +48,7 @@ public final class ValueAnnotationVisitor implements MockValueVisitor {
                 final Object value = new ModelMapper().map(objValue, pair.getKey().getType());
 
                 // No mater whether this field was initialized before or not, if this 'visitor' is called, we need to
-                // re-apply the field defaukting.
+                // re-apply the field defaulting.
                 ReflectionTestUtils.setField(sut, pair.getKey().getName(), value);
             });
     }

@@ -22,8 +22,9 @@ public @interface Fixture {
 
     /**
      * Inject test class (test case) mocks to the class with {@link Fixture} or not.
+     *
      * @return <b>true</b>, if the test class mocks should be injected.
-     *         <b>false</b>, otherwise.
-    */
+     * <b>false</b>, otherwise.
+     */
     boolean injectMocks() default true;
 }

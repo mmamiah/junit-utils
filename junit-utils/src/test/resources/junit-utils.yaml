@@ -1,4 +1,3 @@
-
 junit-utils:
   # Shows the banner if true.
   show-banner: true

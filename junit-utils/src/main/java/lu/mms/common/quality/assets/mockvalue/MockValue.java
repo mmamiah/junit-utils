@@ -62,12 +62,14 @@ public @interface MockValue {
 
     /**
      * An array of values ({@link Value#value()}) to look for in the subject under test.
+     *
      * @return the value
      */
     String[] value();
 
     /**
      * The test method where to apply the ({@link Value#value()}).
+     *
      * @return the test cases
      */
     String[] testcase() default {};

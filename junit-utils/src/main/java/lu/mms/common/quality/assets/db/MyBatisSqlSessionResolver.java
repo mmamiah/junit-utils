@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- *  This extension make the {@linkplain SqlSession SQL Session} available for the test method/case.
+ * This extension make the {@linkplain SqlSession SQL Session} available for the test method/case.
  */
 @API(
     status = API.Status.EXPERIMENTAL,
@@ -61,7 +61,7 @@ public class MyBatisSqlSessionResolver extends JunitUtilsExtension implements Pa
 
     /**
      * @param extensionContext The extension
-     * @return  The DateSource label
+     * @return The DateSource label
      */
     public static String computeContextSessionKey(final ExtensionContext extensionContext) {
         return extensionContext.getTestMethod()
@@ -71,7 +71,7 @@ public class MyBatisSqlSessionResolver extends JunitUtilsExtension implements Pa
 
     /**
      * @param extensionContext The extension
-     * @return  The DateSource label
+     * @return The DateSource label
      */
     public static String computeContextSessionFactoryKey(final ExtensionContext extensionContext) {
         return extensionContext.getTestMethod()
@@ -82,8 +82,9 @@ public class MyBatisSqlSessionResolver extends JunitUtilsExtension implements Pa
 
     /**
      * Compute the {@linkplain SqlSession SQL Session} label to be used in the extension context.
-     * @param key   The key to use to compute the label
-     * @return  The SQL Session label
+     *
+     * @param key The key to use to compute the label
+     * @return The SQL Session label
      */
     public static String computeSessionKey(final String key) {
         return SESSION_KEY + key;
@@ -91,8 +92,9 @@ public class MyBatisSqlSessionResolver extends JunitUtilsExtension implements Pa
 
     /**
      * Compute the {@linkplain SqlSessionFactory SQL Session Factory} label to be used in the extension context.
-     * @param key   The key to use to compute the label
-     * @return  The SQL Session Factory label
+     *
+     * @param key The key to use to compute the label
+     * @return The SQL Session Factory label
      */
     public static String computeSessionFactoryKey(final String key) {
         return SESSION_FACTORY_KEY + key;
@@ -100,6 +102,7 @@ public class MyBatisSqlSessionResolver extends JunitUtilsExtension implements Pa
 
     /**
      * Function to retrieve the {@link SqlSessionFactory} from the {@link ExtensionContext.Store}.
+     *
      * @return {@link SqlSessionFactory} object
      */
     private static Function<ExtensionContext, SqlSessionFactory> getSqlSessionFactoryFunction() {
@@ -112,6 +115,7 @@ public class MyBatisSqlSessionResolver extends JunitUtilsExtension implements Pa
 
     /**
      * Function to retrieve the {@link SqlSession} from the {@link ExtensionContext.Store}.
+     *
      * @return {@link SqlSession} object
      */
     private static Function<ExtensionContext, SqlSession> getSqlSessionFunction() {
@@ -125,6 +129,7 @@ public class MyBatisSqlSessionResolver extends JunitUtilsExtension implements Pa
     /**
      * Function to instantiate the {@link JdbcTemplate}, using the {@link DataSource} from the {@link ExtensionContext}
      * ({@link SqlSession}).
+     *
      * @return {@link JdbcTemplate} object
      */
     private static Function<ExtensionContext, JdbcTemplate> getJdbcTemplateFunction() {

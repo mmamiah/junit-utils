@@ -26,8 +26,8 @@ public final class MockContextUtils {
 
     /**
      * @param klass The class to check
-     * @return  true, if the given class is a collection or an array <br>
-     *          false, otherwise
+     * @return true, if the given class is a collection or an array <br>
+     * false, otherwise
      */
     public static boolean isCollectionOrArray(final Class<?> klass) {
         return klass != null && (Collection.class.isAssignableFrom(klass) || klass.isArray());
@@ -36,6 +36,7 @@ public final class MockContextUtils {
     /**
      * Retrieve the first generic type from a given class. <br>
      * For example, if klass is an ArrayList of "String", then the returned type will be "String".
+     *
      * @param klass The class to check
      * @param type  The {@link ParameterizedType}
      * @return The generic type class
@@ -55,9 +56,10 @@ public final class MockContextUtils {
 
     /**
      * Return the collected mocks into the desired type.
+     *
      * @param type  The desired mocks collection or array type
      * @param mocks The list of mocks to return
-     * @return  The typed collection/array of mocks
+     * @return The typed collection/array of mocks
      */
     public static Object retrieveMocksCollectionWithSafeType(final Class<?> type, final List<?> mocks) {
 
@@ -77,9 +79,10 @@ public final class MockContextUtils {
 
     /**
      * Retrieve a class constructors arguments from the mocks context.
-     * @param mocksContext  The mock context
-     * @param parameters    The parameters
-     * @return              The constructor argument value
+     *
+     * @param mocksContext The mock context
+     * @param parameters   The parameters
+     * @return The constructor argument value
      */
     public static Object[] retrieveMocksByParameters(final InternalMocksContext mocksContext,
                                                      final Parameter[] parameters) {
@@ -107,8 +110,9 @@ public final class MockContextUtils {
      * This method returns the class object. <br>
      * If the object is a mock, it returns the original object class, otherwise it return the <i>object.getClass()</i>
      * value.
+     *
      * @param object The object to check
-     * @return  The object class
+     * @return The object class
      */
     public static Class<?> getObjectClass(final Object object) {
         final Class<?> resultClass;

@@ -15,13 +15,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @API(
-    status = API.Status.EXPERIMENTAL,
-    since = "1.0.0"
+        status = API.Status.EXPERIMENTAL,
+        since = "1.0.0"
 )
 public @interface ValueArgument {
 
     /**
      * The test scenario arguments (String).
+     *
      * @return The string values.
      */
     String[] value() default {};

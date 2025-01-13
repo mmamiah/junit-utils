@@ -11,9 +11,10 @@ public interface MockReinforcementHandler {
 
     /**
      * Inject the mocks to provided fields, via field injection or setter injection.
+     *
      * @param needingInjection Fields needing mock injection
-     * @param mocks The mocks to inject
-     * @param ofInstance Instance owning the <code>field</code>
+     * @param mocks            The mocks to inject
+     * @param ofInstance       Instance owning the <code>field</code>
      */
     void injectMocksOnFields(Set<Field> needingInjection, Set<Object> mocks, Object ofInstance);
 

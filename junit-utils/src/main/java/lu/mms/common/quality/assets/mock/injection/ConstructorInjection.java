@@ -35,8 +35,9 @@ public final class ConstructorInjection implements Consumer<InternalMocksContext
 
     /**
      * Instantiate a new mock injection consumer.
-     * @param annotationClass   The annotation to search.
-     * @return  the mock injection consumer
+     *
+     * @param annotationClass The annotation to search.
+     * @return the mock injection consumer
      */
     public static ConstructorInjection newConsumer(final Class<? extends Annotation> annotationClass) {
         return new ConstructorInjection(annotationClass);
@@ -86,9 +87,9 @@ public final class ConstructorInjection implements Consumer<InternalMocksContext
 
     /**
      * @param spyClass The class to spy
-     * @param object    The spied instance
-     * @param mockName  The spy name
-     * @return  The spy object
+     * @param object   The spied instance
+     * @param mockName The spy name
+     * @return The spy object
      */
     public static Object newSpy(final Class<?> spyClass, final Object object, final String mockName) {
         return mock(spyClass, withSettings().spiedInstance(object).name(mockName).defaultAnswer(CALLS_REAL_METHODS));

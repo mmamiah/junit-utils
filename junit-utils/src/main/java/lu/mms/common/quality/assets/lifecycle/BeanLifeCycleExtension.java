@@ -27,6 +27,7 @@ import java.util.Map;
 /**
  * JUnit's extension to execute the test instance <b>non-mock</b> members lifecycle methods. <br>
  * Any @Mock test instance member will be enforced/fulfilled in order to avoid NPE when executing lifecycle methods.
+ *
  * @see PostConstruct
  * @see PreDestroy
  * @see InitializingBean
@@ -100,7 +101,7 @@ public class BeanLifeCycleExtension extends JunitUtilsExtension implements Befor
     }
 
     private static Map.Entry<String, List<Method>> mapFieldMethods(final Field field,
-                                                            final Class<? extends Annotation> annotationClass) {
+                                                                   final Class<? extends Annotation> annotationClass) {
         final List<Method> methods = AnnotationSupport.findAnnotatedMethods(
             field.getType(),
             annotationClass,

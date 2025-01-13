@@ -16,8 +16,9 @@ public final class ExceptionMessageUtils {
      * if not, check if the cause is different thant the actual exception and call this method recursively with cause
      * exception as arguments. <br>
      * if not, return the class simple name as error message.
+     *
      * @param exception The exception containing the error message
-     * @return  The error message string
+     * @return The error message string
      */
     public static String extractErrorMessage(final Throwable exception) {
         if (StringUtils.isNotBlank(exception.getMessage())) {

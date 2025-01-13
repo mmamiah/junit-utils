@@ -33,23 +33,23 @@ public class DB2Metadata implements MetadataFactory {
             + "from SYSIBM.SYSCOLUMNS "
             + "where TBCREATOR = :schemaName and TBNAME = :tableName";
 
-    private static final String INFORMATION_SCHEMA_CHECKS_SQL = StringUtils.EMPTY+
+    private static final String INFORMATION_SCHEMA_CHECKS_SQL = StringUtils.EMPTY +
             "select columns.TBNAME, checks.* " +
-                    "from SYSIBM.SYSCOLUMNS columns " +
-                    "join SYSIBM.SYSCHECKDEP scdep on (" +
-                    "       scdep.TBOWNER = columns.TBCREATOR " +
-                    "       and " +
-                    "       scdep.TBNAME = columns.TBNAME" +
-                    "       and " +
-                    "       scdep.COLNAME = columns.NAME" +
-                    "   ) " +
-                    "join SYSIBM.SYSCHECKS checks on (" +
-                    "       checks.TBOWNER = scdep.TBOWNER " +
-                    "       and " +
-                    "       checks.TBNAME = scdep.TBNAME" +
-                    "       and " +
-                    "       checks.CHECKNAME = scdep.CHECKNAME" +
-                    "   ) " +
+            "from SYSIBM.SYSCOLUMNS columns " +
+            "join SYSIBM.SYSCHECKDEP scdep on (" +
+            "       scdep.TBOWNER = columns.TBCREATOR " +
+            "       and " +
+            "       scdep.TBNAME = columns.TBNAME" +
+            "       and " +
+            "       scdep.COLNAME = columns.NAME" +
+            "   ) " +
+            "join SYSIBM.SYSCHECKS checks on (" +
+            "       checks.TBOWNER = scdep.TBOWNER " +
+            "       and " +
+            "       checks.TBNAME = scdep.TBNAME" +
+            "       and " +
+            "       checks.CHECKNAME = scdep.CHECKNAME" +
+            "   ) " +
             "where columns.TBCREATOR = :schemaName and columns.TBNAME = :tableName";
 
     private static final String INFORMATION_SCHEMA_CONSTRAINTS_SQL = StringUtils.EMPTY
@@ -64,6 +64,7 @@ public class DB2Metadata implements MetadataFactory {
 
     /**
      * Constructor.
+     *
      * @param dataSource The datasource
      * @param schema    The schema
      * @param tableName The table name
@@ -117,7 +118,7 @@ public class DB2Metadata implements MetadataFactory {
     }
 
     @Override
-    public String getCheckConstraints(){
+    public String getCheckConstraints() {
         return tableChecksMetadata.parallelStream()
                 .map(constraint -> String.valueOf(constraint.get("CHECKCONDITION")))
                 .reduce((a, b) -> String.join(" and ", a, b))
