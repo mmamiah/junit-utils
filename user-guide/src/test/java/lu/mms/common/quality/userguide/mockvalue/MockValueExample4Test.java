@@ -20,8 +20,8 @@ class MockValueExample4Test {
     private Customer sut;
 
     @MockValue(
-        value = {"${customer-mother-name}", "${customer-father-name}"},
-        testcase = "shouldFindTheIdWhenInitializedWithMockValue"
+            value = {"${customer-mother-name}", "${customer-father-name}"},
+            testcase = "shouldFindTheIdWhenInitializedWithMockValue"
     )
     private String familyName = "no_name";
 

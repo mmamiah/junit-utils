@@ -7,7 +7,9 @@ public class ArgumentsService {
 
     private EmptyVerifier verifier;
 
-    /** Argument verifier. */
+    /**
+     * Argument verifier.
+     */
     public ArgumentsService() {
         // No arg constructor
     }
@@ -21,7 +23,7 @@ public class ArgumentsService {
 
     /**
      * @param args The arguments
-     * @return  The arguments length
+     * @return The arguments length
      */
     public int countArgs(final Object[] args) {
         return verifier.getLength(args);

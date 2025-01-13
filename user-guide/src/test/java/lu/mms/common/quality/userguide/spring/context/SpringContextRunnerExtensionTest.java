@@ -24,19 +24,19 @@ class SpringContextRunnerExtensionTest {
     private ApplicationContextRunner simpleContext;
 
     @SpringContextRunner(
-        withConfiguration = ConfigSpringBoot.class
+            withConfiguration = ConfigSpringBoot.class
     )
     private ApplicationContextRunner contextWithConfiguration;
 
     @SpringContextRunner(
-        withPropertyValues = "entity.colorName=brown",
-        withUserConfiguration = ConfigUser.class
+            withPropertyValues = "entity.colorName=brown",
+            withUserConfiguration = ConfigUser.class
     )
     private ApplicationContextRunner contextWithUserConfig;
 
     @SpringContextRunner(
-        withUserConfiguration = ConfigUser.class,
-        withConfiguration = ConfigSpringBoot.class
+            withUserConfiguration = ConfigUser.class,
+            withConfiguration = ConfigSpringBoot.class
     )
     private ApplicationContextRunner contextWithBothConfig;
 

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 class SpringContextRunnerExample2Test {
 
     @SpringContextRunner(
-        withMocks = EntityBrown.class
+            withMocks = EntityBrown.class
     )
     private ApplicationContextRunner appContextRunner;
 

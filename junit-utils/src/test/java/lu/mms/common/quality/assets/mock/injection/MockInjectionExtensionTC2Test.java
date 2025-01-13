@@ -43,16 +43,16 @@ class MockInjectionExtensionTC2Test {
      * field which name is the same with a SUT field, but their type is not the same (type mismatch). <br>
      * Example: See the "customers" field.
      * <code>
-     *  class TestClass {
-     *      @InjectMock
-     *      private Restaurant sut;
+     * class TestClass {
      *
-     *      List<String> customers;
-     *  }
-     *
-     *  class Restaurant {
-     *      private Map<String, Integer> customers;
-     *  }
+     * @InjectMock private Restaurant sut;
+     * <p>
+     * List<String> customers;
+     * }
+     * <p>
+     * class Restaurant {
+     * private Map<String, Integer> customers;
+     * }
      * </code>
      */
     @Test

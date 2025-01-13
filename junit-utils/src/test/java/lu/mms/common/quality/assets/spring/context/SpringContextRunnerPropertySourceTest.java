@@ -43,6 +43,7 @@ class SpringContextRunnerPropertySourceTest {
             MatcherAssert.assertThat(environment.getProperty("junit-utils.component-scan"), equalTo("lu.mms"));
         });
     }
+
     @Test
     void shouldOverrideApplicationProperties() {
         // Arrange

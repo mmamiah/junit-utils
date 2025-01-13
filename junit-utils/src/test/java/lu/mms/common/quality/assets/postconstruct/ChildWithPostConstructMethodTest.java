@@ -49,7 +49,7 @@ class ChildWithPostConstructMethodTest {
         }
     }
 
-    private static class SubjectUnderTest extends AbstractItemWithPostConstruct{
+    private static class SubjectUnderTest extends AbstractItemWithPostConstruct {
         @PostConstruct
         void childPostConstruct() {
             setName(CHILD_NAME);

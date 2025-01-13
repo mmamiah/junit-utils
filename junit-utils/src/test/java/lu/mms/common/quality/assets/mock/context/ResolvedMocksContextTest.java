@@ -80,16 +80,16 @@ class ResolvedMocksContextTest {
         // Assert
         assertThat(context, notNullValue());
         assertThat(context.getSpyFields(), allOf(
-            notNullValue(),
-            emptyIterable()
+                notNullValue(),
+                emptyIterable()
         ));
         assertThat(context.getMocks(), allOf(
-            notNullValue(),
-            emptyIterable()
+                notNullValue(),
+                emptyIterable()
         ));
         assertThat(context.getMockClasses(), allOf(
-            notNullValue(),
-            emptyIterable()
+                notNullValue(),
+                emptyIterable()
         ));
     }
 
@@ -133,10 +133,10 @@ class ResolvedMocksContextTest {
         final List<Device> mocks = List.of(phoneOne, phoneTwo, specialCharger);
 
         return Stream.of(
-            Arguments.of(mocks, Device.class, mocks),
-            Arguments.of(mocks, Phone.class, List.of(phoneOne, phoneTwo)),
-            Arguments.of(mocks, Charger.class, List.of(specialCharger)),
-            Arguments.of(mocks, String.class, List.of())
+                Arguments.of(mocks, Device.class, mocks),
+                Arguments.of(mocks, Phone.class, List.of(phoneOne, phoneTwo)),
+                Arguments.of(mocks, Charger.class, List.of(specialCharger)),
+                Arguments.of(mocks, String.class, List.of())
         );
     }
 
@@ -147,10 +147,10 @@ class ResolvedMocksContextTest {
         final List<Device> mocks = List.of(phoneOne, phoneTwo, specialCharger);
 
         return Stream.of(
-            Arguments.of(mocks, phoneOne, true),
-            Arguments.of(mocks, phoneTwo, true),
-            Arguments.of(mocks, specialCharger, true),
-            Arguments.of(mocks, PHONE_MOCK_NAME, false)
+                Arguments.of(mocks, phoneOne, true),
+                Arguments.of(mocks, phoneTwo, true),
+                Arguments.of(mocks, specialCharger, true),
+                Arguments.of(mocks, PHONE_MOCK_NAME, false)
         );
     }
 

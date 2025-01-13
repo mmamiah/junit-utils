@@ -54,8 +54,8 @@ class MockValueExtensionNullAnnotatedFieldValueTest {
 
         // Act
         Exception exception = assertThrows(
-            Exception.class,
-            () -> mockValueExtension.beforeEach(extensionContextMock)
+                Exception.class,
+                () -> mockValueExtension.beforeEach(extensionContextMock)
         );
 
         // Assert

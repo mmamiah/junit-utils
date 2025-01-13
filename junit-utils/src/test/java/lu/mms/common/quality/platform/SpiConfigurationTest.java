@@ -33,13 +33,13 @@ class SpiConfigurationTest {
         assertThat(factories.size(), equalTo(1));
         assertThat(factories.size(), lessThanOrEqualTo(frameworkAnnotationClasses.size()));
         factories.entrySet().stream()
-            // Keeping only defined annotations
-            .filter(entry -> entry.getKey().getPackage().getName().contains(ROOT_PACKAGE))
-            .forEach(entry -> {
-                assertThat(entry.getKey(), equalTo(entry.getValue().getType()));
-                assertThat(frameworkAnnotationClasses, hasItem(entry.getKey()));
-                assertThat(entry.getKey(), notNullValue());
-            });
+                // Keeping only defined annotations
+                .filter(entry -> entry.getKey().getPackage().getName().contains(ROOT_PACKAGE))
+                .forEach(entry -> {
+                    assertThat(entry.getKey(), equalTo(entry.getValue().getType()));
+                    assertThat(frameworkAnnotationClasses, hasItem(entry.getKey()));
+                    assertThat(entry.getKey(), notNullValue());
+                });
 
     }
 

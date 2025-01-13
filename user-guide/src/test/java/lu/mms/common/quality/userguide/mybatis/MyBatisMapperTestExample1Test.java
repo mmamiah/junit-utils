@@ -18,8 +18,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.nullValue;
 
 @MyBatisMapperTest(
-    testIsolation = false,
-    script = {"sql/oracle/schema.sql", "sql/oracle/data.sql"}
+        testIsolation = false,
+        script = {"sql/oracle/schema.sql", "sql/oracle/data.sql"}
 )
 @TestMethodOrder(OrderAnnotation.class)
 class MyBatisMapperTestExample1Test {

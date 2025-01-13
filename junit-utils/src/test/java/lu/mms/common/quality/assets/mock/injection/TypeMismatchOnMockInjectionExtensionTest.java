@@ -54,14 +54,14 @@ class TypeMismatchOnMockInjectionExtensionTest {
      * Example: See the "customers" field.
      * <code>
      * class TestClass {
-     *      @InjectMock
-     *      private Restaurant sut;
      *
-     *      List<String> customers;
+     * @InjectMock private Restaurant sut;
+     * <p>
+     * List<String> customers;
      * }
-     *
+     * <p>
      * class Restaurant {
-     *      private Map<String, Integer> customers;
+     * private Map<String, Integer> customers;
      * }
      * </code>
      */
@@ -75,13 +75,13 @@ class TypeMismatchOnMockInjectionExtensionTest {
 
         // Assert
         assertThat(sutDevices, allOf(
-            notNullValue(),
-            anEmptyMap()
+                notNullValue(),
+                anEmptyMap()
         ));
         assertThat(MockUtil.isMock(sutDevices), equalTo(false));
         assertThat(sutConstructed, allOf(
-            notNullValue(),
-            anEmptyMap()
+                notNullValue(),
+                anEmptyMap()
         ));
         assertThat(MockUtil.isMock(sutConstructed), equalTo(false));
     }
@@ -93,7 +93,7 @@ class TypeMismatchOnMockInjectionExtensionTest {
 
         private Map<String, Device> devices;
 
-        Laptop (final List<Device> devices) {
+        Laptop(final List<Device> devices) {
             this.devicesByConstructor = Stream.ofNullable(devices)
                     .filter(CollectionUtils::isNotEmpty)
                     .flatMap(Collection::stream)
@@ -108,8 +108,8 @@ class TypeMismatchOnMockInjectionExtensionTest {
             this.devices = aValue.stream()
                     .filter(ObjectUtils::isNotEmpty)
                     .collect(Collectors.toMap(
-                        item -> String.format(BY_METHOD_TEMPLATE, MockUtil.getMockName(item).toString()),
-                        Function.identity())
+                            item -> String.format(BY_METHOD_TEMPLATE, MockUtil.getMockName(item).toString()),
+                            Function.identity())
                     );
         }
 

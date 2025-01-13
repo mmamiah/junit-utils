@@ -1,4 +1,3 @@
-
 open module junitutils.sample.spring {
     requires spring.web;
     requires spring.context;

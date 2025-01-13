@@ -72,26 +72,27 @@ class FixtureExtensionTest {
     @TestFactory
     List<DynamicContainer> shouldNotInitFixtureWhenInTheTestcaseNotTheSameAsInTheFixtureFile() {
         return Arrays.asList(
-            dynamicContainer("With Dependency Injection", getDynamicTestsWithDependencyInjection(true)),
-            dynamicContainer("Without Dependency Injection", getDynamicTestsWithDependencyInjection(false))
+                dynamicContainer("With Dependency Injection", getDynamicTestsWithDependencyInjection(true)),
+                dynamicContainer("Without Dependency Injection", getDynamicTestsWithDependencyInjection(false))
         );
     }
 
     private List<DynamicTest> getDynamicTestsWithDependencyInjection(final boolean withDependencyInjection) {
         return ReflectionUtils
-            .getAllFields(getClass(), ReflectionUtils.withAnnotation(Fixture.class))
-            .parallelStream()
-            // keep the field open to inject only
-            .filter(field -> withDependencyInjection == isOpenToDependencyInjection(field))
-            // keep the class open to inject only
-            .filter(field -> withDependencyInjection == isOpenToDependencyInjection(field.getType()))
-            .map(field -> dynamicTest(field.getName(), () -> testTemplate(field.getName(), withDependencyInjection)))
-            .collect(Collectors.toList());
+                .getAllFields(getClass(), ReflectionUtils.withAnnotation(Fixture.class))
+                .parallelStream()
+                // keep the field open to inject only
+                .filter(field -> withDependencyInjection == isOpenToDependencyInjection(field))
+                // keep the class open to inject only
+                .filter(field -> withDependencyInjection == isOpenToDependencyInjection(field.getType()))
+                .map(field -> dynamicTest(field.getName(), () -> testTemplate(field.getName(), withDependencyInjection)))
+                .collect(Collectors.toList());
     }
 
     /**
      * This is the generic test method.
-     * @param fixtureFieldName The fixture field to test
+     *
+     * @param fixtureFieldName        The fixture field to test
      * @param withDependencyInjection with dependency injection flag
      */
     private void testTemplate(final String fixtureFieldName, final boolean withDependencyInjection) {
@@ -104,13 +105,13 @@ class FixtureExtensionTest {
 
         // find the method which name have the "given" prefix
         ReflectionUtils.getAllMethods(fixture.getClass(), method -> method.getName().startsWith("given"))
-            .forEach(method -> {
-                if (withDependencyInjection && fixture instanceof FixtureOpenToInjection) {
-                    assertValueInitialized((FixtureOpenToInjection) fixture, method);
-                } else {
-                    assertValueNotInitialized(fixture, method);
-                }
-            });
+                .forEach(method -> {
+                    if (withDependencyInjection && fixture instanceof FixtureOpenToInjection) {
+                        assertValueInitialized((FixtureOpenToInjection) fixture, method);
+                    } else {
+                        assertValueNotInitialized(fixture, method);
+                    }
+                });
     }
 
     private void assertValueInitialized(final FixtureOpenToInjection fixture, final Method method) {

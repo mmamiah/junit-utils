@@ -114,6 +114,7 @@ public class BeanLifeCycleDisabledTest {
 
     private interface LifeCycled extends InitializingBean, DisposableBean {
         void init();
+
         void preDestroy();
     }
 
@@ -137,14 +138,17 @@ public class BeanLifeCycleDisabledTest {
         public void init() {
             postConstructExecuted = true;
         }
+
         @PreDestroy
         public void preDestroy() {
             preDestroyExecuted = true;
         }
+
         @Override
         public void afterPropertiesSet() throws Exception {
             afterPropertiesSetExecuted = true;
         }
+
         @Override
         public void destroy() throws Exception {
             destroyExecuted = true;
@@ -171,12 +175,15 @@ public class BeanLifeCycleDisabledTest {
         @PostConstruct
         public void init() {
         }
+
         @PreDestroy
         public void preDestroy() {
         }
+
         @Override
         public void afterPropertiesSet() throws Exception {
         }
+
         @Override
         public void destroy() throws Exception {
         }
@@ -186,12 +193,15 @@ public class BeanLifeCycleDisabledTest {
         @PostConstruct
         public void init() {
         }
+
         @PreDestroy
         public void preDestroy() {
         }
+
         @Override
         public void afterPropertiesSet() throws Exception {
         }
+
         @Override
         public void destroy() throws Exception {
         }

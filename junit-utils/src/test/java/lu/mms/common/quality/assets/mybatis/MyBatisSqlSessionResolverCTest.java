@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 @MyBatisMapperTest(
         dbEngine = InMemoryDb.H2_ORACLE,
         script = {
-        "sql/schema.sql",
-        "sql/data-for-test_class.sql"}
+                "sql/schema.sql",
+                "sql/data-for-test_class.sql"}
 )
 class MyBatisSqlSessionResolverCTest {
 

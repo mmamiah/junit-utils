@@ -41,7 +41,7 @@ public class DisplayNameComparatorTest {
     @MethodSource("argumentsSortingLevelOneProvider")
     @Order(0)
     public void shouldSortNamesWhenSingleLevelComparison(final List<String> entries, final String bddKey,
-                                                  final List<String> results) {
+                                                         final List<String> results) {
         // Arrange
         final DisplayNameComparator sut = new DisplayNameComparator(bddKey);
 
@@ -57,10 +57,10 @@ public class DisplayNameComparatorTest {
     @MethodSource("argumentsSortingLevelTwoProvider")
     @Order(2)
     public void shouldSortNamesWhenTwoLevelComparison(final List<String> entries, final String bddKeyOne,
-                                               final String bddKeyTwo, final List<String> results) {
+                                                      final String bddKeyTwo, final List<String> results) {
         // Arrange
         final Comparator<String> sut = new DisplayNameComparator(bddKeyOne)
-                                        .thenComparing(new DisplayNameComparator(bddKeyTwo));
+                .thenComparing(new DisplayNameComparator(bddKeyTwo));
 
         // Act
         entries.sort(sut);
@@ -74,7 +74,7 @@ public class DisplayNameComparatorTest {
     @MethodSource("argumentsSortingForANDKeyLevelOneProvider")
     @Order(3)
     public void shouldSortNamesWhenUsingConjunctionSimpleComparison(final List<String> entries, final String bddKeyOne,
-                                                             final List<String> results) {
+                                                                    final List<String> results) {
         // Arrange
         final Comparator<String> sut = new DisplayNameComparator(bddKeyOne);
 
@@ -99,7 +99,7 @@ public class DisplayNameComparatorTest {
     @MethodSource("argumentsSortingForANDKeyLevelTwoProvider")
     @Order(4)
     public void shouldSortNamesWhenUsingConjunctionComplexComparison(final List<String> entries, final String bddKeyOne,
-                                                              final String bddKeyTwo, final List<String> results) {
+                                                                     final String bddKeyTwo, final List<String> results) {
         // Arrange
         final Comparator<String> sut = new DisplayNameComparator(bddKeyOne)
                 .thenComparing(new DisplayNameComparator(bddKeyTwo));

@@ -58,6 +58,7 @@ class SpringContextRunnerExtensionTest {
     @Configuration
     private static class MyConfig {
         private Address address;
+
         public MyConfig() {
             // default constructor
         }
@@ -66,6 +67,7 @@ class SpringContextRunnerExtensionTest {
     // Class to be mock
     private static class Customer {
         private Address address;
+
         public Address getAddress() {
             return address;
         }

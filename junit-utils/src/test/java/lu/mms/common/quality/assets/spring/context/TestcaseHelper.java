@@ -24,7 +24,8 @@ final class TestcaseHelper {
         final T instance;
         try {
             instance = ReflectionUtils.accessibleConstructor(clazz).newInstance((Object[]) null);
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException |
+                 IllegalAccessException e) {
             throw new RuntimeException(e);
         }
         prepareTestCaseMock(clazz, instance, method);

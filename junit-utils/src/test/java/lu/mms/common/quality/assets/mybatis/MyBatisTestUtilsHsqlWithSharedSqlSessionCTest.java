@@ -3,7 +3,6 @@ package lu.mms.common.quality.assets.mybatis;
 import lu.mms.common.quality.assets.db.InMemoryDb;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.IsEqual;
@@ -15,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
 
+import static org.apache.commons.rng.simple.RandomSource.XO_RO_SHI_RO_128_PP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -32,11 +32,11 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 @MyBatisMapperTest(
         dbEngine = InMemoryDb.HSQL_ORACLE,
         script = {
-            "sql/schema.sql",
-            "sql/hsql/sequence.sql",
-            "sql/hsql/trigger.sql",
-            "sql/hsql/stored_procedure.sql",
-            "sql/data-for-test_class.sql"
+                "sql/schema.sql",
+                "sql/hsql/sequence.sql",
+                "sql/hsql/trigger.sql",
+                "sql/hsql/stored_procedure.sql",
+                "sql/data-for-test_class.sql"
         },
         testIsolation = false
 )
@@ -76,8 +76,8 @@ class MyBatisTestUtilsHsqlWithSharedSqlSessionCTest {
         int id;
         do {
             // retrieve an available ID
-            id = RandomUtils.nextInt(0, 100);
-        } while(StringUtils.isNotBlank(sut.findCustomerNameById(id)));
+            id = XO_RO_SHI_RO_128_PP.create().nextInt(0, 100);
+        } while (StringUtils.isNotBlank(sut.findCustomerNameById(id)));
 
         // Act
         final boolean inserted = sut.insertCustomer(id, name);
@@ -106,7 +106,7 @@ class MyBatisTestUtilsHsqlWithSharedSqlSessionCTest {
     )
     void shouldInitIsolatedSqlSessionWhenMapperConfigAtMethodLevel(final String name) {
         // Arrange
-        final int id = RandomUtils.nextInt(50, 100);
+        final int id = XO_RO_SHI_RO_128_PP.create().nextInt(50, 100);
         final String customerNotExist = sut.findCustomerNameById(id);
         assumeTrue(StringUtils.isBlank(customerNotExist), "The generated ID [" + id + "] already exists.");
 
@@ -203,7 +203,7 @@ class MyBatisTestUtilsHsqlWithSharedSqlSessionCTest {
         // Arrange
         final int itemCount = ObjectUtils.defaultIfNull(jdbcTemplate.queryForObject("select count(*) from customer", Integer.class), 0);
         assumeTrue(itemCount == 0);
-        final Integer searchId = RandomUtils.nextInt(0, 1000);
+        final Integer searchId = XO_RO_SHI_RO_128_PP.create().nextInt(0, 1000);
 
         // Act
         final String name = sut.findCustomerNameById(searchId);
@@ -222,7 +222,7 @@ class MyBatisTestUtilsHsqlWithSharedSqlSessionCTest {
         // Arrange
         final int itemCount = ObjectUtils.defaultIfNull(jdbcTemplate.queryForObject("select count(*) from CUSTOMER", Integer.class), 0);
         assumeTrue(itemCount == 0);
-        final Integer searchId = RandomUtils.nextInt(0, 1000);
+        final Integer searchId = XO_RO_SHI_RO_128_PP.create().nextInt(0, 1000);
 
         // Act
         final String name = sut.findCustomerNameById(searchId);

@@ -2,13 +2,13 @@ package lu.mms.common.quality.assets.mybatis;
 
 import lu.mms.common.quality.assets.db.InMemoryDb;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import static org.apache.commons.rng.simple.RandomSource.XO_RO_SHI_RO_128_PP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 @MyBatisMapperTest(
         dbEngine = InMemoryDb.H2_ORACLE,
         script = {
-        "sql/schema.sql",
-        "sql/data-for-test_class.sql"},
+                "sql/schema.sql",
+                "sql/data-for-test_class.sql"},
         testIsolation = false
 )
 class MyBatisTestUtilsH2WithSharedSqlSessionCTest {
@@ -63,8 +63,8 @@ class MyBatisTestUtilsH2WithSharedSqlSessionCTest {
         int id;
         // ensure to collect a new iD
         do {
-            id = RandomUtils.nextInt(50, 100);
-        } while(StringUtils.isNotBlank(sut.findCustomerNameById(id)));
+            id = XO_RO_SHI_RO_128_PP.create().nextInt(50, 100);
+        } while (StringUtils.isNotBlank(sut.findCustomerNameById(id)));
 
         // Act
         final boolean inserted = sut.insertCustomer(id, name);
@@ -89,7 +89,7 @@ class MyBatisTestUtilsH2WithSharedSqlSessionCTest {
     )
     void shouldInitIsolatedSqlSessionWhenMapperConfigAtMethodLevel(final String name) {
         // Arrange
-        final int id = RandomUtils.nextInt(50, 100);
+        final int id = XO_RO_SHI_RO_128_PP.create().nextInt(50, 100);
         final String customerNotExist = sut.findCustomerNameById(id);
         assumeTrue(StringUtils.isBlank(customerNotExist), "The generated ID [" + id + "] already exists.");
 

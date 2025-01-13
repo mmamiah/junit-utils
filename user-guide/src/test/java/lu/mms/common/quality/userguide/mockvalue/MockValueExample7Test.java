@@ -20,8 +20,8 @@ class MockValueExample7Test {
 
     // tag::example[]
     @MockValue(
-        value = "${int_property:10}",
-        testcase = "shouldInitAttributedWhenPropertyIsDefaulted"
+            value = "${int_property:10}",
+            testcase = "shouldInitAttributedWhenPropertyIsDefaulted"
     )
     private Integer defaultedIntegerProperty;
 

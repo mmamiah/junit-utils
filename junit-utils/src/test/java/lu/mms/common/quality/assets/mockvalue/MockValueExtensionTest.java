@@ -41,8 +41,8 @@ class MockValueExtensionTest {
     private final String otherTestcaseSurname = "Billy the Kid";
 
     @MockValue(
-        value = "${customer_surname}",
-        testcase = {"shouldInitPropertyWhenTestcaseMatch", "shouldConfirmTheCorrectValueHasBeenSelected"}
+            value = "${customer_surname}",
+            testcase = {"shouldInitPropertyWhenTestcaseMatch", "shouldConfirmTheCorrectValueHasBeenSelected"}
     )
     private final String productOwnerSurname = "John WAYNE";
 

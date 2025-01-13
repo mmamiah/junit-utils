@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 class SpringContextRunnerExample1Test {
 
     @SpringContextRunner(
-        withMocks = UserAccount.class,
-        withUserConfiguration = ConfigUser.class
+            withMocks = UserAccount.class,
+            withUserConfiguration = ConfigUser.class
     )
     private ApplicationContextRunner appContextRunner;
 

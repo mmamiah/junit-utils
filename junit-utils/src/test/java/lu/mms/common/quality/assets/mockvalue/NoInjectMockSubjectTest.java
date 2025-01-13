@@ -47,11 +47,11 @@ class NoInjectMockSubjectTest {
         assertThat(field.getAnnotations(), arrayWithSize(1));
 
         Stream.of(field.getAnnotations())
-            .map(annotation -> (MockValue) annotation)
-            .findAny()
-            .ifPresent(mockValue -> assertThat(mockValue.value(), allOf(
-                arrayWithSize(1),
-                hasItemInArray(VALUE_KEY)
-            )));
+                .map(annotation -> (MockValue) annotation)
+                .findAny()
+                .ifPresent(mockValue -> assertThat(mockValue.value(), allOf(
+                        arrayWithSize(1),
+                        hasItemInArray(VALUE_KEY)
+                )));
     }
 }

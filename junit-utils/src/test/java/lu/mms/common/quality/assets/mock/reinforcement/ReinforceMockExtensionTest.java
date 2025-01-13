@@ -79,7 +79,7 @@ class ReinforceMockExtensionTest {
         // Arrange
 
         // Act
-        final Engine engine = (Engine) ReflectionTestUtils.getField(busMock,"engine");
+        final Engine engine = (Engine) ReflectionTestUtils.getField(busMock, "engine");
 
         // Assert
         assertThat(engine, notNullValue());

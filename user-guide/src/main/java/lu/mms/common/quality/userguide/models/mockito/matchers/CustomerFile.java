@@ -11,6 +11,7 @@ public class CustomerFile {
 
     /**
      * Return the string representation of, if the file exists or not.
+     *
      * @param file The file
      * @return the "true"/"false" string.
      */
@@ -20,6 +21,7 @@ public class CustomerFile {
 
     /**
      * Return the string representation of, if the path exists or not.
+     *
      * @param path The path
      * @return the "true"/"false" string.
      */

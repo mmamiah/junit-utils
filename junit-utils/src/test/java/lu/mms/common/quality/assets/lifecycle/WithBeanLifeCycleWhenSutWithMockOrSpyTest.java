@@ -160,6 +160,7 @@ class WithBeanLifeCycleWhenSutWithMockOrSpyTest {
 
     private interface LifeCycled extends InitializingBean, DisposableBean {
         void init();
+
         void preDestroy();
     }
 
@@ -183,14 +184,17 @@ class WithBeanLifeCycleWhenSutWithMockOrSpyTest {
         public void init() {
             postConstructExecuted = true;
         }
+
         @PreDestroy
         public void preDestroy() {
             preDestroyExecuted = true;
         }
+
         @Override
         public void afterPropertiesSet() throws Exception {
             afterPropertiesSetExecuted = true;
         }
+
         @Override
         public void destroy() throws Exception {
             destroyExecuted = true;
@@ -231,18 +235,22 @@ class WithBeanLifeCycleWhenSutWithMockOrSpyTest {
     private static abstract class AbstractLifeCycled implements LifeCycled {
         private Manufacturer manufacturer;
         private String description;
+
         @PostConstruct
-        public void init(){
+        public void init() {
             description = manufacturer.toString(); // just to be alerted in case of NPE
         }
+
         @PreDestroy
-        public void preDestroy(){
+        public void preDestroy() {
             description = manufacturer.toString(); // just to be alerted in case of NPE
         }
+
         @Override
         public void afterPropertiesSet() throws Exception {
             description = manufacturer.toString(); // just to be alerted in case of NPE
         }
+
         @Override
         public void destroy() throws Exception {
             description = manufacturer.toString(); // just to be alerted in case of NPE

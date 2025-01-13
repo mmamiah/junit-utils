@@ -67,8 +67,8 @@ class MockValueSociableUnitTest {
         // Arrange
         // Get the expected surname value
         final MockValue mockValueAnnotation = getClass()
-            .getDeclaredField("defaultedIntegerProperty")
-            .getAnnotation(MockValue.class);
+                .getDeclaredField("defaultedIntegerProperty")
+                .getAnnotation(MockValue.class);
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(mockValueAnnotation.value()[0]);
         assumeTrue(surnameMatcher.matches());
         final Integer defaultProperty = Integer.valueOf(surnameMatcher.group(2));
@@ -87,8 +87,8 @@ class MockValueSociableUnitTest {
         // Arrange
         // Get the expected surname value
         final Value valueAnnotation = sut.getClass()
-            .getDeclaredField("longProperty")
-            .getAnnotation(Value.class);
+                .getDeclaredField("longProperty")
+                .getAnnotation(Value.class);
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(valueAnnotation.value());
         assumeTrue(surnameMatcher.matches());
         final Long defaultProperty = Long.valueOf(surnameMatcher.group(2));
@@ -106,8 +106,8 @@ class MockValueSociableUnitTest {
         // Arrange
         // Get the expected surname value
         final Value valueAnnotation = sut.getClass()
-            .getDeclaredField("stringProperty")
-            .getAnnotation(Value.class);
+                .getDeclaredField("stringProperty")
+                .getAnnotation(Value.class);
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(valueAnnotation.value());
         assumeTrue(surnameMatcher.matches());
         final String defaultProperty = surnameMatcher.group(2);
@@ -125,8 +125,8 @@ class MockValueSociableUnitTest {
         // Arrange
         // Get the expected surname value
         final Value valueAnnotation = sut.getClass()
-            .getDeclaredField("intArrayPropertyWithSingleElement")
-            .getAnnotation(Value.class);
+                .getDeclaredField("intArrayPropertyWithSingleElement")
+                .getAnnotation(Value.class);
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(valueAnnotation.value());
         assumeTrue(surnameMatcher.matches());
         int[] actualValues = new int[0];
@@ -145,8 +145,8 @@ class MockValueSociableUnitTest {
         // Arrange
         // Get the expected surname value
         final Value valueAnnotation = sut.getClass()
-            .getDeclaredField("longArrayWithMultipleElements")
-            .getAnnotation(Value.class);
+                .getDeclaredField("longArrayWithMultipleElements")
+                .getAnnotation(Value.class);
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(valueAnnotation.value());
         assumeTrue(surnameMatcher.matches());
         long[] actualValues = new long[0];

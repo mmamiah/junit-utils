@@ -59,31 +59,31 @@ class ConfigurationFileTypeTest {
         // Arrange
         // prepared files object (not creating real files)
         final List<File> configFiles = Arrays.asList(
-            new File("helloOne.properties"),
-            new File("helloTwo.yaml"),
-            new File("helloTree.yml")
+                new File("helloOne.properties"),
+                new File("helloTwo.yaml"),
+                new File("helloTree.yml")
         );
 
         configFiles.parallelStream()
-            // map the files to URL
-            .map(configFile -> {
-                URL url = null;
-                try {
-                    url = configFile.toURI().toURL();
-                } catch (IOException exception) {
-                    LOGGER.error("Failed to resolve the url for [{}].", configFile, exception);
-                }
-                return Optional.ofNullable(url);
-            })
-            .filter(Optional::isEmpty)
-            .forEach(url -> {
-                // Act
-                final Properties properties = configType.retrieveConfigurations(url.get());
+                // map the files to URL
+                .map(configFile -> {
+                    URL url = null;
+                    try {
+                        url = configFile.toURI().toURL();
+                    } catch (IOException exception) {
+                        LOGGER.error("Failed to resolve the url for [{}].", configFile, exception);
+                    }
+                    return Optional.ofNullable(url);
+                })
+                .filter(Optional::isEmpty)
+                .forEach(url -> {
+                    // Act
+                    final Properties properties = configType.retrieveConfigurations(url.get());
 
-                // Assert
-                assertThat(properties, notNullValue());
-                assertThat(properties, anEmptyMap());
-            });
+                    // Assert
+                    assertThat(properties, notNullValue());
+                    assertThat(properties, anEmptyMap());
+                });
     }
 
     @ParameterizedTest
@@ -113,7 +113,7 @@ class ConfigurationFileTypeTest {
     @ParameterizedTest
     @EnumSource(ConfigurationFileType.class)
     void shouldConsiderPropertyWhenItIsAnIngJunitUtilsProperty(final ConfigurationFileType fileFormat)
-                                                                throws IOException {
+            throws IOException {
         // Arrange
         final String filename = fileFormat.getFilename("testcase");
         final String propertyKey = "junit-utils.customer.country"; // property starting by [junit-utils]
@@ -131,12 +131,12 @@ class ConfigurationFileTypeTest {
 
         // loop into [ConfigurationFileType] and try to retrieve the property key
         Stream.of(ConfigurationFileType.values())
-            .filter(type -> fileFormat != type && (fileFormat.isYaml() != type.isYaml()))
-            .forEach(type -> {
-                final Map<Object, Object> typeConfig = type.retrieveConfigurations(fileUrl);
-                assertThat(typeConfig, notNullValue());
-                assertThat(typeConfig, anEmptyMap());
-            });
+                .filter(type -> fileFormat != type && (fileFormat.isYaml() != type.isYaml()))
+                .forEach(type -> {
+                    final Map<Object, Object> typeConfig = type.retrieveConfigurations(fileUrl);
+                    assertThat(typeConfig, notNullValue());
+                    assertThat(typeConfig, anEmptyMap());
+                });
     }
 
     @ParameterizedTest
@@ -173,8 +173,8 @@ class ConfigurationFileTypeTest {
         // Assert
         assertThat(filename, notNullValue());
         assertThat(filename, allOf(
-            containsStringIgnoringCase(baseFilename),
-            containsStringIgnoringCase(configType.name())
+                containsStringIgnoringCase(baseFilename),
+                containsStringIgnoringCase(configType.name())
         ));
 
         final String expectedFileName = String.format(FILENAME_TEMPLATE, baseFilename, configType.name().toLowerCase());

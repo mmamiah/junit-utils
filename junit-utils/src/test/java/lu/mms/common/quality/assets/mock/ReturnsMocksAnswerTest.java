@@ -1,7 +1,6 @@
 package lu.mms.common.quality.assets.mock;
 
 import lu.mms.common.quality.assets.mock.context.InternalMocksContext;
-import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.core.IsNot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import org.springframework.util.ReflectionUtils;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.rng.simple.RandomSource.XO_RO_SHI_RO_128_PP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsArrayWithSize.emptyArray;
 import static org.hamcrest.collection.IsEmptyIterable.emptyIterable;
@@ -53,7 +53,7 @@ class ReturnsMocksAnswerTest {
         context.mergeMocks(List.of(personMock));
         sut = new ReturnsMocksAnswer(context);
         final InvocationOnMock invocation = new ReturnMocksInvocationOnMock(
-                                            Person.class, personMock, "getMercedes");
+                Person.class, personMock, "getMercedes");
 
         // Act
         final Object mock = sut.answer(invocation);
@@ -71,7 +71,7 @@ class ReturnsMocksAnswerTest {
 
         final Person notInContext = mock(Person.class);
         final InvocationOnMock invocation = new ReturnMocksInvocationOnMock(
-                                            Person.class, notInContext, "getMercedes");
+                Person.class, notInContext, "getMercedes");
 
         // Act
         final Object mock = sut.answer(invocation);
@@ -87,7 +87,7 @@ class ReturnsMocksAnswerTest {
         context.mergeMocks(List.of(mercedesMock, personMock));
         sut = new ReturnsMocksAnswer(context);
         final InvocationOnMock invocation = new ReturnMocksInvocationOnMock(
-                                            Person.class, personMock, "getMercedes");
+                Person.class, personMock, "getMercedes");
 
         // Act
         final Object mock = sut.answer(invocation);
@@ -102,7 +102,7 @@ class ReturnsMocksAnswerTest {
         context.mergeMocks(List.of(mercedesMock, personMock, audiMock));
         sut = new ReturnsMocksAnswer(context);
         final InvocationOnMock invocation = new ReturnMocksInvocationOnMock(
-            Person.class, personMock, "getMercedes");
+                Person.class, personMock, "getMercedes");
 
         // Act
         final Object mock = sut.answer(invocation);
@@ -117,7 +117,7 @@ class ReturnsMocksAnswerTest {
         context.mergeMocks(List.of(mercedesMock, personMock, audiMock));
         sut = new ReturnsMocksAnswer(context);
         final InvocationOnMock invocation = new ReturnMocksInvocationOnMock(
-            Person.class, personMock, "getCars");
+                Person.class, personMock, "getCars");
 
         // Act
         final Object mock = sut.answer(invocation);
@@ -134,7 +134,7 @@ class ReturnsMocksAnswerTest {
         context.mergeMocks(List.of(mercedesMock, personMock, audiMock));
         sut = new ReturnsMocksAnswer(context);
         final InvocationOnMock invocation = new ReturnMocksInvocationOnMock(
-            Person.class, personMock, "getCarsNames");
+                Person.class, personMock, "getCarsNames");
 
         // Act
         final Object mock = sut.answer(invocation);
@@ -151,7 +151,7 @@ class ReturnsMocksAnswerTest {
         context.mergeMocks(List.of(mercedesMock, personMock, audiMock));
         sut = new ReturnsMocksAnswer(context);
         final InvocationOnMock invocation = new ReturnMocksInvocationOnMock(
-            Person.class, personMock, "getCarsAge");
+                Person.class, personMock, "getCarsAge");
 
         // Act
         final Object[] arrayOfMocks = (Object[]) sut.answer(invocation);
@@ -197,7 +197,7 @@ class ReturnsMocksAnswerTest {
                     new Object[0],
                     null,
                     null,
-                    RandomUtils.nextInt()
+                    XO_RO_SHI_RO_128_PP.create().nextInt()
             );
         }
     }

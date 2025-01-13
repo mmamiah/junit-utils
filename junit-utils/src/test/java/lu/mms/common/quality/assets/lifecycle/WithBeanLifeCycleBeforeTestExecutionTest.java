@@ -2,7 +2,6 @@ package lu.mms.common.quality.assets.lifecycle;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +16,7 @@ import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.commons.rng.simple.RandomSource.XO_RO_SHI_RO_128_PP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -73,6 +73,7 @@ public class WithBeanLifeCycleBeforeTestExecutionTest {
 
     private interface LifeCycled extends InitializingBean, DisposableBean {
         void init();
+
         void preDestroy();
     }
 
@@ -84,21 +85,24 @@ public class WithBeanLifeCycleBeforeTestExecutionTest {
         private boolean destroyExecuted = false;
 
         public Car() {
-            id = RandomUtils.nextInt(1, 100);
+            id = XO_RO_SHI_RO_128_PP.create().nextInt(1, 100);
         }
 
         @PostConstruct
         public void init() {
             postConstructExecuted = true;
         }
+
         @PreDestroy
         public void preDestroy() {
             preDestroyExecuted = true;
         }
+
         @Override
         public void afterPropertiesSet() {
             afterPropertiesSetExecuted = true;
         }
+
         @Override
         public void destroy() {
             destroyExecuted = true;

@@ -2,7 +2,6 @@ package lu.mms.common.quality.assets.mybatis;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
 
+import static org.apache.commons.rng.simple.RandomSource.XO_RO_SHI_RO_128_PP;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -123,7 +123,7 @@ class MyBatisTestUtilsHsqlCTest {
         // Arrange
         final int itemCount = ObjectUtils.defaultIfNull(jdbcTemplate.queryForObject("select count(*) from CUSTOMER", Integer.class), 0);
         assumeTrue(itemCount == 0);
-        final Integer searchId = RandomUtils.nextInt(0, 1000);
+        final Integer searchId = XO_RO_SHI_RO_128_PP.create().nextInt(0, 1000);
 
         // Act
         final String name = sut.findCustomerNameById(searchId);
@@ -142,7 +142,7 @@ class MyBatisTestUtilsHsqlCTest {
         // Arrange
         final int itemCount = ObjectUtils.defaultIfNull(jdbcTemplate.queryForObject("select count(*) from CUSTOMER", Integer.class), 0);
         assumeTrue(itemCount == 0);
-        final Integer searchId = RandomUtils.nextInt(0, 1000);
+        final Integer searchId = XO_RO_SHI_RO_128_PP.create().nextInt(0, 1000);
 
         // Act
         final String name = sut.findCustomerNameById(searchId);

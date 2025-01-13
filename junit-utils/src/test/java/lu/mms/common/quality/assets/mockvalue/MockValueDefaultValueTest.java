@@ -17,13 +17,13 @@ class MockValueDefaultValueTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-        "${property_name}",
-        "${property_name:}",
-        "${property_name:the_default_value}",
-        "${property_name:42}",
-        "${property_name:true}",
-        "${property_name:1,2,3}",
-        "${property_name:one,two,three}"
+            "${property_name}",
+            "${property_name:}",
+            "${property_name:the_default_value}",
+            "${property_name:42}",
+            "${property_name:true}",
+            "${property_name:1,2,3}",
+            "${property_name:one,two,three}"
     })
     void shouldMatchAtValueBasicSettings(final String value) {
         // Arrange
@@ -41,8 +41,8 @@ class MockValueDefaultValueTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-        "${property_name}",
-        "${property_name:}"
+            "${property_name}",
+            "${property_name:}"
     })
     void shouldMatchAtValueBasicSettingsWhenGroup2IsMissing(final String value) {
         // Arrange
@@ -56,8 +56,8 @@ class MockValueDefaultValueTest {
         assertThat(matcher.groupCount(), equalTo(2));
         assertThat(matcher.group(1), equalTo("property_name"));
         assertThat(matcher.group(2), allOf(
-            notNullValue(),
-            emptyString()
+                notNullValue(),
+                emptyString()
         ));
     }
 

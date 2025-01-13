@@ -20,7 +20,7 @@ public class AppController {
 
     /**
      * @param args The arguments
-     * @return  true/false
+     * @return true/false
      */
     public boolean handle(final Object[] args) {
         return argumentsService.countArgs(args) > 0;

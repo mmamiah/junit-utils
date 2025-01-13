@@ -45,14 +45,14 @@ class MockValueDefaultingTest {
     private final String givenName = "EINSTEIN";
 
     @MockValue(
-        value = "${actor_surname}",
-        testcase = "shouldInitPropertyWhenTestcaseMatch"
+            value = "${actor_surname}",
+            testcase = "shouldInitPropertyWhenTestcaseMatch"
     )
     private final String anotherSurname = "Albert";
 
     @MockValue(
-        value = "${actor_surname:Emil}",
-        testcase = {"shouldConfirmTheCorrectValueHasBeenSelected", "shouldInitPropertyWhenTestcaseMatch"}
+            value = "${actor_surname:Emil}",
+            testcase = {"shouldConfirmTheCorrectValueHasBeenSelected", "shouldInitPropertyWhenTestcaseMatch"}
     )
     private String friendSurname;
 
@@ -95,8 +95,8 @@ class MockValueDefaultingTest {
         // Arrange
         // Get the expected surname value
         final MockValue mockValueAnnotation = getClass()
-            .getDeclaredField("friendSurname")
-            .getAnnotation(MockValue.class);
+                .getDeclaredField("friendSurname")
+                .getAnnotation(MockValue.class);
         final Matcher surnameMatcher = MockValueVisitor.BASIC_VALUE_PATTERN.matcher(mockValueAnnotation.value()[0]);
         assumeTrue(surnameMatcher.matches());
         final String expectedSurname = surnameMatcher.group(2);

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
-class ScenarioTestingCTest extends ScenarioTesting{
+class ScenarioTestingCTest extends ScenarioTesting {
 
     @DisplayName("Scenario: Feature #1")
     @TestFactory

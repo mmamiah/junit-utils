@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * Test to ensure that the configuration properties are properly loaded. <br>
  * <b>impl note:</b> {@link ConfigurationPropertiesUtils#initJunitUtilsProperties()} is called by default at
- *          Framework start, no need to call it again.
+ * Framework start, no need to call it again.
  */
 class ConfigurationPropertiesUtilsTest {
 
@@ -31,11 +31,11 @@ class ConfigurationPropertiesUtilsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-        "junit-utils.log-reflections",           // defined in .YML
-        "junit-utils.show-banner",               // defined in .YAML
-        "junit-utils.component-scan",            // defined in .PROPERTIES
-        "junit-utils.junit-platform-properties", // defined in 'junit-platform.properties'
-        "junit-utils.junit-platform-yaml"       // defined in 'junit-platform.yaml'
+            "junit-utils.log-reflections",           // defined in .YML
+            "junit-utils.show-banner",               // defined in .YAML
+            "junit-utils.component-scan",            // defined in .PROPERTIES
+            "junit-utils.junit-platform-properties", // defined in 'junit-platform.properties'
+            "junit-utils.junit-platform-yaml"       // defined in 'junit-platform.yaml'
     })
     void shouldFindConfigurationKeyWhenFullKeyDefined(final String propertyKey) {
         // Arrange

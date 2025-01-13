@@ -13,6 +13,7 @@ public interface CustomerMapper {
 
     /**
      * Find the customer name by ID.
+     *
      * @param id The customer ID
      * @return the customer name
      */
@@ -21,6 +22,7 @@ public interface CustomerMapper {
 
     /**
      * Find the customer name by ID, with UR.
+     *
      * @param id The customer ID
      * @return the customer name
      */
@@ -29,7 +31,8 @@ public interface CustomerMapper {
 
     /**
      * Insert the customer in DB.
-     * @param id the customer ID
+     *
+     * @param id   the customer ID
      * @param name the customer name
      * @return the customer ID.
      */

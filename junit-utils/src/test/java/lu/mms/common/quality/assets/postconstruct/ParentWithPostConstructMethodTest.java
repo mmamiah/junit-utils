@@ -49,7 +49,7 @@ class ParentWithPostConstructMethodTest {
         }
     }
 
-    private static class SubjectUnderTest extends AbstractItemWithPostConstruct{
+    private static class SubjectUnderTest extends AbstractItemWithPostConstruct {
         // concrete class.
     }
 

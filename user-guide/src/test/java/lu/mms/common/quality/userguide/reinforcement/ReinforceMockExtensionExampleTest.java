@@ -33,7 +33,7 @@ class ReinforceMockExtensionExampleTest {
         // Arrange
 
         // Act
-        final Customer customer = (Customer) ReflectionTestUtils.getField(reportMock,"customer");
+        final Customer customer = (Customer) ReflectionTestUtils.getField(reportMock, "customer");
 
         // Assert
         assertThat(customer, notNullValue());
@@ -46,7 +46,7 @@ class ReinforceMockExtensionExampleTest {
         // Arrange
 
         // Act
-        final Identity identity = (Identity) ReflectionTestUtils.getField(customerMock,"identity");
+        final Identity identity = (Identity) ReflectionTestUtils.getField(customerMock, "identity");
 
         // Assert
         assertThat(identity, notNullValue());

@@ -13,6 +13,7 @@ interface EntityMapper {
 
     /**
      * Find the customer name by ID.
+     *
      * @param id The customer ID
      * @return the customer name
      */
@@ -21,6 +22,7 @@ interface EntityMapper {
 
     /**
      * Call the stored procedure to update the customer entity
+     *
      * @param id The customer ID
      */
     @Update("CALL UPDATE_CUSTOMER(#{id})")
@@ -28,16 +30,18 @@ interface EntityMapper {
 
     /**
      * Insert a new customer with name.
-     * @param id The customer ID
+     *
+     * @param id   The customer ID
      * @param name The customer name
-     * @return  true, if the entity has been inserted
-     *          false, otherwise
+     * @return true, if the entity has been inserted
+     * false, otherwise
      */
     @Insert("INSERT into CUSTOMER(ID, LA_NAME) VALUES(#{id}, #{name})")
     boolean insertCustomer(@Param("id") Integer id, @Param("name") String name);
 
     /**
      * Find the counter (updated by the trigger) name by ID.
+     *
      * @param id The customer ID
      * @return the customer name
      */
@@ -46,6 +50,7 @@ interface EntityMapper {
 
     /**
      * Find the update time name by ID.
+     *
      * @param id The customer ID
      * @return the customer name
      */
