@@ -6,11 +6,12 @@ import lu.mms.common.quality.assets.db.re.schema.Schema;
 import lu.mms.common.quality.assets.db.re.schema.Table;
 import lu.mms.common.quality.assets.db.re.script.Relation;
 import lu.mms.common.quality.assets.mybatis.MyBatisMapperTest;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -28,17 +29,23 @@ import static org.hamcrest.core.IsNull.nullValue;
 @MyBatisMapperTest(
         dbEngine = InMemoryDb.H2_ORACLE,
         script = {
-        "sql/schema.sql",
-        "sql/data.sql"}
+                "sql/schema.sql",
+                "sql/data.sql"}
 )
 class ReverseEngineeringWizardCTest {
 
     private ReverseEngineeringWizard sut;
+    private SqlSession session;
 
     @BeforeEach
-    void resolveSqlSessionFactory(final SqlSessionFactory sqlSessionFactory) {
-        final DataSource dataSource = sqlSessionFactory.openSession().getConfiguration().getEnvironment().getDataSource();
-        sut = new ReverseEngineeringWizard(dataSource, "PUBLIC");
+    void init(final SqlSessionFactory sqlSessionFactory) {
+        this.session = sqlSessionFactory.openSession();
+        sut = new ReverseEngineeringWizard(session.getConfiguration().getEnvironment().getDataSource(), "PUBLIC");
+    }
+
+    @AfterEach
+    void closeSqlSession() {
+        session.close();
     }
 
     @Test
@@ -70,7 +77,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractAnyTableEntryAndRelationWhenPkAndFk() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").eq(1));
+        sut.withTable("ADDRESS", Expression.property("ID").eq(1));
 
         // Act
         final Schema schema = sut.build();
@@ -87,7 +94,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractFullRecordValuesWhenExists() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").eq(1));
+        sut.withTable("ADDRESS", Expression.property("ID").eq(1));
 
         // Act
         final Schema schema = sut.build();
@@ -109,7 +116,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenComparisonIN() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").in(1, 3, 90));
+        sut.withTable("ADDRESS", Expression.property("ID").in(1, 3, 90));
 
         // Act
         final Schema schema = sut.build();
@@ -125,7 +132,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenComparisonGE() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").ge('5'));
+        sut.withTable("ADDRESS", Expression.property("ID").ge('5'));
 
         // Act
         final Schema schema = sut.build();
@@ -141,7 +148,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenComparisonLE() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").le('2'));
+        sut.withTable("ADDRESS", Expression.property("ID").le('2'));
 
         // Act
         final Schema schema = sut.build();
@@ -157,7 +164,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenComparisonNOT() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").not('2'));
+        sut.withTable("ADDRESS", Expression.property("ID").not('2'));
 
         // Act
         final Schema schema = sut.build();
@@ -173,7 +180,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenComparisonLIKE() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("LA_STREET").like("Rte"));
+        sut.withTable("ADDRESS", Expression.property("LA_STREET").like("Rte"));
 
         // Act
         final Schema schema = sut.build();
@@ -189,7 +196,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenComparisonBETWEEN() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").between(4, 9));
+        sut.withTable("ADDRESS", Expression.property("ID").between(4, 9));
 
         // Act
         final Schema schema = sut.build();
@@ -206,9 +213,9 @@ class ReverseEngineeringWizardCTest {
     void shouldExtractRecordsValuesWhenInnerJoin() {
         // Arrange
         sut.withLevel(1)
-                .withTable("ADDRESS", Relation.join("ID", "CUSTOMER_ADDRESS", "ID_ADDRESS"))
-                .withTable("ADDRESS", Expression.value("ID").ge(6))
-                .withTable("CUSTOMER", Expression.value("ID").between(7, 9));
+                .withTable("ADDRESS", new Relation("ID", "CUSTOMER_ADDRESS", "ID_ADDRESS"))
+                .withTable("ADDRESS", Expression.property("ID").ge(6))
+                .withTable("CUSTOMER", Expression.property("ID").between(7, 9));
 
         // Act
         final Schema schema = sut.build();
@@ -232,7 +239,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenScanLevelIsZero() {
         // Arrange
-        sut.withLevel(1).withTable("CUSTOMER", Expression.value("ID").between(7, 9));
+        sut.withLevel(1).withTable("CUSTOMER", Expression.property("ID").between(7, 9));
 
         // Act
         final Schema schema = sut.build();
@@ -256,7 +263,7 @@ class ReverseEngineeringWizardCTest {
     void shouldExtractRecordsValuesWhenScanLevelIsDefined() {
         // Arrange
         sut.withLevel(2)
-                .withTable("CUSTOMER", Expression.value("ID").between(7, 9));
+                .withTable("CUSTOMER", Expression.property("ID").between(7, 9));
 
         // Act
         final Schema schema = sut.build();
@@ -280,7 +287,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenConjunctionAND() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").between(2, 5).and(Expression.value("NU_NUMBER").between(30, 40)));
+        sut.withTable("ADDRESS", Expression.property("ID").between(2, 5).and(Expression.property("NU_NUMBER").between(30, 40)));
 
         // Act
         final Schema schema = sut.build();
@@ -298,7 +305,7 @@ class ReverseEngineeringWizardCTest {
     @Test
     void shouldExtractRecordsValuesWhenConjunctionOR() {
         // Arrange
-        sut.withTable("ADDRESS", Expression.value("ID").eq(3).or(Expression.value("ID").eq(5)));
+        sut.withTable("ADDRESS", Expression.property("ID").eq(3).or(Expression.property("ID").eq(5)));
 
         // Act
         final Schema schema = sut.build();

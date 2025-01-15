@@ -1,11 +1,11 @@
 package lu.mms.common.quality.assets.db.re.script;
 
-import lu.mms.common.quality.assets.db.re.Function;
 import lu.mms.common.quality.assets.db.re.Statement;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,7 +20,10 @@ public class Having extends OrderBy {
     }
 
     public OrderBy having(final Statement statement, final Statement... statements) {
-        this.statements = Stream.concat(Stream.ofNullable(statement), Stream.ofNullable(statements).flatMap(Arrays::stream)).toList();
+        if (this.statements == null) {
+            this.statements = new LinkedList<>();
+        }
+        this.statements.addAll(Stream.concat(Stream.ofNullable(statement), Stream.ofNullable(statements).flatMap(Arrays::stream)).toList());
         return this;
     }
 

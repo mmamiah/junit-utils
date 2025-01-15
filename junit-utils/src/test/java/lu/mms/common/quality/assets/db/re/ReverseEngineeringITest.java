@@ -5,11 +5,11 @@ import lu.mms.common.quality.assets.db.re.schema.Schema;
 import lu.mms.common.quality.assets.db.re.script.Ddl;
 import lu.mms.common.quality.assets.db.re.script.Dml;
 import lu.mms.common.quality.assets.mybatis.MyBatisMapperTest;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.sql.DataSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
@@ -29,17 +29,23 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 class ReverseEngineeringITest {
 
     private Schema schema;
+    private SqlSession session;
 
     @BeforeEach
-    void resolveJdbcTemplate(final SqlSessionFactory sqlSessionFactory) {
-        final DataSource dataSource = sqlSessionFactory.openSession().getConfiguration().getEnvironment().getDataSource();
-        schema = new ReverseEngineeringWizard(dataSource, "PUBLIC", 1)
-                .withTable("CUSTOMER_ADDRESS", Expression.value("ID_ADDRESS").eq(1))
+    void init(final SqlSessionFactory sqlSessionFactory) {
+        this.session = sqlSessionFactory.openSession();
+        schema = new ReverseEngineeringWizard(session.getConfiguration().getEnvironment().getDataSource(), "PUBLIC", 1)
+                .withTable("CUSTOMER_ADDRESS", Expression.property("ID_ADDRESS").eq(1))
                 .build();
     }
 
+    @AfterEach
+    void closeSqlSession() {
+        session.close();
+    }
+
     @Test
-    void shouldBuildDDLWhenSchemaProvided(){
+    void shouldBuildDDLWhenSchemaProvided() {
         //  Arrange
         assumeFalse(schema.getTables().isEmpty());
         final Ddl ddl = Ddl.with(schema);
@@ -61,7 +67,7 @@ class ReverseEngineeringITest {
     }
 
     @Test
-    void shouldBuildDMLWhenSchemaProvided(){
+    void shouldBuildDMLWhenSchemaProvided() {
         //  Arrange
         assumeFalse(schema.getTables().isEmpty());
         final Dml dml = Dml.with(schema);

@@ -100,8 +100,8 @@ public class Relation implements Comparable<Relation> {
 
         final String prefix = this.joinType == null ? StringUtils.EMPTY : this.joinType.name() + StringUtils.SPACE;
 
-        this.sourceTableAlias = sourceColumn.getParentTable().getAlias();
-        this.targetTableAlias = foreignColumn.getParentTable().getAlias();
+        this.sourceTableAlias = sourceColumn.getParentTable().computeAlias();
+        this.targetTableAlias = foreignColumn.getParentTable().computeAlias();
 
         // build the SQL expression
         return String.format(

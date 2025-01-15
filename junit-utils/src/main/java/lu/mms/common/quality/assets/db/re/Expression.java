@@ -1,32 +1,48 @@
 package lu.mms.common.quality.assets.db.re;
 
+import lu.mms.common.quality.assets.db.re.schema.Column;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.SPACE;
 
 /**
  * The SQL Expression.
  */
 public class Expression implements Comparable<Expression>, Operator<Expression>, Condition<Expression> {
 
-    public static final String ALIAS = "#alias_placeholder#";
     private static final String EXP_TMPL = "(%s)";
 
-    private final String columnName;
-    private String expression = StringUtils.EMPTY;
+    private CanBuild parent;
+    private Column column;
+    private String expression = EMPTY;
     private String alias;
 
-    private Expression(final String columnName) {
-        this.columnName = columnName;
+    protected Expression() {
+        this.column = null;
+        this.parent = null;
     }
 
-    public static Expression value(final String columnName) {
-        return new Expression(columnName);
+    protected Expression(final CanBuild parent) {
+        this.parent = parent;
+    }
+
+    protected Expression( final Column column) {
+        this.column = column;
+    }
+
+    public static Expression property(final Column column) {
+        return new Expression(column);
+    }
+
+    public static Expression property(final String columnName) {
+        return new Expression(new Column(columnName));
     }
 
     String getExpression() {
@@ -34,21 +50,30 @@ public class Expression implements Comparable<Expression>, Operator<Expression>,
     }
 
     public void setExpression(final String expression) {
-        this.expression = StringUtils.isBlank(expression) ? StringUtils.EMPTY : expression;
+        this.expression = StringUtils.isBlank(expression) ? EMPTY : expression;
     }
 
-    public String getColumnName() {
-        return columnName;
+    public Column getColumn() {
+        return column;
     }
 
+    protected void setColumn(final Column column) {
+        this.column = column;
+    }
+
+    @Deprecated
     public String getAlias() {
         return alias;
     }
 
+    @Deprecated
     @Override
     public void applyAlias(final String alias) {
         this.alias = alias;
-        expression = expression.replace(ALIAS, alias);
+        if (expression.contains(".")) {
+            return;
+        }
+        expression = String.format("%s.%s", alias, expression);
     }
 
     @Override
@@ -117,7 +142,7 @@ public class Expression implements Comparable<Expression>, Operator<Expression>,
         if (value != null) {
             expression = "%" + value + "%";
         }
-        setExpression(buildUnaryExpression( "LIKE", expression));
+        setExpression(buildUnaryExpression("LIKE", expression));
         return this;
     }
 
@@ -128,7 +153,7 @@ public class Expression implements Comparable<Expression>, Operator<Expression>,
         } else if (ArrayUtils.isNotEmpty(values)) {
             final List<Object> cleanValues = Stream.of(values)
                     .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+                    .toList();
 
             if (cleanValues.size() == 1) {
                 eq(cleanValues.get(0));
@@ -137,7 +162,7 @@ public class Expression implements Comparable<Expression>, Operator<Expression>,
                         .map(value -> value instanceof String ? String.format("'%s'", value) : String.valueOf(value))
                         .reduce((a, b) -> StringUtils.joinWith(", ", a, b))
                         .map(value -> "(" + value + ")")
-                        .orElse(StringUtils.EMPTY);
+                        .orElse(EMPTY);
                 setExpression(buildUnaryExpression("IN", expression));
             }
         }
@@ -146,7 +171,18 @@ public class Expression implements Comparable<Expression>, Operator<Expression>,
 
     @Override
     public String build() {
-        return expression;
+        String parentValue = EMPTY;
+        if (this.parent != null) {
+            parentValue = this.parent.build();
+        }
+
+        String expValue = EMPTY;
+        if (StringUtils.isNotBlank(expression)) {
+            expValue = expression;
+        } else if (column != null) {
+            expValue = column.build();
+        }
+        return String.join(SPACE, parentValue, expValue).trim();
     }
 
     @Override
@@ -155,30 +191,34 @@ public class Expression implements Comparable<Expression>, Operator<Expression>,
     }
 
     private String buildUnaryExpression(final String operation, final Object value) {
+        final String columnStr = this.column == null ? EMPTY : this.column.build();
+
         String expression;
         if (value == null || (value instanceof String && StringUtils.isBlank((String) value))) {
-            expression = String.format(ALIAS + ".%s IS NULL", columnName);
+            expression = String.format("%s IS NULL", columnStr);
         } else if (value instanceof String && !operation.equals("IN")) {
-            expression = String.format(ALIAS + ".%s %s '%s'", columnName, operation, value);
+            expression = String.format("%s %s '%s'", columnStr, operation, value);
         } else {
-            expression = String.format(ALIAS + ".%s %s %s", columnName, operation, value);
+            expression = String.format("%s %s %s", columnStr, operation, value);
         }
-        return expression;
+        return expression.trim();
     }
 
     private String buildBetweenExpression(final Object valueOne, final Object valueTwo) {
+        final String columnStr = this.column == null ? EMPTY : this.column.build();
+
         String expression;
         if (valueOne == null || (valueOne instanceof String && StringUtils.isBlank((String) valueOne))) {
             expression = le(valueTwo).build();
         } else if (valueTwo == null || (valueTwo instanceof String && StringUtils.isBlank((String) valueTwo))) {
             expression = ge(valueOne).build();
         } else if ((valueOne instanceof String) || (valueTwo instanceof String)) {
-            expression = String.format(ALIAS + ".%s BETWEEN '%s' AND '%s'", columnName, valueOne, valueTwo);
+            expression = String.format("%s BETWEEN '%s' AND '%s'", columnStr, valueOne, valueTwo);
         } else {
-            expression = String.format(ALIAS + ".%s BETWEEN %s AND %s", columnName, valueOne, valueTwo);
+            expression = String.format("%s BETWEEN %s AND %s", columnStr, valueOne, valueTwo);
         }
-        return expression.replaceFirst("\\(", StringUtils.EMPTY)
-                .replaceFirst("\\)", StringUtils.EMPTY);
+        return expression.replaceFirst("\\(", EMPTY)
+                .replaceFirst("\\)", EMPTY);
     }
 
     private static String appendParenthesis(final String expression) {

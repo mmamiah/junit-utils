@@ -1,5 +1,7 @@
 package lu.mms.common.quality.assets.db.re;
 
+import lu.mms.common.quality.assets.db.re.schema.Column;
+import lu.mms.common.quality.assets.db.re.schema.Table;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -8,85 +10,91 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class ExpressionINTest {
 
     @Test
-    void shouldBuildSqlExpressionINWhenNoValueProvided() {
+    void shouldBuildSqlExpressionINWhenNoPropertyProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object value = null;
 
         // Act
-        Statement statement = Expression.value(columnName).in(value);
+        Statement statement = Expression.property(column).in(value);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " IS NULL"));
+        assertThat(statement.toString(), equalTo(column.build() + " IS NULL"));
     }
 
     @Test
-    void shouldBuildSqlExpressionINWhenSingleStringValueProvided() {
+    void shouldBuildSqlExpressionINWhenSingleStringPropertyProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object value = "str_value";
 
         // Act
-        Statement statement = Expression.value(columnName).in(value);
+        Statement statement = Expression.property(column).in(value);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " = '" + value + "'"));
+        assertThat(statement.toString(), equalTo(column.build() + " = '" + value + "'"));
     }
 
     @Test
     void shouldBuildSqlExpressionINWhenStringValuesProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object one = "v1";
         final Object two = "v2";
 
         // Act
-        Statement statement = Expression.value(columnName).in(one, two);
+        Statement statement = Expression.property(column).in(one, two);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " IN ('" + one + "', '" + two + "')"));
+        assertThat(statement.toString(), equalTo(column.build() + " IN ('" + one + "', '" + two + "')"));
     }
 
     @Test
     void shouldBuildSqlExpressionINWhenMixValuesProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object one = 123;
         final Object two = "v2";
 
         // Act
-        Statement statement = Expression.value(columnName).in(one, two);
+        Statement statement = Expression.property(column).in(one, two);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " IN (" + one + ", '" + two + "')"));
+        assertThat(statement.toString(), equalTo(column.build() + " IN (" + one + ", '" + two + "')"));
     }
 
     @Test
-    void shouldBuildSqlExpressionINWhenValueAndNullProvided() {
+    void shouldBuildSqlExpressionINWhenPropertyAndNullProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object one = "v1";
         final Object two = null;
 
         // Act
-        Statement statement = Expression.value(columnName).in(one, two);
+        Statement statement = Expression.property(column).in(one, two);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " = '" + one + "'"));
+        assertThat(statement.toString(), equalTo(column.build() + " = '" + one + "'"));
     }
 
     @Test
-    void shouldBuildSqlExpressionINWhenNullAndValueAndProvided() {
+    void shouldBuildSqlExpressionINWhenNullAndPropertyAndProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object one = null;
         final Object two = "v2";
 
         // Act
-        Statement statement = Expression.value(columnName).in(one, two);
+        Statement statement = Expression.property(column).in(one, two);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " = '" + two + "'"));
+        assertThat(statement.toString(), equalTo(column.build() + " = '" + two + "'"));
     }
 
 }

@@ -1,12 +1,10 @@
 package lu.mms.common.quality.assets.db.re.script;
 
-import lu.mms.common.quality.assets.db.re.schema.Column;
+import lu.mms.common.quality.assets.db.re.CanBuild;
 import lu.mms.common.quality.assets.db.re.schema.Table;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class From implements SqlScript {
@@ -18,11 +16,11 @@ public class From implements SqlScript {
             + "SELECT %s \n"
             + "FROM %s.%s %s";
 
-    private final Collection<Column> columns;
+    private final CanBuild[] arguments;
     private Table table;
 
-    From(final Collection<Column> columns) {
-        this.columns = columns;
+    From(final CanBuild... arguments) {
+        this.arguments = arguments;
     }
 
     public Where from(final Table table) {
@@ -36,8 +34,9 @@ public class From implements SqlScript {
 
     @Override
     public String build() {
-        final String columnStr = columns.stream()
-                .map(column -> String.join(".", table.getAlias(), column.getName()))
+        final String columnStr = Stream.ofNullable(arguments)
+                .flatMap(Arrays::stream)
+                .map(CanBuild::build)
                 .reduce((a, b) -> StringUtils.joinWith(", ", a, b))
                 .orElse(StringUtils.EMPTY);
         // build the SQL depending on 'values' are empty or not
@@ -46,7 +45,7 @@ public class From implements SqlScript {
                 columnStr,
                 table.getSchema().getName(),
                 table.getName(),
-                table.getAlias()
+                table.computeAlias()
         );
     }
 

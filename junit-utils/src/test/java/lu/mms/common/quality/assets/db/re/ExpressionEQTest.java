@@ -1,50 +1,55 @@
 package lu.mms.common.quality.assets.db.re;
 
-import org.apache.commons.lang3.RandomUtils;
+import lu.mms.common.quality.assets.db.re.schema.Column;
+import lu.mms.common.quality.assets.db.re.schema.Table;
 import org.junit.jupiter.api.Test;
 
+import static org.apache.commons.rng.simple.RandomSource.XO_RO_SHI_RO_128_PP;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ExpressionEQTest {
 
     @Test
-    void shouldBuildSqlExpressionINWhenNoValueProvided() {
+    void shouldBuildSqlExpressionINWhenNoPropertyProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object value = null;
 
         // Act
-        Statement statement = Expression.value(columnName).eq(value);
+        Statement statement = Expression.property(column).eq(value);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " IS NULL"));
+        assertThat(statement.toString(), equalTo(column.build() + " IS NULL"));
     }
 
     @Test
-    void shouldBuildSqlExpressionINWhenStringValueProvided() {
+    void shouldBuildSqlExpressionINWhenStringPropertyProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
         final Object value = "str_value";
 
         // Act
-        Statement statement = Expression.value(columnName).eq(value);
+        Statement statement = Expression.property(column).eq(value);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " = '" + value + "'"));
+        assertThat(statement.toString(), equalTo(column.build() + " = '" + value + "'"));
     }
 
     @Test
-    void shouldBuildSqlExpressionINWhenNumericValueProvided() {
+    void shouldBuildSqlExpressionINWhenNumericPropertyProvided() {
         // Arrange
-        final String columnName = "CASE_COLUMN_NAME";
-        final Object value = RandomUtils.nextInt(0, 100);
+        final Table tableCustomer = new Table("CASE_TABLE");
+        final Column column = tableCustomer.addColumn(new Column("CASE_COLUMN_NAME"));
+        final Object value = XO_RO_SHI_RO_128_PP.create().nextInt(0, 100);
 
         // Act
-        Statement statement = Expression.value(columnName).eq(value);
+        Statement statement = Expression.property(column).eq(value);
 
         // Assert
-        assertThat(statement.toString(), equalTo(Expression.ALIAS + "." + columnName + " = " + value));
+        assertThat(statement.toString(), equalTo(column.build() + " = " + value));
     }
 
 }

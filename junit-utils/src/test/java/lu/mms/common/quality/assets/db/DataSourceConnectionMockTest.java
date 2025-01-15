@@ -1,7 +1,6 @@
 package lu.mms.common.quality.assets.db;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.stream.Stream;
 
+import static org.apache.commons.rng.simple.RandomSource.XO_RO_SHI_RO_128_PP;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -32,7 +32,7 @@ class DataSourceConnectionMockTest {
     @Test
     void shouldProvideResultSetWithSingleElementForEachCall() throws SQLException {
         // Arrange
-        final String arg = RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(1, 10));
+        final String arg = RandomStringUtils.randomAlphanumeric(XO_RO_SHI_RO_128_PP.create().nextInt(1, 10));
         final PreparedStatement preparedStatement = sut.prepareStatement(arg);
         final ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -51,7 +51,7 @@ class DataSourceConnectionMockTest {
     @Test
     void shouldNotHaveNextElementWhenConnectionIsClosed() throws SQLException {
         // Arrange
-        final String arg = RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(1, 10));
+        final String arg = RandomStringUtils.randomAlphanumeric(XO_RO_SHI_RO_128_PP.create().nextInt(1, 10));
         final PreparedStatement preparedStatement = sut.prepareStatement(arg);
         final ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -71,9 +71,9 @@ class DataSourceConnectionMockTest {
         // Act
         final PreparedStatement preparedStatement;
         if (arg2 instanceof Integer) {
-            preparedStatement = sut.prepareStatement(arg1, new int[]{(int)arg2});
+            preparedStatement = sut.prepareStatement(arg1, new int[]{(int) arg2});
         } else {
-            preparedStatement = sut.prepareStatement(arg1, new String[]{(String)arg2});
+            preparedStatement = sut.prepareStatement(arg1, new String[]{(String) arg2});
         }
 
         // Assert
@@ -82,7 +82,7 @@ class DataSourceConnectionMockTest {
         assertThat(MockUtil.isMock(resultSet), equalTo(true));
 
 
-        final int argInt = RandomUtils.nextInt(1, 20);
+        final int argInt = XO_RO_SHI_RO_128_PP.create().nextInt(1, 20);
         assertThat(resultSet.getString(argInt), notNullValue());
 
         final String argStr = RandomStringUtils.randomAlphanumeric(argInt);
@@ -90,7 +90,7 @@ class DataSourceConnectionMockTest {
     }
 
     private static Stream<Arguments> preparedStatementArgumentProvider() {
-        final int argInt = RandomUtils.nextInt(1, 10);
+        final int argInt = XO_RO_SHI_RO_128_PP.create().nextInt(1, 10);
         final String argStr1 = RandomStringUtils.randomAlphanumeric(argInt);
         final String argStr2 = RandomStringUtils.randomAlphanumeric(argInt);
         return Stream.of(
