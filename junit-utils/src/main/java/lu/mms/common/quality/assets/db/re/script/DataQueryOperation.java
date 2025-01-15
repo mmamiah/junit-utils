@@ -35,4 +35,9 @@ public abstract class DataQueryOperation implements SqlScript {
         return String.format(DQL_STATEMENT, operation, script);
     }
 
+    @Override
+    public String build() {
+        return this.dataQueryOperationExpression;
+    }
+
 }

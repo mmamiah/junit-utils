@@ -77,9 +77,10 @@ public class Table implements Comparable<Table> {
         return records;
     }
 
-    public void addColumn(final Column column) {
+    public Column addColumn(final Column column) {
         column.setParent(this);
         this.columns.put(column.getName(), column);
+        return column;
     }
 
     public String getPrimaryKeyConstraint() {
@@ -106,7 +107,7 @@ public class Table implements Comparable<Table> {
     public void appendPrimaryKey(final String columnName, final Table refTable, final String refColumnName) {
         final Relation relation = new Relation(this.name, columnName, refTable.getName(), refColumnName);
         relation.setSourceTableAlias(this.alias);
-        relation.setTargetTableAlias(refTable.getAlias());
+        relation.setTargetTableAlias(refTable.computeAlias());
 
         this.primaryKeys.merge(
                 columnName, Set.of(relation),
@@ -117,7 +118,7 @@ public class Table implements Comparable<Table> {
     public void appendForeignKey(final String columnName, final Table refTable, final String refColumnName) {
         final Relation relation = new Relation(this.name, columnName, refTable.getName(), refColumnName);
         relation.setSourceTableAlias(this.alias);
-        relation.setTargetTableAlias(refTable.getAlias());
+        relation.setTargetTableAlias(refTable.computeAlias());
 
         this.foreignKeys.merge(
                 columnName, Set.of(relation),
@@ -158,8 +159,13 @@ public class Table implements Comparable<Table> {
         return schema;
     }
 
-    public String getAlias() {
-        return alias;
+    public String computeAlias() {
+        if (StringUtils.isNotBlank(alias)) {
+            return alias;
+        } else if (schema == null) {
+            return getName();
+        }
+        return String.format("%s.%s", schema.getName(), getName());
     }
 
     public void setDescription(final String description) {

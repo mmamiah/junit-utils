@@ -60,7 +60,7 @@ public class Schema {
     }
 
     public void cleanConstraints() {
-        for (final Table table: tables.values()) {
+        for (final Table table : tables.values()) {
             table.cleanConstraints();
         }
     }
@@ -76,7 +76,7 @@ public class Schema {
         final long seconds = TimeUnit.SECONDS.convert(stopWatch.lastTaskInfo().getTimeNanos(), TimeUnit.NANOSECONDS);
         final long millis = stopWatch.lastTaskInfo().getTimeMillis();
         if (minutes == 0) {
-            this.executionTime = String.format("%s sec %s ms.",  seconds, millis);
+            this.executionTime = String.format("%s sec %s ms.", seconds, millis);
         } else {
             this.executionTime = String.format("%s min, %s sec %s ms.", minutes, seconds, millis);
         }

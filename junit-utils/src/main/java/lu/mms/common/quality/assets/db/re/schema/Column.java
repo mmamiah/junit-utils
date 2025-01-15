@@ -1,5 +1,6 @@
 package lu.mms.common.quality.assets.db.re.schema;
 
+import lu.mms.common.quality.assets.db.re.CanBuild;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -9,7 +10,7 @@ import java.util.Comparator;
 /**
  * The DB table column definition.
  */
-public class Column implements Comparable<Column>, Cloneable  {
+public class Column implements Comparable<Column>, Cloneable, CanBuild {
 
     private static final String NOT_NULL = " NOT NULL";
     private static final String UNIQUE = "UNIQUE";
@@ -37,6 +38,14 @@ public class Column implements Comparable<Column>, Cloneable  {
         this.unique = unique;
         this.autoIncrement = autoIncrement;
         this.defaultValue = defaultValue;
+    }
+
+    public Column(final String name) {
+        this(0, name, "STRING", false, false, false, null);
+    }
+
+    public Column(final int columnId, final String name, final String columnType) {
+        this(columnId, name, columnType, false, false, false, null);
     }
 
     public Object getValue() {
@@ -134,6 +143,14 @@ public class Column implements Comparable<Column>, Cloneable  {
         );
 
         return comparator.compare(this, o);
+    }
+
+    @Override
+    public String build() {
+        if (getParentTable() == null) {
+            return getName();
+        }
+        return String.format("%s.%s", getParentTable().computeAlias(), getName());
     }
 
     @Override

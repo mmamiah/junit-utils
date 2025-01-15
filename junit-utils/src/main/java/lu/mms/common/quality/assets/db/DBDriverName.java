@@ -7,7 +7,7 @@ public enum DBDriverName {
     DERBY("Apache Derby"),
     DB2("DB2"),
     DB2ZOS("DB2ZOS"),
-    HSQL("HSQL Database Engine"),
+    HSQL("HSQL Database Engine Driver"),
     SQLSERVER("Microsoft SQL Server"),
     MYSQL("MySQL"),
     ORACLE("Oracle"),
