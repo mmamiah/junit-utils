@@ -84,9 +84,10 @@ public class ReverseEngineeringWizard {
     /**
      * Add a table to the scanning context. Only the records matching the provided {@code values} will be included as
      * table records. If no match is found, the table will remain empty.
+     *
      * @param tableName The table name
-     * @param filters The SQL expression to filter the tables rows.
-     * @return  The {@link ReverseEngineeringWizard} object
+     * @param filters   The SQL expression to filter the tables rows.
+     * @return The {@link ReverseEngineeringWizard} object
      */
     public ReverseEngineeringWizard withTable(final String tableName, final Statement... filters) {
         if (StringUtils.isNotBlank(tableName) && ArrayUtils.isNotEmpty(filters)) {
@@ -107,9 +108,10 @@ public class ReverseEngineeringWizard {
     /**
      * Add a table to the scanning context. Only the records matching the provided {@code values} will be included as
      * table records. If no match is found, the table will remain empty.
-     * @param tableName The table name
+     *
+     * @param tableName   The table name
      * @param sqlRelation The SQL join template.
-     * @return  The {@link ReverseEngineeringWizard} object
+     * @return The {@link ReverseEngineeringWizard} object
      */
     public ReverseEngineeringWizard withTable(final String tableName, final Relation sqlRelation) {
         sqlRelation.setSourceTable(tableName);
@@ -131,7 +133,7 @@ public class ReverseEngineeringWizard {
         stopWatch.start();
 
         // get connection
-        try (final Connection connection = dataSource.getConnection()){
+        try (final Connection connection = dataSource.getConnection()) {
             final DatabaseMetaData metadata = connection.getMetaData();
 
             final Schema schema = createSchema(schemaName.toUpperCase(), metadata);
@@ -143,7 +145,7 @@ public class ReverseEngineeringWizard {
 
             // Add PK & FK tables definition depending on level.
             final Set<String> skip = new HashSet<>();
-            while(--this.level >= 0) {
+            while (--this.level >= 0) {
                 // add relations definitions
                 final Collection<Table> scope = new HashSet<>(schema.getTables().values());
                 for (Table table : scope) {
@@ -161,7 +163,7 @@ public class ReverseEngineeringWizard {
                     LOGGER.info("Table [{}] added in the context.", table.getName());
 
                     this.joins.merge(
-                            table.getAlias(), table.getAllRelations(),
+                            table.computeAlias(), table.getAllRelations(),
                             (a, b) -> Stream.concat(a.stream(), b.stream()).collect(Collectors.toSet())
                     );
                 }
@@ -182,7 +184,7 @@ public class ReverseEngineeringWizard {
             stopWatch.stop();
             schema.setElapsedTime(stopWatch);
             return schema;
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             LOGGER.error("Failed to extract the data. Code: {}, Cause: {}.", ex.getErrorCode(), ex.getMessage());
             throw new IllegalStateException(ex.getMessage(), ex);
         } finally {
@@ -204,9 +206,10 @@ public class ReverseEngineeringWizard {
     /**
      * This method will find where the table (in parameters) Primary keys are used, and add the found tables in the
      * context.
-     * @param metadata  The DB metadata
-     * @param schema    The DB schema to enrich
-     * @param table The source table
+     *
+     * @param metadata The DB metadata
+     * @param schema   The DB schema to enrich
+     * @param table    The source table
      * @throws SQLException The exception thrown when accessing the data
      */
     private void appendExportedKeys(final DatabaseMetaData metadata, final Schema schema, final Table table) throws SQLException {
@@ -232,9 +235,10 @@ public class ReverseEngineeringWizard {
     /**
      * This method will find where the table (in parameters) foreign keys come from, and add the found tables in the
      * context.
-     * @param metadata  The DB metadata
-     * @param schema    The DB schema to enrich
-     * @param table The source table
+     *
+     * @param metadata The DB metadata
+     * @param schema   The DB schema to enrich
+     * @param table    The source table
      * @throws SQLException The exception thrown when accessing the data
      */
     private void appendImportedKeys(final DatabaseMetaData metadata, final Schema schema, final Table table) throws SQLException {
@@ -312,7 +316,7 @@ public class ReverseEngineeringWizard {
             final List<Statement> tableFilters = ObjectUtils.defaultIfNull(filters.get(table.getName()), List.<Expression>of())
                     .stream()
                     .map(statement -> {
-                        statement.applyAlias(table.getAlias());
+                        statement.applyAlias(table.computeAlias());
                         return statement;
                     })
                     .collect(Collectors.toList());
@@ -326,8 +330,9 @@ public class ReverseEngineeringWizard {
 
     /**
      * Determine the database type from a given {@code datasource}.
-     * @param dataSource    The datasource
-     * @return  The database type object
+     *
+     * @param dataSource The datasource
+     * @return The database type object
      */
     private static DBDriverName retrieveDriverName(final DataSource dataSource) {
         String driverName = null;
@@ -343,7 +348,7 @@ public class ReverseEngineeringWizard {
 
     private void collectColumnsValues(final Connection connection, final Table table) {
         final String sql = Dql
-                .select(table.getColumns().values())
+                .select(table.getColumns().values().toArray(Column[]::new))
                 .from(table)
                 .join(collectActiveRelations(table))
                 .where(table.getStatements())
@@ -352,11 +357,11 @@ public class ReverseEngineeringWizard {
         LOGGER.debug("SQL query: \n" + sql);
 
         // execute the statement
-        try (final PreparedStatement statement = connection.prepareStatement(sql)){
+        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
             try (final ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     final Record record = new Record();
-                    for (Map.Entry<String, Column> entry: table.getColumns().entrySet()){
+                    for (Map.Entry<String, Column> entry : table.getColumns().entrySet()) {
                         record.appendColumnValue(entry.getKey(), resultSet.getObject(entry.getKey()));
                     }
                     table.addRecord(record);
@@ -373,7 +378,7 @@ public class ReverseEngineeringWizard {
     }
 
     private HashSet<Relation> collectActiveRelations(Table table) {
-        final HashSet<String> activeAlias = new HashSet<>(Set.of(table.getAlias()));
+        final HashSet<String> activeAlias = new HashSet<>(Set.of(table.computeAlias()));
         activeAlias.addAll(
                 table.getAllRelations().stream()
                         .flatMap(rel -> Stream.of(rel.getSourceTableAlias(), rel.getTargetTableAlias()))

@@ -37,7 +37,7 @@ public interface MigrationScript extends SqlScript {
             .append(ISO_LOCAL_TIME)
             .toFormatter(Locale.getDefault(Locale.Category.FORMAT));
 
-    String BANNER =  StringUtils.LF
+    String BANNER = StringUtils.LF
             + "--------------------------------------------- ---------------------------------------\n"
             + "--- Description: JUnit Utils - DB Reverse Engineering %s\n"
             + "--- Created on : %s \n"
@@ -53,7 +53,7 @@ public interface MigrationScript extends SqlScript {
                     return factory.getObject();
                 })
                 // retrieve the app version
-                .map(properties -> ((Map<?,?>) properties.get("application")).get("version"));
+                .map(properties -> ((Map<?, ?>) properties.get("application")).get("version"));
         return String.format(BANNER, appVersion, LOCAL_DATE_TIME.format(LocalDateTime.now()), executionTime);
     }
 
@@ -87,7 +87,7 @@ public interface MigrationScript extends SqlScript {
         try {
             isCreated = Files.write(file, lines, StandardCharsets.UTF_8).toFile().exists();
             LOGGER.info("File created: [{}]", file);
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             LOGGER.error("Failed to create the file [{}]", file);
         }
         return isCreated;

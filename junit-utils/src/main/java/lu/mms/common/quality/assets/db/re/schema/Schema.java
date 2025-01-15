@@ -72,9 +72,9 @@ public class Schema {
     }
 
     public void setElapsedTime(final StopWatch stopWatch) {
-        final long minutes = TimeUnit.MINUTES.convert(stopWatch.getLastTaskTimeNanos(), TimeUnit.NANOSECONDS);
-        final long seconds = TimeUnit.SECONDS.convert(stopWatch.getLastTaskTimeNanos(), TimeUnit.NANOSECONDS);
-        final long millis = stopWatch.getLastTaskTimeMillis();
+        final long minutes = TimeUnit.MINUTES.convert(stopWatch.lastTaskInfo().getTimeNanos(), TimeUnit.NANOSECONDS);
+        final long seconds = TimeUnit.SECONDS.convert(stopWatch.lastTaskInfo().getTimeNanos(), TimeUnit.NANOSECONDS);
+        final long millis = stopWatch.lastTaskInfo().getTimeMillis();
         if (minutes == 0) {
             this.executionTime = String.format("%s sec %s ms.",  seconds, millis);
         } else {

@@ -130,7 +130,7 @@ public class Column implements Comparable<Column>, Cloneable  {
     public int compareTo(final Column o) {
         final Comparator<Column> comparator = Comparator.nullsLast(
                 Comparator.comparing(Column::getName)
-                .thenComparing(column -> String.valueOf(column.getValue()))
+                        .thenComparing(column -> String.valueOf(column.getValue()))
         );
 
         return comparator.compare(this, o);

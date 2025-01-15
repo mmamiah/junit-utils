@@ -5,7 +5,7 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'Equal' comparison.
      *
-     * @param value      the value
+     * @param value the value
      * @return the sql condition
      */
     Operator<T> eq(final Object value);
@@ -13,15 +13,15 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'Greater Than' comparison.
      *
-     * @param value      the value
+     * @param value the value
      * @return the sql comparison
      */
-    Operator<T> gt(final Object value) ;
+    Operator<T> gt(final Object value);
 
     /**
      * The SQL 'Greater Than or Equal' comparison.
      *
-     * @param value      the value
+     * @param value the value
      * @return the sql comparison
      */
     Operator<T> ge(final Object value);
@@ -29,7 +29,7 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'Less Than' comparison.
      *
-     * @param value      the value
+     * @param value the value
      * @return the sql comparison
      */
     Operator<T> lt(final Object value);
@@ -37,7 +37,7 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'Less Than or Equal' comparison.
      *
-     * @param value      the value
+     * @param value the value
      * @return the sql comparison
      */
     Operator<T> le(final Object value);
@@ -45,7 +45,7 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'Not Equal' comparison.
      *
-     * @param value      the value
+     * @param value the value
      * @return the sql comparison
      */
     Operator<T> not(final Object value);
@@ -53,8 +53,8 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'Between' comparison.
      *
-     * @param from  the value #1
-     * @param to    the value #2
+     * @param from the value #1
+     * @param to   the value #2
      * @return the sql comparison
      */
     Operator<T> between(final Object from, final Object to);
@@ -62,7 +62,7 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'LIKE' comparison.
      *
-     * @param value      the value
+     * @param value the value
      * @return the sql comparison
      */
     Operator<T> like(final Object value);
@@ -70,7 +70,7 @@ public interface Condition<T> extends Statement {
     /**
      * The SQL 'IN' comparison.
      *
-     * @param values     the values
+     * @param values the values
      * @return the sql comparison
      */
     Operator<T> in(final Object... values);

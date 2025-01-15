@@ -30,6 +30,7 @@ open module junitutils.quality {
     requires spring.boot.autoconfigure;
     requires jakarta.annotation;
     requires org.apiguardian.api;
+    requires micrometer.commons;
 
     // export
     exports lu.mms.common.quality;

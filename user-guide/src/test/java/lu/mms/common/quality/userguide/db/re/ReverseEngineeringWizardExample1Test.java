@@ -29,7 +29,7 @@ class ReverseEngineeringWizardExample1Test {
         dbConfig.setPassword("pwd");
         dbConfig.addDataSourceProperty("poolName", "test_pool");
         dbConfig.addDataSourceProperty("maximumPoolSize", 30);
-        dbConfig.setJdbcUrl("jdbc:oracle:thin:@//my_data_base:1521/DB_NAME");
+        dbConfig.setJdbcUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=Oracle;");
         dataSource = new HikariDataSource(dbConfig);
     }
 
@@ -38,7 +38,7 @@ class ReverseEngineeringWizardExample1Test {
      * We will be using DDL for this test, but the same works for DML as well.
      */
     @Test
-    void shouldCreateMigScriptInSamePackageWhenPackageProviderExists(){
+    void shouldCreateMigScriptInSamePackageWhenPackageProviderExists() {
         //  Arrange
         final Schema schema = new ReverseEngineeringWizard(
                 dataSource,
@@ -47,10 +47,10 @@ class ReverseEngineeringWizardExample1Test {
                 "CUSTOMER",
                 // match in the CUSTOMER table
                 Expression
-                    .value("CD_TYPE").eq("AXE")
-                    .and(Expression.value("CD_LANGUE").in("FR", "EN"))
-                    .or(Expression.value("ID_CUST").between(468, 700)),
-                Expression.value("CITY").in("Luxembourg", "Madrid", "Paris")
+                        .property("CD_TYPE").eq("AXE")
+                        .and(Expression.property("CD_LANGUE").in("FR", "EN"))
+                        .or(Expression.property("ID_CUST").between(468, 700)),
+                Expression.property("CITY").in("Luxembourg", "Madrid", "Paris")
         ).build();
         assumeFalse(schema.getTables().isEmpty());
 
@@ -70,17 +70,17 @@ class ReverseEngineeringWizardExample1Test {
      * We will be using DDL for this test, but the same works for DML as well.
      */
     @Test
-    void shouldCreateMigScriptInSamePackageWhenMissingPackageProvider(){
+    void shouldCreateMigScriptInSamePackageWhenMissingPackageProvider() {
         //  Arrange
         final Schema schema = new ReverseEngineeringWizard(
                 dataSource,
-                "SCHEMA_NAME"
+                "PUBLIC"
         ).withTable(
                 "CUSTOMER",
                 // match in the CUSTOMER table
-                Expression.value("CD_TYPE").eq("AXE"),
-                Expression.value("CD_LANGUE").in("FR", "EN", "LU"),
-                Expression.value("ID_CUST").between(468, 700)
+                Expression.property("CD_TYPE").eq("AXE"),
+                Expression.property("CD_LANGUE").in("FR", "EN", "LU"),
+                Expression.property("ID_CUST").between(468, 700)
         ).build();
         assumeFalse(schema.getTables().isEmpty());
 
