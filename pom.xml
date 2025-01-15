@@ -26,7 +26,7 @@
     <inceptionYear>2020</inceptionYear>
 
     <properties>
-        <artifactoryVersion>1.0.0</artifactoryVersion>
+        <artifactoryVersion>1.1.0</artifactoryVersion>
 
         <!-- JDK -->
         <java.version>17</java.version>
@@ -54,6 +54,7 @@
         <HikariCP.version>5.1.0</HikariCP.version>
         <commons-text.version>1.11.0</commons-text.version>
         <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-rng.version>1.6</commons-rng.version>
         <ojdbc8.version>23.3.0.23.09</ojdbc8.version>
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
 
@@ -150,6 +151,13 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${commons-collections4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-rng-bom</artifactId>
+                <scope>import</scope>
+                <type>pom</type>
+                <version>${commons-rng.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.modelmapper</groupId>
