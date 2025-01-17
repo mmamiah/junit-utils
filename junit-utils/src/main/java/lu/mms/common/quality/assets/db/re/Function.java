@@ -70,7 +70,7 @@ public class Function implements CanBuild {
 
     @Override
     public String toString() {
-        return String.format("%s %s", this.name, super.toString());
+        return this.build();
     }
 
     private static String formatFunction(final String functionName, final Column... columns){
